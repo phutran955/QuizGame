@@ -1,0 +1,29 @@
+/* css/start.css */
+.start-scene {
+  width: 100%;
+  height: 100vh;
+  background: url("../assets/images/startbg.jpg") center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.start-title {
+  font-size: 48px;
+  color: #fff;
+  margin-bottom: 40px;
+}
+
+.start-btn {
+  padding: 16px 40px;
+  font-size: 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: #ffcc00;
+}
+
+.start-btn:hover {
+  transform: scale(1.05);
+}

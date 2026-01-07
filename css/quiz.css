@@ -1,0 +1,28 @@
+.quiz-scene {
+  padding: 30px;
+  text-align: center;
+}
+
+.quiz-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+}
+
+.quiz-question h2 {
+  margin: 40px 0;
+  font-size: 32px;
+}
+
+.quiz-answers {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.quiz-answers button {
+  padding: 20px;
+  font-size: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+}

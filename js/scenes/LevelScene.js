@@ -1,0 +1,39 @@
+import { router } from "../router.js";
+import QuizScene from "./QuizScene.js";
+
+export let currentLevel = 1;
+
+export default function LevelScene() {
+  const div = document.createElement("div");
+  div.className = "level-scene";
+
+  div.innerHTML = `
+    <h1 class="level-title">Choose Level</h1>
+
+    <div class="level-list">
+      <button data-level="1">Level 1</button>
+      <button data-level="2">Level 2</button>
+      <button data-level="3">Level 3</button>
+      <button data-level="4">Level 4</button>
+    </div>
+
+    <button class="back-btn">Back</button>
+  `;
+
+  // chọn level
+  div.querySelectorAll("[data-level]").forEach(btn => {
+    btn.onclick = () => {
+      currentLevel = Number(btn.dataset.level);
+      router.navigate(QuizScene);
+    };
+  });
+
+  // quay lại start
+  div.querySelector(".back-btn").onclick = () => {
+    import("./StartScene.js").then(m => {
+      router.navigate(m.default);
+    });
+  };
+
+  return div;
+}
