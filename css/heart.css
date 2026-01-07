@@ -1,0 +1,10 @@
+.heart-bar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.heart {
+  width: 32px;
+  height: 32px;
+}
