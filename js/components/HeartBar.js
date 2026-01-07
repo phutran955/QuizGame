@@ -9,7 +9,7 @@
     img.src =
       i < currentHearts
         ? "assets/images/heart.png"
-        : "assets/images/heartblack.png";
+        : "assets/images/heartblank.png";
 
     div.appendChild(img);
   }
