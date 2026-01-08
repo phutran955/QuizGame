@@ -1,7 +1,7 @@
 .level-scene {
   width: 100%;
   height: 100vh;
-  background: url("../assets/images/level-bg.png") center/cover no-repeat;
+  background: url("../assets/images/GEM_Start.png") center/cover no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,30 +16,73 @@
 
 .level-list {
   display: grid;
-  grid-template-columns: repeat(2, 160px);
-  gap: 20px;
+  grid-template-columns: repeat(2, 180px);
+  gap: 32px;
+  justify-content: center;
 }
 
 .level-btn {
-  height: 120px;
-  font-size: 28px;
-  border-radius: 16px;
-  border: none;
+  all: unset;
+  font-size: 36px;
+  font-weight: 800;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 110px;
+  border-radius: 38px;
+  color: #4caf50;
+
+    text-shadow:
+    -2px -2px 0 #ffffff,
+     2px -2px 0 #ffffff,
+    -2px  2px 0 #ffffff,
+     2px  2px 0 #ffffff;
+
   cursor: pointer;
-  background: #4caf50;
-  color: #fff;
 }
 
 .level-btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-4px) scale(1.05);
+}
+
+.level-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #388e3c;
+}
+
+.level-1 {
+  background: url("../assets/images/levels/level1bg.jpg") center / contain no-repeat;
+}
+
+.level-2 {
+  background: url("../assets/images/levels/level2bg.jpg") center / contain no-repeat;
+}
+
+.level-3 {
+  background: url("../assets/images/levels/level3bg.jpg") center / contain no-repeat;
+}
+
+.level-4 {
+  background: url("../assets/images/levels/level4bg.jpg") center / contain no-repeat;
 }
 
 .back-btn {
   margin-top: 40px;
-  padding: 12px 30px;
-  font-size: 20px;
-  border-radius: 10px;
+  padding: 25px 150px;
+  font-family: "Comic Sans MS", "Arial Rounded MT Bold", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
-  background: #ff9800;
+
+  background: #763c21;
+  color: #b0b0b0;
+  text-shadow: 1px 1px 0 #5e5e5e, -1px -1px 0 #d6d6d6;
+}
+
+.back-btn:hover {
+  transform: translateY(-4px) scale(1.05);
 }

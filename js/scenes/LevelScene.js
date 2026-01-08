@@ -11,10 +11,10 @@ export default function LevelScene() {
     <h1 class="level-title">Choose Level</h1>
 
     <div class="level-list">
-      <button data-level="1">Level 1</button>
-      <button data-level="2">Level 2</button>
-      <button data-level="3">Level 3</button>
-      <button data-level="4">Level 4</button>
+      <button class="level-btn level-1" data-level="1">Level 1</button>
+      <button class="level-btn level-2" data-level="2">Level 2</button>
+      <button class="level-btn level-3" data-level="3">Level 3</button>
+      <button class="level-btn level-4" data-level="4">Level 4</button>
     </div>
 
     <button class="back-btn">Back</button>
