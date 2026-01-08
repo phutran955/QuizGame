@@ -1,10 +1,13 @@
 import { router } from "../router.js";
 import { quizService } from "../services/quizService.js";
 import { currentLevel } from "./LevelScene.js";
+
 import ResultPopup from "../components/ResultPopup.js";
 import SettingMenu from "../components/SettingMenu.js";
+
 import HeartBar from "../components/HeartBar.js";
 import Messages from "../components/MessagesPopup.js";
+
 import StartScene from "./StartScene.js";
 import LevelScene from "./LevelScene.js";
 import { levelConfig } from "../configs/levelConfig.js";
@@ -16,6 +19,7 @@ export default function QuizScene() {
   let hearts = 3;
   let settingMenu = null;
   let popup = null;
+  let isPaused = false;
 
   let timer = null;
   const TOTAL_TIME = 10;
@@ -36,6 +40,9 @@ export default function QuizScene() {
         return;
       }
 
+      currentQuestionIndex = 0;
+      hearts = 3;
+      popup = null;
       render();
     } catch (err) {
       console.error(err);
@@ -46,16 +53,15 @@ export default function QuizScene() {
   // ====== TIMER ======
   function startTimer() {
     clearInterval(timer);
-    timeLeft = TOTAL_TIME;
-
-    const fill = div.querySelector(".timer-fill");
-    fill.style.width = "100%";
 
     timer = setInterval(() => {
+      if (isPaused) return;
+
       timeLeft--;
 
+      const fill = div.querySelector(".timer-fill");
       const percent = (timeLeft / TOTAL_TIME) * 100;
-      fill.style.width = percent + "%";
+      if (fill) fill.style.width = percent + "%";
 
       if (timeLeft <= 0) {
         clearInterval(timer);
@@ -65,10 +71,16 @@ export default function QuizScene() {
   }
 
   function handleTimeOut() {
-    if (popup) return;
+    if (isPaused) return; // ❗ không chặn bằng popup
 
+    clearInterval(timer);
     hearts--;
 
+    // update heart bar ngay
+    div.querySelector(".hearts").innerHTML = "";
+    div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+
+    // ===== GAME OVER =====
     if (hearts <= 0) {
       popup = ResultPopup({
         isWin: false,
@@ -79,35 +91,55 @@ export default function QuizScene() {
       });
 
       div.appendChild(popup);
-
-    } else {
-      popup = Messages({
-        type: "wrong",
-        message: "Hết giờ rồi 😭",
-        onClose: () => {
-          popup = null;
-          currentQuestionIndex++;
-          render();
-        },
-      });
-
-      div.appendChild(popup);
+      return;
     }
+
+    // ===== CHƯA CHẾT =====
+    popup = Messages({
+      type: "wrong",
+      message: "Hết giờ rồi 😭",
+      onClose: () => {
+        popup = null;
+        currentQuestionIndex++;
+        render();
+      },
+    });
+
+    div.appendChild(popup);
   }
 
   // ====== RENDER ======
   function render() {
     clearInterval(timer);
+    timeLeft = TOTAL_TIME;
 
     const q = questions[currentQuestionIndex];
-    const config = levelConfig[currentLevel];
 
-    // 🎨 BACKGROUND THEO LEVEL
-    div.style.backgroundImage = `url(${config.background})`;
+    // ===== WIN =====
+    if (!q) {
+      popup = ResultPopup({
+        isWin: true,
+        level: currentLevel,
+        onRestart: () => router.navigate(() => QuizScene()),
+        onGoLevel: () => router.navigate(() => LevelScene()),
+        onGoHome: () => router.navigate(() => StartScene()),
+      });
+
+      div.innerHTML = "";
+      div.appendChild(popup);
+      return;
+    }
+
+    const config = levelConfig[currentLevel] || {};
+
+    // BACKGROUND
+    div.style.backgroundImage = config.background
+      ? `url(${config.background})`
+      : "none";
     div.style.backgroundSize = "cover";
     div.style.backgroundPosition = "center";
 
-    // ===== LAYOUT =====
+    // LAYOUT
     div.innerHTML = `
       <div class="quiz-content">
         <div class="quiz-top">
@@ -127,43 +159,42 @@ export default function QuizScene() {
 
         <div class="quiz-answers">
           ${q.answers
-        .map(
-          (ans, index) =>
-            `<button data-index="${index}">${ans}</button>`
-        )
+        .map((ans, index) => `<button data-index="${index}">${ans}</button>`)
         .join("")}
         </div>
       </div>
     `;
 
-    // ❤️ HEART BAR
+    // HEART BAR
     div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
 
-    // ⚙️ SETTINGS MENU
+    // SETTINGS MENU
     div.querySelector(".setting-btn").onclick = () => {
       if (settingMenu) return;
+
+      isPaused = true;
+      clearInterval(timer);
 
       settingMenu = SettingMenu({
         onClose: () => {
           settingMenu.remove();
           settingMenu = null;
+          isPaused = false;
+          startTimer();
         },
 
         onGoStart: () => {
-          settingMenu.remove();
-          settingMenu = null;
+          isPaused = false;
           router.navigate(() => StartScene());
         },
 
         onGoLevel: () => {
-          settingMenu.remove();
-          settingMenu = null;
+          isPaused = false;
           router.navigate(() => LevelScene());
         },
 
         onReplay: () => {
-          settingMenu.remove();
-          settingMenu = null;
+          isPaused = false;
           router.navigate(() => QuizScene());
         },
       });
@@ -171,47 +202,38 @@ export default function QuizScene() {
       div.appendChild(settingMenu);
     };
 
-    // ===== ANSWERS =====
+    // ANSWERS
     div.querySelectorAll(".quiz-answers button").forEach((btn) => {
       btn.onclick = () => {
-        if (popup) return;
+        if (isPaused) return; // ❗ không chặn bằng popup
+
         clearInterval(timer);
+        div.querySelectorAll(".quiz-answers button").forEach((b) => (b.disabled = true));
 
         const answerIndex = Number(btn.dataset.index);
 
-        // ✅ ĐÚNG
+        // ===== ĐÚNG =====
         if (answerIndex === q.correctIndex) {
           currentQuestionIndex++;
 
           popup = Messages({
             type: "correct",
-            message: config.popupText.correct,
+            message: config.popupText?.correct || "Đúng rồi! 🎉",
             onClose: () => {
               popup = null;
-
-              if (currentQuestionIndex >= questions.length) {
-                popup = ResultPopup({
-                  isWin: true,
-                  level: currentLevel,
-                  onRestart: () => router.navigate(() => QuizScene()),
-                  onGoLevel: () => router.navigate(() => LevelScene()),
-                  onGoHome: () => router.navigate(() => StartScene()),
-                });
-
-                div.appendChild(popup);
-
-              } else {
-                render();
-              }
+              render();
             },
           });
 
           div.appendChild(popup);
         }
-
-        // ❌ SAI
+        // ===== SAI =====
         else {
           hearts--;
+
+          // update heart bar ngay
+          div.querySelector(".hearts").innerHTML = "";
+          div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
 
           if (hearts <= 0) {
             popup = ResultPopup({
@@ -223,23 +245,24 @@ export default function QuizScene() {
             });
 
             div.appendChild(popup);
-          } else {
-            popup = Messages({
-              type: "wrong",
-              message: config.popupText.wrong,
-              onClose: () => {
-                popup = null;
-                render();
-              },
-            });
-
-            div.appendChild(popup);
+            return;
           }
+
+          popup = Messages({
+            type: "wrong",
+            message: config.popupText?.wrong || "Sai rồi 😢",
+            onClose: () => {
+              popup = null;
+              render();
+            },
+          });
+
+          div.appendChild(popup);
         }
+
       };
     });
 
-    // ⏱ START TIMER SAU KHI RENDER XONG
     startTimer();
   }
 

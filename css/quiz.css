@@ -186,6 +186,15 @@
   cursor: pointer;
 }
 
+.quiz-scene.paused {
+  pointer-events: none;
+}
+
+.setting-overlay {
+  pointer-events: auto;
+}
+
+
 /* =========================
    ANIMATION
 ========================= */
