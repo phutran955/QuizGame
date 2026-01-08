@@ -1,10 +1,10 @@
 import { router } from "../router.js";
 import { quizService } from "../services/quizService.js";
 import { currentLevel } from "./LevelScene.js";
-import ResultScene from "./ResultScene.js";
+import ResultPopup from "../components/ResultPopup.js";
 import SettingMenu from "../components/SettingMenu.js";
 import HeartBar from "../components/HeartBar.js";
-import ResultPopup from "../components/ResultPopup.js";
+import Messages from "../components/MessagesPopup.js";
 import StartScene from "./StartScene.js";
 import LevelScene from "./LevelScene.js";
 import { levelConfig } from "../configs/levelConfig.js";
@@ -70,9 +70,18 @@ export default function QuizScene() {
     hearts--;
 
     if (hearts <= 0) {
-      router.navigate(() => ResultScene(false, currentLevel));
-    } else {
       popup = ResultPopup({
+        isWin: false,
+        level: currentLevel,
+        onRestart: () => router.navigate(() => QuizScene()),
+        onGoLevel: () => router.navigate(() => LevelScene()),
+        onGoHome: () => router.navigate(() => StartScene()),
+      });
+
+      div.appendChild(popup);
+
+    } else {
+      popup = Messages({
         type: "wrong",
         message: "Hết giờ rồi 😭",
         onClose: () => {
@@ -118,11 +127,11 @@ export default function QuizScene() {
 
         <div class="quiz-answers">
           ${q.answers
-            .map(
-              (ans, index) =>
-                `<button data-index="${index}">${ans}</button>`
-            )
-            .join("")}
+        .map(
+          (ans, index) =>
+            `<button data-index="${index}">${ans}</button>`
+        )
+        .join("")}
         </div>
       </div>
     `;
@@ -174,14 +183,23 @@ export default function QuizScene() {
         if (answerIndex === q.correctIndex) {
           currentQuestionIndex++;
 
-          popup = ResultPopup({
+          popup = Messages({
             type: "correct",
             message: config.popupText.correct,
             onClose: () => {
               popup = null;
 
               if (currentQuestionIndex >= questions.length) {
-                router.navigate(() => ResultScene(true, currentLevel));
+                popup = ResultPopup({
+                  isWin: true,
+                  level: currentLevel,
+                  onRestart: () => router.navigate(() => QuizScene()),
+                  onGoLevel: () => router.navigate(() => LevelScene()),
+                  onGoHome: () => router.navigate(() => StartScene()),
+                });
+
+                div.appendChild(popup);
+
               } else {
                 render();
               }
@@ -196,9 +214,17 @@ export default function QuizScene() {
           hearts--;
 
           if (hearts <= 0) {
-            router.navigate(() => ResultScene(false, currentLevel));
-          } else {
             popup = ResultPopup({
+              isWin: false,
+              level: currentLevel,
+              onRestart: () => router.navigate(() => QuizScene()),
+              onGoLevel: () => router.navigate(() => LevelScene()),
+              onGoHome: () => router.navigate(() => StartScene()),
+            });
+
+            div.appendChild(popup);
+          } else {
+            popup = Messages({
               type: "wrong",
               message: config.popupText.wrong,
               onClose: () => {
