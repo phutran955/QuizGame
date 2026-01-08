@@ -7,6 +7,7 @@ import HeartBar from "../components/HeartBar.js";
 import ResultPopup from "../components/ResultPopup.js";
 import StartScene from "./StartScene.js";
 import LevelScene from "./LevelScene.js";
+import { levelConfig } from "../configs/levelConfig.js";
 
 export default function QuizScene() {
   // ====== STATE ======
@@ -15,6 +16,10 @@ export default function QuizScene() {
   let hearts = 3;
   let settingMenu = null;
   let popup = null;
+
+  let timer = null;
+  const TOTAL_TIME = 10;
+  let timeLeft = TOTAL_TIME;
 
   const div = document.createElement("div");
   div.className = "quiz-scene";
@@ -38,37 +43,94 @@ export default function QuizScene() {
     }
   }
 
-  // ====== RENDER UI ======
+  // ====== TIMER ======
+  function startTimer() {
+    clearInterval(timer);
+    timeLeft = TOTAL_TIME;
+
+    const fill = div.querySelector(".timer-fill");
+    fill.style.width = "100%";
+
+    timer = setInterval(() => {
+      timeLeft--;
+
+      const percent = (timeLeft / TOTAL_TIME) * 100;
+      fill.style.width = percent + "%";
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        handleTimeOut();
+      }
+    }, 1000);
+  }
+
+  function handleTimeOut() {
+    if (popup) return;
+
+    hearts--;
+
+    if (hearts <= 0) {
+      router.navigate(() => ResultScene(false, currentLevel));
+    } else {
+      popup = ResultPopup({
+        type: "wrong",
+        message: "Hết giờ rồi 😭",
+        onClose: () => {
+          popup = null;
+          currentQuestionIndex++;
+          render();
+        },
+      });
+
+      div.appendChild(popup);
+    }
+  }
+
+  // ====== RENDER ======
   function render() {
+    clearInterval(timer);
+
     const q = questions[currentQuestionIndex];
+    const config = levelConfig[currentLevel];
 
-    // 1️⃣ Render layout trước
+    // 🎨 BACKGROUND THEO LEVEL
+    div.style.backgroundImage = `url(${config.background})`;
+    div.style.backgroundSize = "cover";
+    div.style.backgroundPosition = "center";
+
+    // ===== LAYOUT =====
     div.innerHTML = `
-    <div class="quiz-top">
-      <div class="hearts"></div>
-      <div class="level">Level ${currentLevel}</div>
-      <button class="setting-btn">⚙️</button>
-    </div>
+      <div class="quiz-content">
+        <div class="quiz-top">
+          <div class="hearts"></div>
 
-    <div class="quiz-question">
-      <h2>${q.question}</h2>
-    </div>
+          <div class="timer-bar">
+            <div class="timer-fill"></div>
+          </div>
 
-    <div class="quiz-answers">
-      ${q.answers
-        .map(
-          (ans, index) =>
-            `<button data-index="${index}">${ans}</button>`
-        )
-        .join("")}
-    </div>
-  `;
+          <div class="level">Level ${currentLevel}</div>
+          <button class="setting-btn">⚙️</button>
+        </div>
 
-    // 2️⃣ Render HeartBar SAU KHI DOM ĐÃ CÓ
-    const heartContainer = div.querySelector(".hearts");
-    heartContainer.appendChild(HeartBar(3, hearts));
+        <div class="quiz-question">
+          <h2>${q.question}</h2>
+        </div>
 
-    // ===== SETTINGS MENU =====
+        <div class="quiz-answers">
+          ${q.answers
+            .map(
+              (ans, index) =>
+                `<button data-index="${index}">${ans}</button>`
+            )
+            .join("")}
+        </div>
+      </div>
+    `;
+
+    // ❤️ HEART BAR
+    div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+
+    // ⚙️ SETTINGS MENU
     div.querySelector(".setting-btn").onclick = () => {
       if (settingMenu) return;
 
@@ -104,6 +166,7 @@ export default function QuizScene() {
     div.querySelectorAll(".quiz-answers button").forEach((btn) => {
       btn.onclick = () => {
         if (popup) return;
+        clearInterval(timer);
 
         const answerIndex = Number(btn.dataset.index);
 
@@ -113,14 +176,12 @@ export default function QuizScene() {
 
           popup = ResultPopup({
             type: "correct",
-            message: "Bạn làm rất tốt! 🎉",
+            message: config.popupText.correct,
             onClose: () => {
               popup = null;
 
               if (currentQuestionIndex >= questions.length) {
-                router.navigate(() =>
-                  ResultScene(true, currentLevel)
-                );
+                router.navigate(() => ResultScene(true, currentLevel));
               } else {
                 render();
               }
@@ -135,13 +196,11 @@ export default function QuizScene() {
           hearts--;
 
           if (hearts <= 0) {
-            router.navigate(() =>
-              ResultScene(false, currentLevel)
-            );
+            router.navigate(() => ResultScene(false, currentLevel));
           } else {
             popup = ResultPopup({
               type: "wrong",
-              message: "Thử lại nhé 💪",
+              message: config.popupText.wrong,
               onClose: () => {
                 popup = null;
                 render();
@@ -153,8 +212,10 @@ export default function QuizScene() {
         }
       };
     });
-  }
 
+    // ⏱ START TIMER SAU KHI RENDER XONG
+    startTimer();
+  }
 
   // ====== START ======
   loadQuestions();

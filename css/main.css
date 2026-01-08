@@ -1,0 +1,13 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Comic Sans MS", "Arial Rounded MT Bold", Arial, sans-serif;
+  background: #000;
+}
