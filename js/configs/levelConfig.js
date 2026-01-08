@@ -1,7 +1,7 @@
 export const levelConfig = {
   1: {
     background: "assets/images/levels/level1bg.jpg",
-    mascot: "cat",
+    mascot: "level01",
     popupText: {
       correct: "Giỏi lắm 😸",
       wrong: "Sai rồi nè 😿",

@@ -7,6 +7,7 @@ import SettingMenu from "../components/SettingMenu.js";
 
 import HeartBar from "../components/HeartBar.js";
 import Messages from "../components/MessagesPopup.js";
+import Mascot from "../components/Mascot/Mascot.js";
 
 import StartScene from "./StartScene.js";
 import LevelScene from "./LevelScene.js";
@@ -20,6 +21,8 @@ export default function QuizScene() {
   let settingMenu = null;
   let popup = null;
   let isPaused = false;
+  let mascotInstance = null;
+
 
   let timer = null;
   const TOTAL_TIME = 10;
@@ -75,6 +78,8 @@ export default function QuizScene() {
 
     clearInterval(timer);
     hearts--;
+    mascotInstance?.sad();
+
 
     // update heart bar ngay
     div.querySelector(".hearts").innerHTML = "";
@@ -99,6 +104,7 @@ export default function QuizScene() {
       type: "wrong",
       message: "Hết giờ rồi 😭",
       onClose: () => {
+        mascotInstance?.idle();
         popup = null;
         currentQuestionIndex++;
         render();
@@ -141,29 +147,56 @@ export default function QuizScene() {
 
     // LAYOUT
     div.innerHTML = `
-      <div class="quiz-content">
-        <div class="quiz-top">
-          <div class="hearts"></div>
+  <div class="quiz-content">
 
-          <div class="timer-bar">
-            <div class="timer-fill"></div>
-          </div>
+    <!-- TOP BAR (độc lập) -->
+    <div class="quiz-top">
+      <div class="hearts"></div>
 
-          <div class="level">Level ${currentLevel}</div>
-          <button class="setting-btn">⚙️</button>
-        </div>
-
-        <div class="quiz-question">
-          <h2>${q.question}</h2>
-        </div>
-
-        <div class="quiz-answers">
-          ${q.answers
-        .map((ans, index) => `<button data-index="${index}">${ans}</button>`)
-        .join("")}
-        </div>
+      <div class="timer-bar">
+        <div class="timer-fill"></div>
       </div>
-    `;
+
+      <div class="level">Level ${currentLevel}</div>
+      <button class="setting-btn">⚙️</button>
+    </div>
+
+    <!-- QUIZ ZONE: bao trọn mascot + question + answers -->
+<div class="quiz-zone">
+
+  <div class="mascot-area"></div>
+
+  <div class="quiz-panel">
+    <div class="quiz-question">
+      <h2>${q.question}</h2>
+    </div>
+
+    <div class="quiz-answers">
+      ${q.answers
+        .map(
+          (ans, index) =>
+            `<button data-index="${index}">${ans}</button>`
+        )
+        .join("")}
+    </div>
+  </div>
+
+</div>
+
+`;
+
+    // ===== INIT MASCOT =====
+    const mascotArea = div.querySelector(".mascot-area");
+    mascotArea.innerHTML = "";
+
+    if (config.mascot) {
+      mascotInstance = Mascot({
+        mascotName: config.mascot,
+      });
+
+      mascotArea.appendChild(mascotInstance.el);
+    }
+
 
     // HEART BAR
     div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
@@ -214,12 +247,15 @@ export default function QuizScene() {
 
         // ===== ĐÚNG =====
         if (answerIndex === q.correctIndex) {
+          mascotInstance?.happy();
+
           currentQuestionIndex++;
 
           popup = Messages({
             type: "correct",
             message: config.popupText?.correct || "Đúng rồi! 🎉",
             onClose: () => {
+              mascotInstance?.idle();
               popup = null;
               render();
             },
@@ -230,6 +266,8 @@ export default function QuizScene() {
         // ===== SAI =====
         else {
           hearts--;
+          mascotInstance?.sad();
+
 
           // update heart bar ngay
           div.querySelector(".hearts").innerHTML = "";
@@ -252,8 +290,9 @@ export default function QuizScene() {
             type: "wrong",
             message: config.popupText?.wrong || "Sai rồi 😢",
             onClose: () => {
+              mascotInstance?.idle();
               popup = null;
-               currentQuestionIndex++; 
+              currentQuestionIndex++;
               render();
             },
           });

@@ -1,4 +1,3 @@
-
 /* =========================
    QUIZ SCENE
 ========================= */
@@ -14,7 +13,7 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 /* =========================
@@ -34,6 +33,66 @@
   color: #fff;
   text-shadow: 1px 1px 3px #000;
 }
+
+/* =========================
+   QUIZ ZONE LAYOUT
+========================= */
+.quiz-zone {
+  margin-top: 80px;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  /* sát mặt đất */
+  justify-content: center;
+  /* ⬅ căn giữa toàn bộ */
+  padding: 0 40px 50px;
+  gap: 40px;
+}
+
+
+/* =========================
+   MASCOT
+========================= */
+.mascot-area {
+  flex: 0 0 180px;
+  /* ⬅ thu nhỏ vùng mascot */
+  margin-left: 20px;
+  /* ⬅ đẩy sát mép trái */
+  display: flex;
+  align-items: flex-end;
+}
+
+
+/* =========================
+   QUIZ PANEL (QUESTION + ANSWERS)
+========================= */
+.quiz-panel {
+  margin-bottom: 200px;
+  /* ⬅ hạ panel xuống */
+  flex: 1;
+  max-width: 520px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  padding: 24px;
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* question */
+.quiz-panel .quiz-question h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #fff;
+  text-shadow: 2px 2px 4px #000;
+}
+
+/* answers grid giữ nguyên */
+.quiz-panel .quiz-answers {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
 
 /* =========================
    QUESTION
@@ -70,6 +129,8 @@
   transform: translateY(2px);
   box-shadow: 0 2px 0 #c9a600;
 }
+
+
 
 /* =========================
    SETTINGS BUTTON
@@ -117,7 +178,7 @@
 .popup-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -191,7 +252,7 @@
 .setting-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -219,30 +280,11 @@
   cursor: pointer;
 }
 
-.quiz-scene.paused {
-  pointer-events: none;
-}
-
-.setting-overlay {
-  pointer-events: auto;
-}
 
 
 /* =========================
-   ANIMATION
+   RESULTS MENU
 ========================= */
-@keyframes pop {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-
 .result-popup h2 {
   font-size: 26px;
   margin-bottom: 10px;
@@ -269,5 +311,26 @@
   color: #fff;
 }
 
+.quiz-scene.paused {
+  pointer-events: none;
+}
+
+.setting-overlay {
+  pointer-events: auto;
+}
 
 
+/* =========================
+   ANIMATION
+========================= */
+@keyframes pop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
