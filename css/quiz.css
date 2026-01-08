@@ -152,6 +152,39 @@
   cursor: pointer;
 }
 
+.toast-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: #333;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 3000;
+}
+
+/* hiệu ứng hiện */
+.toast-message.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* đúng */
+.toast-message.correct {
+  background: #4caf50;
+}
+
+/* sai */
+.toast-message.wrong {
+  background: #f44336;
+}
+
+
 /* =========================
    SETTINGS MENU
 ========================= */

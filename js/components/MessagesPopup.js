@@ -1,21 +1,29 @@
-export default function MessagesPopup({ type, message, onClose }) {
-  const overlay = document.createElement("div");
-  overlay.className = "popup-overlay";
+export default function MessagesPopup({ type, message, onClose, duration = 1500 }) {
+  const toast = document.createElement("div");
+  toast.className = `toast-message ${type}`;
 
-  const popup = document.createElement("div");
-  popup.className = `popup ${type}`;
+  toast.innerHTML = `
+    <span>${message}</span>
+  `;
 
-  popup.innerHTML = `
-    <h3>${type === "correct" ? "✅ Đúng rồi!" : "❌ Sai rồi!"}</h3>
-    <p>${message}</p>
-    <button>OK</button>
-  `
+  // thêm vào body để nổi trên cùng
+  document.body.appendChild(toast);
 
-  popup.querySelector("button").onclick = () => {
-    overlay.remove();
-    onClose?.();
-  };
+  // animate in
+  requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
 
-  overlay.appendChild(popup);
-  return overlay;
+  // auto remove
+  setTimeout(() => {
+    toast.classList.remove("show");
+
+    toast.addEventListener("transitionend", () => {
+      toast.remove();
+      onClose?.();
+    }, { once: true });
+
+  }, duration);
+
+  return toast;
 }

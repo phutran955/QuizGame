@@ -253,6 +253,7 @@ export default function QuizScene() {
             message: config.popupText?.wrong || "Sai rồi 😢",
             onClose: () => {
               popup = null;
+               currentQuestionIndex++; 
               render();
             },
           });
