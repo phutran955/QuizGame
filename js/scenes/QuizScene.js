@@ -12,6 +12,8 @@ import StartScene from "./StartScene.js";
 import LevelScene from "./LevelScene.js";
 import { levelConfig } from "../configs/levelConfig.js";
 
+import { playSound } from "../components/soundManager.js";
+
 export default function QuizScene() {
   // ====== STATE ======
   let questions = [];
@@ -71,17 +73,19 @@ export default function QuizScene() {
   }
 
   function handleTimeOut() {
-    if (isPaused) return; // ❗ không chặn bằng popup
+    if (isPaused) return;
 
     clearInterval(timer);
     hearts--;
 
-    // update heart bar ngay
+    playSound("wrong");
+
     div.querySelector(".hearts").innerHTML = "";
     div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
 
-    // ===== GAME OVER =====
     if (hearts <= 0) {
+      playSound("gameover");
+
       popup = ResultPopup({
         isWin: false,
         level: currentLevel,
@@ -94,7 +98,6 @@ export default function QuizScene() {
       return;
     }
 
-    // ===== CHƯA CHẾT =====
     popup = Messages({
       type: "wrong",
       message: "Hết giờ rồi 😭",
@@ -117,6 +120,8 @@ export default function QuizScene() {
 
     // ===== WIN =====
     if (!q) {
+      playSound("win"); // 🎉 âm thanh chiến thắng
+
       popup = ResultPopup({
         isWin: true,
         level: currentLevel,
@@ -132,14 +137,10 @@ export default function QuizScene() {
 
     const config = levelConfig[currentLevel] || {};
 
-    // BACKGROUND
     div.style.backgroundImage = config.background
       ? `url(${config.background})`
       : "none";
-    div.style.backgroundSize = "cover";
-    div.style.backgroundPosition = "center";
 
-    // LAYOUT
     div.innerHTML = `
       <div class="quiz-content">
         <div class="quiz-top">
@@ -159,19 +160,17 @@ export default function QuizScene() {
 
         <div class="quiz-answers">
           ${q.answers
-        .map((ans, index) => `<button data-index="${index}">${ans}</button>`)
-        .join("")}
+            .map((ans, index) => `<button data-index="${index}">${ans}</button>`)
+            .join("")}
         </div>
       </div>
     `;
 
-    // HEART BAR
     div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
 
-    // SETTINGS MENU
+    // SETTINGS
     div.querySelector(".setting-btn").onclick = () => {
       if (settingMenu) return;
-
       isPaused = true;
       clearInterval(timer);
 
@@ -182,38 +181,44 @@ export default function QuizScene() {
           isPaused = false;
           startTimer();
         },
-
-        onGoStart: () => {
-          isPaused = false;
-          router.navigate(() => StartScene());
-        },
-
-        onGoLevel: () => {
-          isPaused = false;
-          router.navigate(() => LevelScene());
-        },
-
-        onReplay: () => {
-          isPaused = false;
-          router.navigate(() => QuizScene());
-        },
+        onGoStart: () => router.navigate(() => StartScene()),
+        onGoLevel: () => router.navigate(() => LevelScene()),
+        onReplay: () => router.navigate(() => QuizScene()),
       });
 
       div.appendChild(settingMenu);
     };
 
-    // ANSWERS
+    // ===== ANSWERS =====
     div.querySelectorAll(".quiz-answers button").forEach((btn) => {
       btn.onclick = () => {
-        if (isPaused) return; // ❗ không chặn bằng popup
+        if (isPaused) return;
 
         clearInterval(timer);
-        div.querySelectorAll(".quiz-answers button").forEach((b) => (b.disabled = true));
+
+        const buttons = div.querySelectorAll(".quiz-answers button");
+        buttons.forEach((b) => (b.disabled = true));
 
         const answerIndex = Number(btn.dataset.index);
+        const isCorrect = answerIndex === q.correctIndex;
 
-        // ===== ĐÚNG =====
-        if (answerIndex === q.correctIndex) {
+        if (isCorrect) {
+          btn.classList.add("correct");
+          playSound("correct");
+        } else {
+          btn.classList.add("wrong");
+          playSound("wrong");
+
+          if (hearts - 1 <= 0) {
+            buttons.forEach((b) => {
+              if (Number(b.dataset.index) === q.correctIndex) {
+                b.classList.add("correct-answer");
+              }
+            });
+          }
+        }
+
+        if (isCorrect) {
           currentQuestionIndex++;
 
           popup = Messages({
@@ -226,16 +231,15 @@ export default function QuizScene() {
           });
 
           div.appendChild(popup);
-        }
-        // ===== SAI =====
-        else {
+        } else {
           hearts--;
 
-          // update heart bar ngay
           div.querySelector(".hearts").innerHTML = "";
           div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
 
           if (hearts <= 0) {
+            playSound("gameover");
+
             popup = ResultPopup({
               isWin: false,
               level: currentLevel,
@@ -259,14 +263,12 @@ export default function QuizScene() {
 
           div.appendChild(popup);
         }
-
       };
     });
 
     startTimer();
   }
 
-  // ====== START ======
   loadQuestions();
   return div;
 }
