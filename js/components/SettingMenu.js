@@ -4,13 +4,13 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
 
   overlay.innerHTML = `
     <div class="setting-menu">
-      <h3>⚙️ Cài đặt</h3>
+      <h3>Cài đặt</h3>
 
-      <button id="btn-start">🏠 Về màn hình Start</button>
-      <button id="btn-level">📚 Chọn Level</button>
-      <button id="btn-replay">🔄 Chơi lại Level</button>
+      <button id="btn-start">Về màn hình Start</button>
+      <button id="btn-level">Chọn Level</button>
+      <button id="btn-replay">Chơi lại Level</button>
 
-      <button id="btn-close">❌ Đóng</button>
+      <button id="btn-close">Đóng</button>
     </div>
   `;
 

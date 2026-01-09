@@ -16,7 +16,9 @@ import { levelConfig } from "../configs/levelConfig.js";
 export default function QuizScene() {
   // ====== STATE ======
   let questions = [];
+  let totalQuestions = 0;
   let currentQuestionIndex = 0;
+  let correctCount = 0;
   let hearts = 3;
   let settingMenu = null;
   let popup = null;
@@ -42,6 +44,8 @@ export default function QuizScene() {
         div.innerHTML = `<p>⚠️ Không có câu hỏi cho level này</p>`;
         return;
       }
+
+      totalQuestions = questions.length; // ĐẾM Ở CÂU HỎI
 
       currentQuestionIndex = 0;
       hearts = 3;
@@ -90,6 +94,8 @@ export default function QuizScene() {
       popup = ResultPopup({
         isWin: false,
         level: currentLevel,
+        correctCount,
+        totalQuestions,
         onRestart: () => router.navigate(() => QuizScene()),
         onGoLevel: () => router.navigate(() => LevelScene()),
         onGoHome: () => router.navigate(() => StartScene()),
@@ -122,10 +128,12 @@ export default function QuizScene() {
     const q = questions[currentQuestionIndex];
 
     // ===== WIN =====
-    if (!q) {
+    if (!q && correctCount > 1) {
       popup = ResultPopup({
         isWin: true,
         level: currentLevel,
+        correctCount,
+        totalQuestions,
         onRestart: () => router.navigate(() => QuizScene()),
         onGoLevel: () => router.navigate(() => LevelScene()),
         onGoHome: () => router.navigate(() => StartScene()),
@@ -158,7 +166,7 @@ export default function QuizScene() {
       </div>
 
       <div class="level">Level ${currentLevel}</div>
-      <button class="setting-btn">⚙️</button>
+      <button class="setting-btn"></button>
     </div>
 
     <!-- QUIZ ZONE: bao trọn mascot + question + answers -->
@@ -252,6 +260,8 @@ export default function QuizScene() {
 
           currentQuestionIndex++;
 
+          correctCount++;
+
           popup = Messages({
             type: "correct",
             message: config.popupText?.correct || "Đúng rồi! 🎉",
@@ -278,6 +288,8 @@ export default function QuizScene() {
             popup = ResultPopup({
               isWin: false,
               level: currentLevel,
+              correctCount,
+              totalQuestions,
               onRestart: () => router.navigate(() => QuizScene()),
               onGoLevel: () => router.navigate(() => LevelScene()),
               onGoHome: () => router.navigate(() => StartScene()),

@@ -7,6 +7,8 @@
   padding: 20px;
   text-align: center;
 
+  overflow: hidden;
+
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -25,11 +27,12 @@
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
+  flex: 0 0 auto;
 }
 
 .level {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 40px;
   color: #fff;
   text-shadow: 1px 1px 3px #000;
 }
@@ -49,7 +52,6 @@
   gap: 40px;
 }
 
-
 /* =========================
    MASCOT
 ========================= */
@@ -62,14 +64,14 @@
   align-items: flex-end;
 }
 
-
 /* =========================
    QUIZ PANEL (QUESTION + ANSWERS)
 ========================= */
 .quiz-panel {
-  margin-bottom: 200px;
+  margin-bottom: 0;
   /* ⬅ hạ panel xuống */
   flex: 1;
+  transform: translateY(20px);
   max-width: 520px;
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(6px);
@@ -92,7 +94,6 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
-
 
 /* =========================
    QUESTION
@@ -130,19 +131,24 @@
   box-shadow: 0 2px 0 #c9a600;
 }
 
-
-
 /* =========================
    SETTINGS BUTTON
 ========================= */
 .setting-btn {
-  font-size: 22px;
-  background: #fff;
+  background-image: url("../assets/images/menu.png"); /* ảnh bánh răng */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 120px;
+  height: 120px;
   cursor: pointer;
+}
+
+.setting-btn:hover {
+  transform: scale(1.1) rotate(10deg);
 }
 
 /* =========================
@@ -157,8 +163,8 @@
    TIMER
 ========================= */
 .timer-bar {
-  width: 140px;
-  height: 14px;
+  width: 400px;
+  height: 20px;
   background: #ddd;
   border-radius: 20px;
   overflow: hidden;
@@ -244,7 +250,6 @@
 .toast-message.wrong {
   background: #f44336;
 }
-
 
 /* =========================
    SETTINGS MENU
@@ -337,7 +342,6 @@
   transform: translateY(-2px);
   opacity: 0.9;
 }
-
 
 /* =========================
    ANIMATION

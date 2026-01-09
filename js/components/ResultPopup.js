@@ -3,6 +3,8 @@ import { levelConfig } from "../configs/levelConfig.js";
 export default function ResultPopup({
   isWin,
   level,
+  correctCount,
+  totalQuestions,
   onRestart,
   onGoLevel,
   onGoHome,
@@ -20,6 +22,8 @@ export default function ResultPopup({
 
   const mascotName = levelConfig[level]?.mascot;
 
+  const correctText = `Số câu trả lời đúng: ${correctCount}/${totalQuestions}`;
+
   // 👉 chỉ 1 ảnh tĩnh
   const mascotImg = mascotName
     ? isWin
@@ -28,23 +32,24 @@ export default function ResultPopup({
     : "";
 
   popup.innerHTML = `
-    <h2>${title}</h2>
-    <p>${message}</p>
+  <h2>${title}</h2>
+  <p>${message}</p>
+  <p class="correct-count">✅ ${correctText}</p>
 
-    ${
-      mascotImg
-        ? `<div class="result-mascot">
-             <img src="${mascotImg}" draggable="false" />
-           </div>`
-        : ""
-    }
+  ${
+    mascotImg
+      ? `<div class="result-mascot">
+           <img src="${mascotImg}" draggable="false" />
+         </div>`
+      : ""
+  }
 
-    <div class="result-buttons">
-      <button class="restart">Chơi lại</button>
-      <button class="levels">Chọn level</button>
-      <button class="home">Về Start</button>
-    </div>
-  `;
+  <div class="result-buttons">
+    <button class="restart">Chơi lại</button>
+    <button class="levels">Chọn level</button>
+    <button class="home">Về Start</button>
+  </div>
+`;
 
   popup.querySelector(".restart").onclick = () => {
     onRestart && onRestart();
