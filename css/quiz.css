@@ -207,6 +207,8 @@
   width: 120px;
   height: 120px;
   cursor: pointer;
+
+  filter: invert(1);
 }
 
 .setting-btn:hover {
