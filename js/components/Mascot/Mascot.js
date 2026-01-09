@@ -36,7 +36,10 @@ export default function Mascot({ mascotName }) {
     currentAnim = playAnimation({
       img,
       path: `/assets/mascots/${mascotName}/sad`,
-      loop: false, // đứng yên ở frame 10
+      loop: false,
+      onEnd: () => {
+        idle(); // quay lại idle NGAY khi sad kết thúc
+      },
     });
   }
 
