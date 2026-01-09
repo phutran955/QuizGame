@@ -1,4 +1,11 @@
-export function playAnimation({ img, path, fps = 6, loop = true }) {
+export function playAnimation({
+  img,
+  path,
+  fps = 6,
+  loop = true,
+  totalFrames = 10,
+  onEnd,
+}) {
   let frame = 1;
   let timer = null;
 
@@ -7,10 +14,13 @@ export function playAnimation({ img, path, fps = 6, loop = true }) {
       img.src = `${path}/${frame}.png`;
       frame++;
 
-      // giả sử tối đa 10 frame
-      if (frame > 10) {
-        if (loop) frame = 1;
-        else stop();
+      if (frame > totalFrames) {
+        if (loop) {
+          frame = 1;
+        } else {
+          stop();
+          onEnd && onEnd();
+        }
       }
     }, 1000 / fps);
   }
@@ -20,6 +30,5 @@ export function playAnimation({ img, path, fps = 6, loop = true }) {
   }
 
   start();
-
   return { stop };
 }

@@ -280,14 +280,20 @@
   cursor: pointer;
 }
 
-
-
 /* =========================
-   RESULTS MENU
+   RESULT POPUP
 ========================= */
+
+.result-popup {
+  text-align: center;
+  padding: 24px;
+  border-radius: 20px;
+}
+
+/* Title */
 .result-popup h2 {
   font-size: 26px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .result-popup p {
@@ -295,28 +301,41 @@
   margin-bottom: 16px;
 }
 
+/* Mascot */
+.result-mascot {
+  margin: 12px 0 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.result-mascot img {
+  width: 160px;
+  max-width: 70%;
+  image-rendering: pixelated; /* nếu là pixel art */
+  user-select: none;
+}
+
+/* Buttons */
 .result-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: center;
+  gap: 12px;
 }
 
 .result-buttons button {
-  padding: 12px;
+  padding: 12px 16px;
   font-size: 16px;
-  border-radius: 12px;
+  border-radius: 14px;
   border: none;
   cursor: pointer;
   background: #ff9800;
   color: #fff;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
-.quiz-scene.paused {
-  pointer-events: none;
-}
-
-.setting-overlay {
-  pointer-events: auto;
+.result-buttons button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
 }
 
 

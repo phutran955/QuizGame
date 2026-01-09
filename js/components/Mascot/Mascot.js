@@ -6,29 +6,47 @@ export default function Mascot({ mascotName }) {
 
   const img = document.createElement("img");
   img.draggable = false;
-
   div.appendChild(img);
 
   let currentAnim = null;
+  let currentState = "idle";
 
-  function play(type, loop = true) {
+  function stopCurrent() {
     if (currentAnim) currentAnim.stop();
+    currentAnim = null;
+  }
+
+  function idle() {
+    stopCurrent();
+    currentState = "idle";
 
     currentAnim = playAnimation({
       img,
-      path: `/assets/mascots/${mascotName}/${type}`,
-      fps: 6,
-      loop,
+      path: `/assets/mascots/${mascotName}/idle`,
+      loop: true,
     });
   }
 
-  // mặc định idle
-  play("idle");
+  function sad() {
+    if (currentState === "sad") return;
+
+    stopCurrent();
+    currentState = "sad";
+
+    currentAnim = playAnimation({
+      img,
+      path: `/assets/mascots/${mascotName}/sad`,
+      loop: false, // đứng yên ở frame 10
+    });
+  }
+
+  // start mặc định
+  idle();
 
   return {
     el: div,
-    idle: () => play("idle"),
-    happy: () => play("happy", false),
-    sad: () => play("sad", false),
+    idle,
+    sad,
+    getState: () => currentState,
   };
 }

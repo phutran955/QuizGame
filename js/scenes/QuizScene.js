@@ -187,15 +187,17 @@ export default function QuizScene() {
 
     // ===== INIT MASCOT =====
     const mascotArea = div.querySelector(".mascot-area");
-    mascotArea.innerHTML = "";
 
-    if (config.mascot) {
+    if (config.mascot && !mascotInstance) {
       mascotInstance = Mascot({
         mascotName: config.mascot,
       });
+    }
 
+    if (mascotInstance && !mascotArea.contains(mascotInstance.el)) {
       mascotArea.appendChild(mascotInstance.el);
     }
+
 
 
     // HEART BAR
@@ -247,7 +249,6 @@ export default function QuizScene() {
 
         // ===== ĐÚNG =====
         if (answerIndex === q.correctIndex) {
-          mascotInstance?.happy();
 
           currentQuestionIndex++;
 
@@ -290,7 +291,6 @@ export default function QuizScene() {
             type: "wrong",
             message: config.popupText?.wrong || "Sai rồi 😢",
             onClose: () => {
-              mascotInstance?.idle();
               popup = null;
               currentQuestionIndex++;
               render();

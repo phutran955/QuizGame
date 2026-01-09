@@ -1,4 +1,12 @@
-export default function ResultPopup({ isWin, level, onRestart, onGoLevel, onGoHome }) {
+import { levelConfig } from "../configs/levelConfig.js";
+
+export default function ResultPopup({
+  isWin,
+  level,
+  onRestart,
+  onGoLevel,
+  onGoHome,
+}) {
   const overlay = document.createElement("div");
   overlay.className = "popup-overlay";
 
@@ -10,9 +18,26 @@ export default function ResultPopup({ isWin, level, onRestart, onGoLevel, onGoHo
     ? `Bạn đã hoàn thành Level ${level}`
     : `Bạn đã hết tim ở Level ${level}`;
 
+  const mascotName = levelConfig[level]?.mascot;
+
+  // 👉 chỉ 1 ảnh tĩnh
+  const mascotImg = mascotName
+    ? isWin
+      ? `/assets/mascots/${mascotName}/win.png`
+      : `/assets/mascots/${mascotName}/lose.png`
+    : "";
+
   popup.innerHTML = `
     <h2>${title}</h2>
     <p>${message}</p>
+
+    ${
+      mascotImg
+        ? `<div class="result-mascot">
+             <img src="${mascotImg}" draggable="false" />
+           </div>`
+        : ""
+    }
 
     <div class="result-buttons">
       <button class="restart">Chơi lại</button>
