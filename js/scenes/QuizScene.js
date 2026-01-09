@@ -84,7 +84,7 @@ export default function QuizScene() {
 
     clearInterval(timer);
     hearts--;
-    mascotInstance?.sad();
+    mascotInstance?.idle();
 
 
     playSound("wrong");
@@ -113,7 +113,7 @@ export default function QuizScene() {
       type: "wrong",
       message: "Hết giờ rồi 😭",
       onClose: () => {
-        mascotInstance?.idle();
+        mascotInstance?.sad();
         popup = null;
         currentQuestionIndex++;
         render();
@@ -235,7 +235,6 @@ export default function QuizScene() {
       div.appendChild(settingMenu);
     };
 
-    // ===== ANSWERS =====
     // ===== ANSWERS =====
     div.querySelectorAll(".quiz-answers button").forEach((btn) => {
       btn.onclick = () => {
