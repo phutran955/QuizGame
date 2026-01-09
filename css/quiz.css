@@ -64,6 +64,10 @@
   align-items: flex-end;
 }
 
+.mascot-area img{
+  transform: translateY(-40px);
+}
+
 /* =========================
    QUIZ PANEL (QUESTION + ANSWERS)
 ========================= */
