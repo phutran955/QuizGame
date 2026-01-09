@@ -68,7 +68,7 @@
    QUIZ PANEL (QUESTION + ANSWERS)
 ========================= */
 .quiz-panel {
-  margin-bottom: 0;
+  margin-bottom: 200px;
   /* ⬅ hạ panel xuống */
   flex: 1;
   transform: translateY(20px);
