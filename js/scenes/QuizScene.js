@@ -184,11 +184,11 @@ export default function QuizScene() {
 
         <div class="quiz-answers">
           ${q.answers
-            .map(
-              (ans, index) =>
-                `<button data-index="${index}">${ans}</button>`
-            )
-            .join("")}
+        .map(
+          (ans, index) =>
+            `<button data-index="${index}">${ans}</button>`
+        )
+        .join("")}
         </div>
       </div>
 
@@ -236,87 +236,87 @@ export default function QuizScene() {
     };
 
     // ===== ANSWERS =====
-// ===== ANSWERS =====
-div.querySelectorAll(".quiz-answers button").forEach((btn) => {
-  btn.onclick = () => {
-    if (isPaused) return;
+    // ===== ANSWERS =====
+    div.querySelectorAll(".quiz-answers button").forEach((btn) => {
+      btn.onclick = () => {
+        if (isPaused) return;
 
-    // 1. Stop timer & lock buttons
-    clearInterval(timer);
-    const buttons = div.querySelectorAll(".quiz-answers button");
-    buttons.forEach((b) => (b.disabled = true));
+        // 1. Stop timer & lock buttons
+        clearInterval(timer);
+        const buttons = div.querySelectorAll(".quiz-answers button");
+        buttons.forEach((b) => (b.disabled = true));
 
-    // 2. Check answer
-    const answerIndex = Number(btn.dataset.index);
-    const isCorrect = answerIndex === q.correctIndex;
+        // 2. Check answer
+        const answerIndex = Number(btn.dataset.index);
+        const isCorrect = answerIndex === q.correctIndex;
 
-    // 3. UI feedback
-    if (isCorrect) {
-      btn.classList.add("correct");
-      playSound("correct");
-    } else {
-      btn.classList.add("wrong");
-      playSound("wrong");
-      mascotInstance?.sad();
+        // 3. UI feedback
+        if (isCorrect) {
+          btn.classList.add("correct");
+          playSound("correct");
+        } else {
+          btn.classList.add("wrong");
+          playSound("wrong");
+          mascotInstance?.sad();
 
-      // highlight correct answer
-      buttons.forEach((b) => {
-        if (Number(b.dataset.index) === q.correctIndex) {
-          b.classList.add("correct-answer");
+          // highlight correct answer
+          buttons.forEach((b) => {
+            if (Number(b.dataset.index) === q.correctIndex) {
+              b.classList.add("correct-answer");
+            }
+          });
         }
-      });
-    }
 
-    // 4. Logic game
-    if (isCorrect) {
-      currentQuestionIndex++;
-
-      popup = Messages({
-        type: "correct",
-        message: config.popupText?.correct || "Đúng rồi! 🎉",
-        onClose: () => {
-          popup = null;
-          mascotInstance?.idle();
-          render();
-        },
-      });
-
-      div.appendChild(popup);
-    } else {
-      hearts--;
-
-      div.querySelector(".hearts").innerHTML = "";
-      div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
-
-      if (hearts <= 0) {
-        playSound("gameover");
-
-        popup = ResultPopup({
-          isWin: false,
-          level: currentLevel,
-          onRestart: () => router.navigate(() => QuizScene()),
-          onGoLevel: () => router.navigate(() => LevelScene()),
-          onGoHome: () => router.navigate(() => StartScene()),
-        });
-
-        div.appendChild(popup);
-        return;
-      }
-
-      popup = Messages({
-        type: "wrong",
-        message: config.popupText?.wrong || "Sai rồi 😢",
-        onClose: () => {
-          popup = null;
+        // 4. Logic game
+        if (isCorrect) {
           currentQuestionIndex++;
-          render();
-        },
-      });
 
-      div.appendChild(popup);
-    }
-  };
-});
+          popup = Messages({
+            type: "correct",
+            message: config.popupText?.correct || "Đúng rồi! 🎉",
+            onClose: () => {
+              popup = null;
+              mascotInstance?.idle();
+              render();
+            },
+          });
+
+          div.appendChild(popup);
+        } else {
+          hearts--;
+
+          div.querySelector(".hearts").innerHTML = "";
+          div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+
+          if (hearts <= 0) {
+            playSound("gameover");
+
+            popup = ResultPopup({
+              isWin: false,
+              level: currentLevel,
+              onRestart: () => router.navigate(() => QuizScene()),
+              onGoLevel: () => router.navigate(() => LevelScene()),
+              onGoHome: () => router.navigate(() => StartScene()),
+            });
+
+            div.appendChild(popup);
+            return;
+          }
+
+          popup = Messages({
+            type: "wrong",
+            message: config.popupText?.wrong || "Sai rồi 😢",
+            onClose: () => {
+              popup = null;
+              currentQuestionIndex++;
+              render();
+            },
+          });
+
+          div.appendChild(popup);
+        }
+      };
+    });
 
     startTimer();
   }
