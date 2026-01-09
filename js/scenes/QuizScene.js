@@ -246,7 +246,6 @@ div.querySelectorAll(".quiz-answers button").forEach((btn) => {
     if (isCorrect) {
       btn.classList.add("correct");
       playSound("correct");
-      mascotInstance?.happy();
     } else {
       btn.classList.add("wrong");
       playSound("wrong");
