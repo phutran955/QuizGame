@@ -1,13 +1,13 @@
 .mascot {
-  width: 340px;
-  height: 400px;
+  width: 320px;
+  height: 480px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
 }
 
 .mascot img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 125%;
+  max-height: 125%;
   image-rendering: pixelated;
 }
