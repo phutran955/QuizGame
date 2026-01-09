@@ -3,7 +3,7 @@ export default [
     id: 1,
     question: "1 + 2 = ?",
     answers: ["3", "4", "5", "6"],
-    correctIndex: 1,
+    correctIndex: 0,
   },
   {
     id: 2,
