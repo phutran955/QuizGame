@@ -10,7 +10,7 @@ export const levelConfig = {
 
   2: {
     background: "assets/images/levels/level2bg.jpg",
-    mascot: "bear",
+    mascot: "level01",
     popupText: {
       correct: "Tuyệt vời 🐻",
       wrong: "Thử lại nhé 🐻‍❄️",
@@ -19,9 +19,19 @@ export const levelConfig = {
 
   3: {
     background: "assets/images/levels/level3bg.jpg",
+    mascot: "level01",
+    popupText: {
+      correct: "Đỉnh quá 🐰",
+      wrong: "Gần đúng rồi 🐰",
+    },
   },
 
   4: {
     background: "assets/images/levels/level4bg.jpg",
+    mascot: "level01",
+    popupText: {
+      correct: "Xuất sắc 🦁",
+      wrong: "Cố lên nữa nhé 🦁",
+    },
   },
 };

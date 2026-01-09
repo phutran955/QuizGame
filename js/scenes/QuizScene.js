@@ -27,7 +27,6 @@ export default function QuizScene() {
   let isPaused = false;
   let mascotInstance = null;
 
-
   let timer = null;
   const TOTAL_TIME = 10;
   let timeLeft = TOTAL_TIME;
@@ -47,9 +46,9 @@ export default function QuizScene() {
         return;
       }
 
-      totalQuestions = questions.length; // ĐẾM Ở CÂU HỎI
-
+      totalQuestions = questions.length;
       currentQuestionIndex = 0;
+      correctCount = 0;
       hearts = 3;
       popup = null;
       render();
@@ -85,8 +84,6 @@ export default function QuizScene() {
     clearInterval(timer);
     hearts--;
     mascotInstance?.sad();
-
-
     playSound("wrong");
 
     div.querySelector(".hearts").innerHTML = "";
@@ -132,7 +129,7 @@ export default function QuizScene() {
 
     // ===== WIN =====
     if (!q) {
-      playSound("win"); // 🎉 âm thanh chiến thắng
+      playSound("win");
 
       popup = ResultPopup({
         isWin: true,
@@ -156,66 +153,49 @@ export default function QuizScene() {
       : "none";
 
     div.innerHTML = `
-  <div class="quiz-content">
-
-    <!-- TOP BAR -->
-    <div class="quiz-top">
-      <div class="hearts"></div>
-
-      <div class="timer-bar">
-        <div class="timer-fill"></div>
-      </div>
-
-      <div class="level">Level ${currentLevel}</div>
-      <button class="setting-btn"></button>
-    </div>
-
-    <!-- QUIZ ZONE -->
-    <div class="quiz-zone">
-
-      <!-- Mascot -->
-      <div class="mascot-area"></div>
-
-      <!-- Question & Answers -->
-      <div class="quiz-panel">
-        <div class="quiz-question">
-          <h2>${q.question}</h2>
+      <div class="quiz-content">
+        <div class="quiz-top">
+          <div class="hearts"></div>
+          <div class="timer-bar"><div class="timer-fill"></div></div>
+          <div class="level">Level ${currentLevel}</div>
+          <button class="setting-btn"></button>
         </div>
 
-        <div class="quiz-answers">
-          ${q.answers
-        .map(
-          (ans, index) =>
-            `<button data-index="${index}">${ans}</button>`
-        )
-        .join("")}
+        <div class="quiz-zone">
+          <div class="mascot-area"></div>
+
+          <div class="quiz-panel">
+            <div class="quiz-question">
+              <h2>${q.question}</h2>
+            </div>
+
+            <div class="quiz-answers">
+              ${q.answers
+                .map((ans, index) => `<button data-index="${index}">${ans}</button>`)
+                .join("")}
+            </div>
+          </div>
         </div>
       </div>
-
-    </div>
-  </div>
-`;
-
+    `;
 
     // ===== INIT MASCOT =====
     const mascotArea = div.querySelector(".mascot-area");
 
     if (config.mascot && !mascotInstance) {
-      mascotInstance = Mascot({
-        mascotName: config.mascot,
-      });
+      mascotInstance = Mascot({ mascotName: config.mascot });
     }
 
     if (mascotInstance && !mascotArea.contains(mascotInstance.el)) {
       mascotArea.appendChild(mascotInstance.el);
     }
 
-
-
     div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
 
-    // SETTINGS
+    // ===== SETTINGS =====
     div.querySelector(".setting-btn").onclick = () => {
+      playSound("click");
+
       if (settingMenu) return;
       isPaused = true;
       clearInterval(timer);
@@ -236,30 +216,28 @@ export default function QuizScene() {
     };
 
     // ===== ANSWERS =====
-    // ===== ANSWERS =====
     div.querySelectorAll(".quiz-answers button").forEach((btn) => {
       btn.onclick = () => {
         if (isPaused) return;
 
-        // 1. Stop timer & lock buttons
         clearInterval(timer);
+
         const buttons = div.querySelectorAll(".quiz-answers button");
         buttons.forEach((b) => (b.disabled = true));
 
-        // 2. Check answer
         const answerIndex = Number(btn.dataset.index);
         const isCorrect = answerIndex === q.correctIndex;
 
-        // 3. UI feedback
         if (isCorrect) {
           btn.classList.add("correct");
           playSound("correct");
+          mascotInstance?.happy?.();
+          correctCount++;
         } else {
           btn.classList.add("wrong");
           playSound("wrong");
           mascotInstance?.sad();
 
-          // highlight correct answer
           buttons.forEach((b) => {
             if (Number(b.dataset.index) === q.correctIndex) {
               b.classList.add("correct-answer");
@@ -267,7 +245,6 @@ export default function QuizScene() {
           });
         }
 
-        // 4. Logic game
         if (isCorrect) {
           currentQuestionIndex++;
 
@@ -294,6 +271,8 @@ export default function QuizScene() {
             popup = ResultPopup({
               isWin: false,
               level: currentLevel,
+              correctCount,
+              totalQuestions,
               onRestart: () => router.navigate(() => QuizScene()),
               onGoLevel: () => router.navigate(() => LevelScene()),
               onGoHome: () => router.navigate(() => StartScene()),
@@ -308,6 +287,7 @@ export default function QuizScene() {
             message: config.popupText?.wrong || "Sai rồi 😢",
             onClose: () => {
               popup = null;
+              mascotInstance?.idle();
               currentQuestionIndex++;
               render();
             },

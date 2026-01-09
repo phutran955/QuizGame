@@ -1,5 +1,6 @@
 import { router } from "../router.js";
 import LevelScene from "./LevelScene.js";
+import { playSound } from "../components/soundManager.js";
 
 export default function StartScene() {
   const div = document.createElement("div");
@@ -11,6 +12,7 @@ export default function StartScene() {
   `;
 
   div.querySelector(".start-btn").onclick = () => {
+    playSound("click"); 
     router.navigate(LevelScene);
   };
 
