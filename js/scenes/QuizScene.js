@@ -34,14 +34,22 @@ export default function QuizScene() {
   const div = document.createElement("div");
   div.className = "quiz-scene";
 
+  // ===== HEART EFFECT =====
+  function applyHeartBeat() {
+    div.querySelectorAll(".hearts img, .hearts .heart").forEach(h => {
+      h.classList.remove("heart-beat");
+      void h.offsetWidth; // restart animation
+      h.classList.add("heart-beat");
+    });
+  }
+
   // ===== MASCOT CHAT =====
   function showMascotChat(content) {
-  const chatBox = div.querySelector(".mascot-chat");
-  if (!chatBox) return;
-
-  chatBox.innerHTML = "";
-  chatBox.appendChild(content);
-}
+    const chatBox = div.querySelector(".mascot-chat");
+    if (!chatBox) return;
+    chatBox.innerHTML = "";
+    chatBox.appendChild(content);
+  }
 
   // ====== LOAD DATA ======
   async function loadQuestions() {
@@ -93,11 +101,11 @@ export default function QuizScene() {
     clearInterval(timer);
     hearts--;
     mascotInstance?.idle();
-
     playSound("wrong");
 
     div.querySelector(".hearts").innerHTML = "";
     div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+    applyHeartBeat();
 
     if (hearts <= 0) {
       playSound("gameover");
@@ -182,22 +190,23 @@ export default function QuizScene() {
             </div>
 
             <div class="quiz-answers">
-              ${q.answers
-                .map((ans, index) => `<button data-index="${index}">${ans}</button>`)
-                .join("")}
+              ${q.answers.map((ans, i) =>
+                `<button data-index="${i}">${ans}</button>`
+              ).join("")}
             </div>
           </div>
         </div>
       </div>
     `;
 
+    // 🍃 ADD LEAVES AFTER RENDER
+    createFallingLeaves(div);
+
     // ===== INIT MASCOT =====
     const mascotArea = div.querySelector(".mascot-area");
-
     if (config.mascot && !mascotInstance) {
       mascotInstance = Mascot({ mascotName: config.mascot });
     }
-
     if (mascotInstance && !mascotArea.contains(mascotInstance.el)) {
       mascotArea.appendChild(mascotInstance.el);
     }
@@ -207,7 +216,6 @@ export default function QuizScene() {
     // ===== SETTINGS =====
     div.querySelector(".setting-btn").onclick = () => {
       playSound("click");
-
       if (settingMenu) return;
       isPaused = true;
       clearInterval(timer);
@@ -231,7 +239,6 @@ export default function QuizScene() {
     div.querySelectorAll(".quiz-answers button").forEach((btn) => {
       btn.onclick = () => {
         if (isPaused) return;
-
         clearInterval(timer);
 
         const buttons = div.querySelectorAll(".quiz-answers button");
@@ -245,6 +252,19 @@ export default function QuizScene() {
           playSound("correct");
           mascotInstance?.happy?.();
           correctCount++;
+
+          popup = Messages({
+            type: "correct",
+            message: config.popupText?.correct || "Đúng rồi! 🎉",
+            onClose: () => {
+              popup = null;
+              mascotInstance?.idle();
+              currentQuestionIndex++;
+              render();
+            },
+          });
+
+          showMascotChat(popup);
         } else {
           btn.classList.add("wrong");
           playSound("wrong");
@@ -255,27 +275,11 @@ export default function QuizScene() {
               b.classList.add("correct-answer");
             }
           });
-        }
 
-        if (isCorrect) {
-          currentQuestionIndex++;
-
-          popup = Messages({
-            type: "correct",
-            message: config.popupText?.correct || "Đúng rồi! 🎉",
-            onClose: () => {
-              popup = null;
-              mascotInstance?.idle();
-              render();
-            },
-          });
-
-          showMascotChat(popup);
-        } else {
           hearts--;
-
           div.querySelector(".hearts").innerHTML = "";
           div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+          applyHeartBeat();
 
           if (hearts <= 0) {
             playSound("gameover");
@@ -311,6 +315,25 @@ export default function QuizScene() {
     });
 
     startTimer();
+  }
+
+  // ===== FALLING LEAVES =====
+  function createFallingLeaves(parent) {
+    parent.querySelector(".leaves-container")?.remove();
+
+    const container = document.createElement("div");
+    container.className = "leaves-container";
+
+    for (let i = 0; i < 12; i++) {
+      const leaf = document.createElement("div");
+      leaf.className = "leaf";
+      leaf.style.left = Math.random() * 100 + "%";
+      leaf.style.animationDuration = 6 + Math.random() * 6 + "s";
+      leaf.style.animationDelay = Math.random() * 5 + "s";
+      container.appendChild(leaf);
+    }
+
+    parent.appendChild(container);
   }
 
   loadQuestions();
