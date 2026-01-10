@@ -23,6 +23,7 @@ export const levelConfig = {
     popupText: {
       correct: "Tuyệt vời 🐻",
       wrong: "Thử lại nhé 🐻‍❄️",
+
     },
   },
 
@@ -32,6 +33,7 @@ export const levelConfig = {
     popupText: {
       correct: "Tuyệt vời 🐻",
       wrong: "Thử lại nhé 🐻‍❄️",
+
     },
   },
 };

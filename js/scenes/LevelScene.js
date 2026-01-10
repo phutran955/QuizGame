@@ -1,5 +1,6 @@
 import { router } from "../router.js";
 import QuizScene from "./QuizScene.js";
+import { playSound } from "../components/soundManager.js";
 
 export let currentLevel = 1;
 
@@ -23,6 +24,7 @@ export default function LevelScene() {
   // chọn level
   div.querySelectorAll("[data-level]").forEach(btn => {
     btn.onclick = () => {
+      playSound("click"); // ✅ âm thanh click
       currentLevel = Number(btn.dataset.level);
       router.navigate(QuizScene);
     };
@@ -30,6 +32,7 @@ export default function LevelScene() {
 
   // quay lại start
   div.querySelector(".back-btn").onclick = () => {
+    playSound("click"); // ✅ âm thanh click
     import("./StartScene.js").then(m => {
       router.navigate(m.default);
     });

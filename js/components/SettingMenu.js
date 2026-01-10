@@ -1,3 +1,5 @@
+import { playSound } from "./soundManager.js";
+
 export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay }) {
   const overlay = document.createElement("div");
   overlay.className = "setting-overlay";
@@ -14,10 +16,25 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
     </div>
   `;
 
-  overlay.querySelector("#btn-start").onclick = onGoStart;
-  overlay.querySelector("#btn-level").onclick = onGoLevel;
-  overlay.querySelector("#btn-replay").onclick = onReplay;
-  overlay.querySelector("#btn-close").onclick = onClose;
+  overlay.querySelector("#btn-start").onclick = () => {
+    playSound("click");
+    onGoStart();
+  };
+
+  overlay.querySelector("#btn-level").onclick = () => {
+    playSound("click");
+    onGoLevel();
+  };
+
+  overlay.querySelector("#btn-replay").onclick = () => {
+    playSound("click");
+    onReplay();
+  };
+
+  overlay.querySelector("#btn-close").onclick = () => {
+    playSound("click");
+    onClose();
+  };
 
   return overlay;
 }

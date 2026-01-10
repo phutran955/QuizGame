@@ -1,4 +1,5 @@
 const sounds = {
+    click: new Audio("/assets/images/sounds/click.mp3"),
     correct: new Audio("/assets/images/sounds/correct.mp3"),
     wrong: new Audio("/assets/images/sounds/wrong.mp3"),
     gameover: new Audio("/assets/images/sounds/gameover.mp3"),
