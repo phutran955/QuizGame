@@ -66,6 +66,46 @@
 
 .mascot-area img{
   transform: translateY(-40px);
+  transform: translateX(-200px);
+}
+
+.mascot-chat {
+  position: absolute;
+  bottom: 160px; /* trên đầu mascot */
+  left: 80px;
+  max-width: 260px;
+  z-index: 10;
+}
+
+.mascot-chat .popup {
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  font-size: 14px;
+  animation: popIn 0.3s ease;
+}
+
+/* mỏ chat */
+.mascot-chat .popup::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 24px;
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: #fff transparent transparent;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* =========================
@@ -288,12 +328,12 @@
 }
 
 .toast-message {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  background: #333;
-  color: #fff;
+  position: absolute;
+  bottom: 160px;   /* trên đầu mascot */
+  left: 430px;
+  transform: none;
+  background: #fff;
+  color: #333;
   padding: 12px 24px;
   border-radius: 20px;
   font-size: 16px;
@@ -307,17 +347,34 @@
 .toast-message.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+  transform: scale(3);
 }
 
 /* đúng */
 .toast-message.correct {
-  background: #4caf50;
+  color: #4caf50;
+  font-weight: bold;
 }
 
 /* sai */
 .toast-message.wrong {
-  background: #f44336;
+  color: #f44336;
+  font-weight: bold;
 }
+
+.toast-message::after {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  left: -10px;
+
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 12px solid #fff;
+  border-left: 0;
+}
+
+
 
 /* =========================
    SETTINGS MENU
@@ -424,4 +481,38 @@
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* =========================
+   MASCOT CHAT OVERRIDE
+========================= */
+
+/* tắt overlay khi popup nằm trong mascot */
+.mascot-chat .popup-overlay {
+  display: none !important;
+}
+
+/* ép popup về layout bình thường */
+.mascot-chat .popup {
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  font-size: 14px;
+  animation: popIn 0.25s ease;
+}
+
+/* mỏ chat */
+.mascot-chat .popup::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: -10px;
+  border-width: 10px 10px 10px 0;
+  border-style: solid;
+  border-color: #ffffff transparent transparent;
 }

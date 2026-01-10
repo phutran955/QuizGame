@@ -34,6 +34,15 @@ export default function QuizScene() {
   const div = document.createElement("div");
   div.className = "quiz-scene";
 
+  // ===== MASCOT CHAT =====
+  function showMascotChat(content) {
+  const chatBox = div.querySelector(".mascot-chat");
+  if (!chatBox) return;
+
+  chatBox.innerHTML = "";
+  chatBox.appendChild(content);
+}
+
   // ====== LOAD DATA ======
   async function loadQuestions() {
     div.innerHTML = `<p>⏳ Đang tải câu hỏi...</p>`;
@@ -118,7 +127,7 @@ export default function QuizScene() {
       },
     });
 
-    div.appendChild(popup);
+    showMascotChat(popup);
   }
 
   // ====== RENDER ======
@@ -163,7 +172,9 @@ export default function QuizScene() {
         </div>
 
         <div class="quiz-zone">
-          <div class="mascot-area"></div>
+          <div class="mascot-area">
+            <div class="mascot-chat"></div>
+          </div>
 
           <div class="quiz-panel">
             <div class="quiz-question">
@@ -259,7 +270,7 @@ export default function QuizScene() {
             },
           });
 
-          div.appendChild(popup);
+          showMascotChat(popup);
         } else {
           hearts--;
 
@@ -294,7 +305,7 @@ export default function QuizScene() {
             },
           });
 
-          div.appendChild(popup);
+          showMascotChat(popup);
         }
       };
     });

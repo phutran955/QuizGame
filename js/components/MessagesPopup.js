@@ -6,8 +6,9 @@ export default function MessagesPopup({ type, message, onClose, duration = 1500 
     <span>${message}</span>
   `;
 
-  // thêm vào body để nổi trên cùng
-  document.body.appendChild(toast);
+ const mascot = document.querySelector(".mascot-area");
+(mascot || document.body).appendChild(toast);
+
 
   // animate in
   requestAnimationFrame(() => {
