@@ -27,19 +27,37 @@ export default function Mascot({ mascotName }) {
     });
   }
 
+  function happy() {
+    return new Promise(resolve => {
+      stopCurrent();
+      currentState = "happy";
+
+      currentAnim = playAnimation({
+        img,
+        path: `/assets/mascots/${mascotName}/happy`,
+        loop: false,
+        onEnd: () => {
+          idle();
+          resolve(); // ✅ BÁO ĐÃ XONG ANIM
+        },
+      });
+    });
+  }
+
   function sad() {
-    if (currentState === "sad") return;
+    return new Promise(resolve => {
+      stopCurrent();
+      currentState = "sad";
 
-    stopCurrent();
-    currentState = "sad";
-
-    currentAnim = playAnimation({
-      img,
-      path: `/assets/mascots/${mascotName}/sad`,
-      loop: false,
-      onEnd: () => {
-        idle(); // quay lại idle NGAY khi sad kết thúc
-      },
+      currentAnim = playAnimation({
+        img,
+        path: `/assets/mascots/${mascotName}/sad`,
+        loop: false,
+        onEnd: () => {
+          idle();
+          resolve(); // ✅ BÁO ĐÃ XONG ANIM
+        },
+      });
     });
   }
 
@@ -49,6 +67,7 @@ export default function Mascot({ mascotName }) {
   return {
     el: div,
     idle,
+    happy,
     sad,
     getState: () => currentState,
   };

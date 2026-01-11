@@ -127,9 +127,9 @@ export default function QuizScene() {
     popup = Messages({
       type: "wrong",
       message: "Hết giờ rồi 😭",
-      onClose: () => {
-        mascotInstance?.sad();
+      onClose: async () => {
         popup = null;
+        await mascotInstance.sad();
         currentQuestionIndex++;
         render();
       },
@@ -191,8 +191,8 @@ export default function QuizScene() {
 
             <div class="quiz-answers">
               ${q.answers.map((ans, i) =>
-                `<button data-index="${i}">${ans}</button>`
-              ).join("")}
+      `<button data-index="${i}">${ans}</button>`
+    ).join("")}
             </div>
           </div>
         </div>
@@ -250,15 +250,15 @@ export default function QuizScene() {
         if (isCorrect) {
           btn.classList.add("correct");
           playSound("correct");
-          mascotInstance?.happy?.();
+          mascotInstance.happy();
           correctCount++;
 
           popup = Messages({
             type: "correct",
             message: config.popupText?.correct || "Đúng rồi! 🎉",
-            onClose: () => {
+            onClose: async () => {
               popup = null;
-              mascotInstance?.idle();
+              await mascotInstance.idle();
               currentQuestionIndex++;
               render();
             },
@@ -268,7 +268,7 @@ export default function QuizScene() {
         } else {
           btn.classList.add("wrong");
           playSound("wrong");
-          mascotInstance?.sad();
+          mascotInstance.sad();
 
           buttons.forEach((b) => {
             if (Number(b.dataset.index) === q.correctIndex) {
@@ -301,9 +301,9 @@ export default function QuizScene() {
           popup = Messages({
             type: "wrong",
             message: config.popupText?.wrong || "Sai rồi 😢",
-            onClose: () => {
+            onClose: async () => {
               popup = null;
-              mascotInstance?.idle();
+              await mascotInstance.idle();
               currentQuestionIndex++;
               render();
             },
