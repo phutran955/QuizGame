@@ -347,8 +347,7 @@
 /* hiệu ứng hiện */
 .toast-message.show {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  transform: scale(3);
+  transform: translateX(-50%) scale(3);
 }
 
 /* đúng */
@@ -380,35 +379,61 @@
 /* =========================
    SETTINGS MENU
 ========================= */
-.setting-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+.quiz-top {
+  position: relative; /* rất quan trọng */
 }
 
 .setting-menu {
+  position: absolute;
+  top: 120px;      /* dưới nút setting */
+  right: 0;        /* sát mép phải */
   background: #fff;
-  padding: 20px;
+  padding: 16px;
   border-radius: 16px;
-  min-width: 240px;
-  text-align: center;
+  width: 220px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  z-index: 9999;
+
+  transform-origin: top center;
+  overflow: hidden;
+
+  pointer-events: auto;
+
+  animation: rollDown 0.5s ease;
+}
+
+@keyframes rollDown {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  60% {
+    opacity: 1;
+    transform: scaleY(1.05);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+
+.setting-menu h3 {
+  margin-bottom: 10px;
 }
 
 .setting-menu button {
-  display: block;
   width: 100%;
-  margin: 10px 0;
-  padding: 12px;
-  font-size: 16px;
+  margin: 6px 0;
+  padding: 10px;
   border-radius: 10px;
   border: none;
   background: #ff9800;
   color: #fff;
   cursor: pointer;
+}
+
+.setting-menu button:hover {
+  opacity: 0.9;
 }
 
 /* =========================
