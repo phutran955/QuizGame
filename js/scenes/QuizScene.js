@@ -53,7 +53,6 @@ export default function QuizScene() {
 
   // ====== LOAD DATA ======
   async function loadQuestions() {
-    div.innerHTML = `<p>⏳ Đang tải câu hỏi...</p>`;
 
     try {
       questions = await quizService.getQuestions(currentLevel);
