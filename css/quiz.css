@@ -2,12 +2,16 @@
    QUIZ SCENE
 ========================= */
 .quiz-scene {
-  min-height: 100vh;
-  width: 100%;
-  padding: 20px;
-  text-align: center;
+  width: 1580px;
+  height: 720px;
 
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  transform-origin: center;
+  transform: translate(-50%, -50%);
+
   overflow: hidden;
 
   background-repeat: no-repeat;
@@ -16,7 +20,6 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
 }
 
 /* =========================

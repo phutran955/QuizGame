@@ -4,7 +4,7 @@ export const levelConfig = {
     mascot: "cat",
     popupText: {
       correct: "Giỏi lắm 😸",
-      wrong: "Sai rồi nè 😿",
+      wrong: "Chưa tày đâu ",
     },
   },
 

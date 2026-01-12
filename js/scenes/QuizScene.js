@@ -73,6 +73,22 @@ export default function QuizScene() {
       div.innerHTML = `<p>❌ Lỗi tải câu hỏi</p>`;
     }
   }
+  // ==== SCALE GAME ====
+  function scaleGame() {
+    const DESIGN_WIDTH = 1280;
+    const DESIGN_HEIGHT = 720;
+
+    const scaleX = window.innerWidth / DESIGN_WIDTH;
+    const scaleY = window.innerHeight / DESIGN_HEIGHT;
+    const scale = Math.min(scaleX, scaleY);
+
+    div.style.transform =
+      `translate(-50%, -50%) scale(${scale})`;
+  }
+
+  window.addEventListener("resize", scaleGame);
+  setTimeout(scaleGame, 0);
+
 
   // ====== TIMER ======
   function startTimer() {
