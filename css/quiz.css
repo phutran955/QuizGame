@@ -68,14 +68,15 @@
   align-items: flex-end;
 }
 
-.mascot-area img{
+.mascot-area img {
   transform: translateY(-40px);
   transform: translateX(-200px);
 }
 
 .mascot-chat {
   position: absolute;
-  bottom: 160px; /* trên đầu mascot */
+  bottom: 160px;
+  /* trên đầu mascot */
   left: 80px;
   max-width: 260px;
   z-index: 10;
@@ -85,7 +86,7 @@
   background: #fff;
   border-radius: 16px;
   padding: 12px 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.3s ease;
 }
@@ -106,6 +107,7 @@
     opacity: 0;
     transform: translateY(10px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -174,7 +176,7 @@
   color: #1f1f1f;
   cursor: pointer;
 
-  box-shadow: 0 6px 0 #2e7d32, 0 10px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 0 #2e7d32, 0 10px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
 
   animation: floatIdle 2.2s ease-in-out infinite;
@@ -182,20 +184,29 @@
 
 /* 🌟 Nhấp nhô nhẹ */
 @keyframes floatIdle {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
+
 /* 👉 Rê chuột */
 .quiz-answers button:hover {
   transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 10px 0 #2e7d32, 0 14px 22px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 0 #2e7d32, 0 14px 22px rgba(0, 0, 0, 0.25);
 }
 
 /* 👉 Khi bấm */
 .quiz-answers button:active {
   transform: translateY(-2px) scale(0.96);
-  box-shadow: 0 4px 0 #2e7d32, 0 6px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 0 #2e7d32, 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* =========================
@@ -211,9 +222,17 @@
 }
 
 @keyframes correctPop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2) rotate(3deg); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2) rotate(3deg);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ❌ SAI */
@@ -225,11 +244,25 @@
 }
 
 @keyframes wrongShake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-6px);
+  }
+
+  50% {
+    transform: translateX(6px);
+  }
+
+  75% {
+    transform: translateX(-6px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /* 🌟 ĐÁP ÁN ĐÚNG (khi hết mạng) */
@@ -245,7 +278,8 @@
    SETTINGS BUTTON
 ========================= */
 .setting-btn {
-  background-image: url("../assets/images/menu.png"); /* ảnh bánh răng */
+  background-image: url("../assets/images/menu.png");
+  /* ảnh bánh răng */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -332,7 +366,8 @@
 
 .toast-message {
   position: absolute;
-  bottom: 160px;   /* trên đầu mascot */
+  bottom: 160px;
+  /* trên đầu mascot */
   left: 430px;
   transform: none;
   background: #fff;
@@ -382,18 +417,21 @@
    SETTINGS MENU
 ========================= */
 .quiz-top {
-  position: relative; /* rất quan trọng */
+  position: relative;
+  /* rất quan trọng */
 }
 
 .setting-menu {
   position: absolute;
-  top: 120px;      /* dưới nút setting */
-  right: 0;        /* sát mép phải */
+  top: 120px;
+  /* dưới nút setting */
+  right: 0;
+  /* sát mép phải */
   background: #fff;
   padding: 16px;
   border-radius: 16px;
   width: 220px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   z-index: 9999;
 
   transform-origin: top center;
@@ -409,10 +447,12 @@
     opacity: 0;
     transform: scaleY(0);
   }
+
   60% {
     opacity: 1;
     transform: scaleY(1.05);
   }
+
   100% {
     transform: scaleY(1);
   }
@@ -437,6 +477,22 @@
 .setting-menu button:hover {
   opacity: 0.9;
 }
+
+.setting-group {
+  text-align: left;
+  margin: 12px 0;
+  font-weight: bold;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.setting-group input[type="range"] {
+  width: 100%;
+}
+
 
 /* =========================
    RESULT POPUP
@@ -469,7 +525,8 @@
 .result-mascot img {
   width: 160px;
   max-width: 70%;
-  image-rendering: pixelated; /* nếu là pixel art */
+  image-rendering: pixelated;
+  /* nếu là pixel art */
   user-select: none;
 }
 
@@ -529,7 +586,7 @@
   background: #ffffff;
   border-radius: 16px;
   padding: 12px 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.25s ease;
 }
@@ -546,16 +603,15 @@
 }
 
 /* ===== LÁ RƠI ===== */
-/* ===== LÁ RƠI - NẰM SAU UI ===== */
 .leaves-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;   /* không chặn click */
+  pointer-events: none;
   overflow: hidden;
-  z-index: 2;             /* nền động */
+  z-index: 2;
 }
 
 .leaf {
@@ -564,7 +620,7 @@
   width: 30px;
   height: 30px;
 
-  background-image: url("/assets/images/decor/leaf.png"); /* đổi đúng đường dẫn */
+  background-image: url("/assets/images/decor/leaf.png");
   background-size: contain;
   background-repeat: no-repeat;
 
@@ -573,14 +629,26 @@
 
 /* rơi xuống */
 @keyframes leafFall {
-  from { transform: translateY(-80px); }
-  to   { transform: translateY(110vh); }
+  from {
+    transform: translateY(-80px);
+  }
+
+  to {
+    transform: translateY(110vh);
+  }
 }
 
 /* lắc lư */
 @keyframes leafSwing {
-  0%,100% { margin-left: 0; }
-  50%     { margin-left: 40px; }
+
+  0%,
+  100% {
+    margin-left: 0;
+  }
+
+  50% {
+    margin-left: 40px;
+  }
 }
 
 .quiz-content {
@@ -590,7 +658,7 @@
 
 .quiz-top,
 .quiz-zone,
-.quiz-panel{
+.quiz-panel {
   position: relative;
   z-index: 10;
 }
@@ -601,9 +669,101 @@
 }
 
 @keyframes heartBeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.2); }
-  50% { transform: scale(1); }
-  75% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.2);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+
+  75% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
+
+/* =========================
+   LEVEL EFFECTS
+========================= */
+
+.effects-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+  /* dưới UI, trên background */
+}
+
+/* ===== LEVEL 2: MƯA ===== */
+.rain {
+  position: absolute;
+  top: -40px;
+  width: 3px;
+  height: 24px;
+  background: linear-gradient(to bottom, #ffffffaa, #ffffff00);
+  border-radius: 2px;
+  animation: rainFall linear infinite;
+}
+
+@keyframes rainFall {
+  from {
+    transform: translateY(-40px);
+  }
+
+  to {
+    transform: translateY(110vh);
+  }
+}
+
+/* ===== LEVEL 3: LÁ VÀNG ===== */
+.leaf-yellow {
+  position: absolute;
+  top: -60px;
+  width: 34px;
+  height: 34px;
+  background-image: url("/assets/images/decor/autumnleaf.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: leafFall linear infinite, leafSwing ease-in-out infinite;
+}
+
+/* ===== LEVEL 4: TRO LỬA ===== */
+.ember {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-image: url("/assets/images/decor/embers.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: emberFly linear infinite;
+  filter: drop-shadow(0 0 12px orange);
+  pointer-events: none;
+}
+
+
+@keyframes emberFly {
+  0% {
+    transform: translateY(0) scale(0.4) rotate(0deg);
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-500px) scale(1.3) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+
