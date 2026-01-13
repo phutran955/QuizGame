@@ -33,8 +33,7 @@ export default function ResultPopup({
 
   popup.innerHTML = `
   <h2>${title}</h2>
-  <p>${message}</p>
-  <p class="correct-count">✅ ${correctText}</p>
+  <p>${message}</p>  
 
   ${
     mascotImg
@@ -43,6 +42,8 @@ export default function ResultPopup({
          </div>`
       : ""
   }
+
+  <p class="correct-count">✅ ${correctText}</p>
 
   <div class="result-buttons">
     <button class="restart">Chơi lại</button>
