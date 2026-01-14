@@ -7,10 +7,10 @@
 
   position: absolute;
   left: 50%;
-  top: 50%;
+  bottom: 0;
+  top: auto;
 
   transform-origin: center;
-  transform: translate(-50%, -50%);
 
   overflow: hidden;
 

@@ -36,6 +36,18 @@ body {
   overflow: hidden;
 }
 
+#game {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+
 
 /* =========================
    ROTATE WARNING (PORTRAIT)
@@ -67,20 +79,12 @@ body {
   }
 }
 
-
-
 /* =========================
    DESKTOP
 ========================= */
-@media screen and (min-width: 1025px) {
-  #game {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .quiz-scene {
-    width: min(1280px, 100vw);
-    height: min(720px, 100vh);
-  }
+.quiz-scene {
+  width: 1280px;
+  height: 720px;
+  transform-origin: center center;
 }
+
