@@ -68,7 +68,7 @@
   align-items: flex-end;
 }
 
-.mascot-area img{
+.mascot-area img {
   transform: translateY(-40px);
   transform: translateX(-200px);
 }
@@ -85,7 +85,7 @@
   background: #fff;
   border-radius: 16px;
   padding: 12px 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.3s ease;
 }
@@ -174,7 +174,7 @@
   color: #1f1f1f;
   cursor: pointer;
 
-  box-shadow: 0 6px 0 #2e7d32, 0 10px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 0 #2e7d32, 0 10px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
 
   animation: floatIdle 2.2s ease-in-out infinite;
@@ -182,20 +182,26 @@
 
 /* 🌟 Nhấp nhô nhẹ */
 @keyframes floatIdle {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 /* 👉 Rê chuột */
 .quiz-answers button:hover {
   transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 10px 0 #2e7d32, 0 14px 22px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 0 #2e7d32, 0 14px 22px rgba(0, 0, 0, 0.25);
 }
 
 /* 👉 Khi bấm */
 .quiz-answers button:active {
   transform: translateY(-2px) scale(0.96);
-  box-shadow: 0 4px 0 #2e7d32, 0 6px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 0 #2e7d32, 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* =========================
@@ -211,9 +217,15 @@
 }
 
 @keyframes correctPop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2) rotate(3deg); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2) rotate(3deg);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ❌ SAI */
@@ -225,11 +237,21 @@
 }
 
 @keyframes wrongShake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+  75% {
+    transform: translateX(-6px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /* 🌟 ĐÁP ÁN ĐÚNG (khi hết mạng) */
@@ -239,7 +261,6 @@
   color: #5d4500;
   box-shadow: 0 0 18px #ffeb3b;
 }
-
 
 /* =========================
    SETTINGS BUTTON
@@ -255,7 +276,6 @@
   width: 120px;
   height: 120px;
   cursor: pointer;
-
 }
 
 .setting-btn:hover {
@@ -332,7 +352,7 @@
 
 .toast-message {
   position: absolute;
-  bottom: 160px;   /* trên đầu mascot */
+  bottom: 160px; /* trên đầu mascot */
   left: 430px;
   transform: none;
   background: #fff;
@@ -376,51 +396,31 @@
   border-left: 0;
 }
 
-
-
 /* =========================
    SETTINGS MENU
 ========================= */
-.quiz-top {
-  position: relative; /* rất quan trọng */
+.setting-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .setting-menu {
-  position: absolute;
-  top: 120px;      /* dưới nút setting */
-  right: 0;        /* sát mép phải */
   background: #fff;
-  padding: 16px;
+  padding: 20px;
   border-radius: 16px;
-  width: 220px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-  z-index: 9999;
-
-  transform-origin: top center;
-  overflow: hidden;
-
-  pointer-events: auto;
-
-  animation: rollDown 0.5s ease;
+  min-width: 240px;
+  text-align: center;
 }
-
-@keyframes rollDown {
-  0% {
-    opacity: 0;
-    transform: scaleY(0);
-  }
-  60% {
-    opacity: 1;
-    transform: scaleY(1.05);
-  }
-  100% {
-    transform: scaleY(1);
-  }
-}
-
 
 .setting-menu h3 {
   margin-bottom: 10px;
+  font-size: 36px;
+  font-weight: bold;
 }
 
 .setting-menu button {
@@ -432,6 +432,8 @@
   background: #ff9800;
   color: #fff;
   cursor: pointer;
+  height: 60px;
+  font-size: 24px;
 }
 
 .setting-menu button:hover {
@@ -529,7 +531,7 @@
   background: #ffffff;
   border-radius: 16px;
   padding: 12px 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.25s ease;
 }
@@ -553,9 +555,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;   /* không chặn click */
+  pointer-events: none; /* không chặn click */
   overflow: hidden;
-  z-index: 2;             /* nền động */
+  z-index: 2; /* nền động */
 }
 
 .leaf {
@@ -573,14 +575,23 @@
 
 /* rơi xuống */
 @keyframes leafFall {
-  from { transform: translateY(-80px); }
-  to   { transform: translateY(110vh); }
+  from {
+    transform: translateY(-80px);
+  }
+  to {
+    transform: translateY(110vh);
+  }
 }
 
 /* lắc lư */
 @keyframes leafSwing {
-  0%,100% { margin-left: 0; }
-  50%     { margin-left: 40px; }
+  0%,
+  100% {
+    margin-left: 0;
+  }
+  50% {
+    margin-left: 40px;
+  }
 }
 
 .quiz-content {
@@ -590,7 +601,7 @@
 
 .quiz-top,
 .quiz-zone,
-.quiz-panel{
+.quiz-panel {
   position: relative;
   z-index: 10;
 }
@@ -601,9 +612,19 @@
 }
 
 @keyframes heartBeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.2); }
-  50% { transform: scale(1); }
-  75% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
