@@ -75,7 +75,7 @@ export default function QuizScene() {
   }
   // ==== SCALE GAME ====
   function scaleGame() {
-    const DESIGN_WIDTH = 1500;
+    const DESIGN_WIDTH = 1720;
     const DESIGN_HEIGHT = 720;
 
     const scaleX = window.innerWidth / DESIGN_WIDTH;

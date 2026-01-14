@@ -2,7 +2,7 @@
    QUIZ SCENE
 ========================= */
 .quiz-scene {
-  width: 1500px;
+  width: 1720px;
   height: 720px;
 
   position: absolute;
@@ -68,14 +68,15 @@
   align-items: flex-end;
 }
 
-.mascot-area img{
+.mascot-area img {
   transform: translateY(-40px);
   transform: translateX(-200px);
 }
 
 .mascot-chat {
   position: absolute;
-  bottom: 160px; /* trên đầu mascot */
+  bottom: 160px;
+  /* trên đầu mascot */
   left: 80px;
   max-width: 260px;
   z-index: 10;
@@ -85,7 +86,7 @@
   background: #fff;
   border-radius: 16px;
   padding: 12px 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.3s ease;
 }
@@ -106,6 +107,7 @@
     opacity: 0;
     transform: translateY(10px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -174,7 +176,7 @@
   color: #1f1f1f;
   cursor: pointer;
 
-  box-shadow: 0 6px 0 #2e7d32, 0 10px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 0 #2e7d32, 0 10px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
 
   animation: floatIdle 2.2s ease-in-out infinite;
@@ -185,23 +187,26 @@
   0% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-4px);
   }
+
   100% {
     transform: translateY(0);
   }
 }
+
 /* 👉 Rê chuột */
 .quiz-answers button:hover {
   transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 10px 0 #2e7d32, 0 14px 22px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 0 #2e7d32, 0 14px 22px rgba(0, 0, 0, 0.25);
 }
 
 /* 👉 Khi bấm */
 .quiz-answers button:active {
   transform: translateY(-2px) scale(0.96);
-  box-shadow: 0 4px 0 #2e7d32, 0 6px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 0 #2e7d32, 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* =========================
@@ -220,9 +225,11 @@
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.2) rotate(3deg);
   }
+
   100% {
     transform: scale(1);
   }
@@ -240,15 +247,19 @@
   0% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-6px);
   }
+
   50% {
     transform: translateX(6px);
   }
+
   75% {
     transform: translateX(-6px);
   }
+
   100% {
     transform: translateX(0);
   }
@@ -267,7 +278,8 @@
    SETTINGS BUTTON
 ========================= */
 .setting-btn {
-  background-image: url("../assets/images/menu.png"); /* ảnh bánh răng */
+  background-image: url("../assets/images/menu.png");
+  /* ảnh bánh răng */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -354,7 +366,8 @@
 
 .toast-message {
   position: absolute;
-  bottom: 160px; /* trên đầu mascot */
+  bottom: 160px;
+  /* trên đầu mascot */
   left: 430px;
   transform: none;
   background: #fff;
@@ -428,7 +441,8 @@
 
 .setting-buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 cột */
+  grid-template-columns: 1fr 1fr;
+  /* 2 cột */
   gap: 14px 16px;
   margin: 10px 105px 0px;
   width: 450px;
@@ -447,9 +461,11 @@
 
 /* ⭐ Nút Đóng chiếm 2 cột & căn giữa */
 .setting-buttons .btn-close {
-  grid-column: 1 / -1;   /* chiếm toàn hàng */
+  grid-column: 1 / -1;
+  /* chiếm toàn hàng */
   width: 60%;
-  justify-self: center; /* căn giữa */
+  justify-self: center;
+  /* căn giữa */
   margin-top: 10px;
 }
 
@@ -507,7 +523,8 @@
 .result-mascot img {
   width: 160px;
   max-width: 70%;
-  image-rendering: pixelated; /* nếu là pixel art */
+  image-rendering: pixelated;
+  /* nếu là pixel art */
   user-select: none;
 }
 
@@ -567,7 +584,7 @@
   background: #ffffff;
   border-radius: 16px;
   padding: 12px 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.25s ease;
 }
@@ -591,9 +608,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* không chặn click */
+  pointer-events: none;
+  /* không chặn click */
   overflow: hidden;
-  z-index: 2; /* nền động */
+  z-index: 2;
+  /* nền động */
 }
 
 .leaf {
@@ -602,7 +621,8 @@
   width: 30px;
   height: 30px;
 
-  background-image: url("/assets/images/decor/leaf.png"); /* đổi đúng đường dẫn */
+  background-image: url("/assets/images/decor/leaf.png");
+  /* đổi đúng đường dẫn */
   background-size: contain;
   background-repeat: no-repeat;
 
@@ -611,14 +631,26 @@
 
 /* rơi xuống */
 @keyframes leafFall {
-  from { transform: translateY(-80px); }
-  to   { transform: translateY(110vh); }
+  from {
+    transform: translateY(-80px);
+  }
+
+  to {
+    transform: translateY(110vh);
+  }
 }
 
 /* lắc lư */
 @keyframes leafSwing {
-  0%,100% { margin-left: 0; }
-  50%     { margin-left: 40px; }
+
+  0%,
+  100% {
+    margin-left: 0;
+  }
+
+  50% {
+    margin-left: 40px;
+  }
 }
 
 .quiz-content {
@@ -628,7 +660,7 @@
 
 .quiz-top,
 .quiz-zone,
-.quiz-panel{
+.quiz-panel {
   position: relative;
   z-index: 10;
 }
@@ -642,15 +674,19 @@
   0% {
     transform: scale(1);
   }
+
   25% {
     transform: scale(1.2);
   }
+
   50% {
     transform: scale(1);
   }
+
   75% {
     transform: scale(1.15);
   }
+
   100% {
     transform: scale(1);
   }
