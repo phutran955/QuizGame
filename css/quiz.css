@@ -2,9 +2,6 @@
    QUIZ SCENE
 ========================= */
 .quiz-scene {
-  width: 1720px;
-  height: 720px;
-
   position: absolute;
   left: 50%;
   top: 50%;

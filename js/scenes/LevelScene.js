@@ -7,6 +7,8 @@ export let currentLevel = 1;
 export default function LevelScene() {
   const div = document.createElement("div");
   div.className = "level-scene";
+  div.style.width = "1720px";
+  div.style.height = "720px";
 
   div.innerHTML = `
     <h1 class="level-title">Choose Level</h1>

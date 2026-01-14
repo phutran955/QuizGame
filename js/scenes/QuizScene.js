@@ -33,6 +33,8 @@ export default function QuizScene() {
 
   const div = document.createElement("div");
   div.className = "quiz-scene";
+  div.style.width = "1720px";
+  div.style.height = "720px";
 
   // ===== HEART EFFECT =====
   function applyHeartBeat() {
@@ -73,21 +75,6 @@ export default function QuizScene() {
       div.innerHTML = `<p>❌ Lỗi tải câu hỏi</p>`;
     }
   }
-  // ==== SCALE GAME ====
-  function scaleGame() {
-    const DESIGN_WIDTH = 1720;
-    const DESIGN_HEIGHT = 720;
-
-    const scaleX = window.innerWidth / DESIGN_WIDTH;
-    const scaleY = window.innerHeight / DESIGN_HEIGHT;
-    const scale = Math.min(scaleX, scaleY);
-
-    div.style.transform =
-      `translate(-50%, -50%) scale(${scale})`;
-  }
-
-  window.addEventListener("resize", scaleGame);
-  setTimeout(scaleGame, 0);
 
 
   // ====== TIMER ======
