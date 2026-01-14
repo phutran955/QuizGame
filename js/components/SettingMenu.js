@@ -1,4 +1,10 @@
-import { playSound, toggleBackgroundMusic, isBackgroundMusicPlaying } from "./soundManager.js";
+import {
+  playSound,
+  toggleBackgroundMusic,
+  setMusicVolume,
+  getMusicVolume,
+  isMusicPlaying
+} from "./soundManager.js";
 
 export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay }) {
   const overlay = document.createElement("div");
@@ -6,8 +12,12 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
 
   overlay.innerHTML = `
     <div class="setting-menu">
-
+      <div class="setting-group">
+        <label>🎵 Âm lượng nhạc nền</label>
+        <input id="music-range" type="range" min="0" max="1" step="0.01">
+        </div>
       <div class="setting-buttons">
+        
       <button id="btn-start">Về màn hình Start</button>
       <button id="btn-level">Chọn Level</button>
       <button id="btn-replay">Chơi lại Level</button>
@@ -17,13 +27,12 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
     </div>
   `;
 
-  const musicBtn = overlay.querySelector("#btn-music");
+  const musicRange = overlay.querySelector("#music-range");
+  musicRange.value = getMusicVolume();
 
-  function updateMusicText() {
-    musicBtn.textContent = isBackgroundMusicPlaying() ? "Tắt nhạc 🔊" : "Bật nhạc 🔇";
-  }
-
-  updateMusicText();
+  musicRange.oninput = (e) => {
+    setMusicVolume(Number(e.target.value));
+  };
 
   overlay.querySelector("#btn-start").onclick = () => {
     playSound("click");
@@ -40,11 +49,23 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
     onReplay();
   };
 
-  musicBtn.onclick = () => {
-    playSound("click");
+  const btnMusic = overlay.querySelector("#btn-music");
+
+  function updateMusicButton() {
+    if (isMusicPlaying()) {
+      btnMusic.textContent = "🔇 Tắt nhạc";
+    } else {
+      btnMusic.textContent = "🎵 Bật nhạc";
+    }
+  }
+
+  updateMusicButton();
+
+  btnMusic.onclick = () => {
     toggleBackgroundMusic();
-    updateMusicText();
+    updateMusicButton();
   };
+
 
   overlay.querySelector("#btn-close").onclick = () => {
     playSound("click");
