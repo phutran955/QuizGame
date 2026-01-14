@@ -182,9 +182,15 @@
 
 /* 🌟 Nhấp nhô nhẹ */
 @keyframes floatIdle {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 /* 👉 Rê chuột */
 .quiz-answers button:hover {
@@ -211,9 +217,15 @@
 }
 
 @keyframes correctPop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2) rotate(3deg); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2) rotate(3deg);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ❌ SAI */
@@ -225,11 +237,21 @@
 }
 
 @keyframes wrongShake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+  75% {
+    transform: translateX(-6px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /* 🌟 ĐÁP ÁN ĐÚNG (khi hết mạng) */
@@ -332,7 +354,7 @@
 
 .toast-message {
   position: absolute;
-  bottom: 160px;   /* trên đầu mascot */
+  bottom: 160px; /* trên đầu mascot */
   left: 430px;
   transform: none;
   background: #fff;
@@ -381,46 +403,35 @@
 /* =========================
    SETTINGS MENU
 ========================= */
-.quiz-top {
-  position: relative; /* rất quan trọng */
+.setting-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .setting-menu {
-  position: absolute;
-  top: 120px;      /* dưới nút setting */
-  right: 0;        /* sát mép phải */
-  background: #fff;
-  padding: 16px;
+  background: url("../assets/images/decor/menu_BG.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 120%;
+  padding: 20px;
   border-radius: 16px;
-  width: 220px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-  z-index: 9999;
-
-  transform-origin: top center;
-  overflow: hidden;
-
-  pointer-events: auto;
-
-  animation: rollDown 0.5s ease;
-}
-
-@keyframes rollDown {
-  0% {
-    opacity: 0;
-    transform: scaleY(0);
-  }
-  60% {
-    opacity: 1;
-    transform: scaleY(1.05);
-  }
-  100% {
-    transform: scaleY(1);
-  }
+  width: 700px;
+  text-align: center;
+  height: 500px;
 }
 
 
-.setting-menu h3 {
-  margin-bottom: 10px;
+.setting-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 cột */
+  gap: 14px 16px;
+  margin: 10px 105px 0px;
+  width: 450px;
 }
 
 .setting-menu button {
@@ -436,6 +447,25 @@
 
 .setting-menu button:hover {
   opacity: 0.9;
+}
+
+.setting-group {
+  text-align: left;
+  margin: 12px 0;
+  font-weight: bold;
+  margin-top: 110px;
+  margin-left: 105px;
+  width: 450px;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 6px;
+  margin: 0px 130px;
+}
+
+.setting-group input[type="range"] {
+  width: 100%;
 }
 
 /* =========================
@@ -553,9 +583,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;   /* không chặn click */
+  pointer-events: none; /* không chặn click */
   overflow: hidden;
-  z-index: 2;             /* nền động */
+  z-index: 2; /* nền động */
 }
 
 .leaf {
@@ -601,9 +631,19 @@
 }
 
 @keyframes heartBeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.2); }
-  50% { transform: scale(1); }
-  75% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
