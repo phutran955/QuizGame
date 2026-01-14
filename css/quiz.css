@@ -418,60 +418,43 @@
 }
 
 .setting-menu {
-  position: absolute;
-  top: 120px;
-  /* dưới nút setting */
-  right: 0;
-  /* sát mép phải */
-  background: #fff;
+  background: url("../assets/images/decor/menu_BG.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 120%;
   padding: 20px;
   border-radius: 16px;
-  width: 220px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  z-index: 9999;
-
-  transform-origin: top center;
-  overflow: hidden;
-
-  pointer-events: auto;
-
-  animation: rollDown 0.5s ease;
-}
-
-@keyframes rollDown {
-  0% {
-    opacity: 0;
-    transform: scaleY(0);
-  }
-
-  60% {
-    opacity: 1;
-    transform: scaleY(1.05);
-  }
-
-  100% {
-    transform: scaleY(1);
-  }
+  width: 700px;
+  text-align: center;
+  height: 500px;
 }
 
 
-.setting-menu h3 {
-  margin-bottom: 10px;
-  font-size: 36px;
-  font-weight: bold;
+.setting-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 cột */
+  gap: 14px 16px;
+  margin: 150px 105px 0px;
+  width: 450px;
 }
 
-.setting-menu button {
-  width: 100%;
-  margin: 6px 0;
-  padding: 10px;
-  border-radius: 10px;
+/* button chung */
+.setting-buttons button {
+  padding: 14px;
+  border-radius: 14px;
   border: none;
   background: #ff9800;
   color: #fff;
+  font-size: 18px;
   cursor: pointer;
-  height: 60px;
-  font-size: 24px;
+}
+
+/* ⭐ Nút Đóng chiếm 2 cột & căn giữa */
+.setting-buttons .btn-close {
+  grid-column: 1 / -1;   /* chiếm toàn hàng */
+  width: 60%;
+  justify-self: center; /* căn giữa */
+  margin-top: 10px;
 }
 
 .setting-menu button:hover {
