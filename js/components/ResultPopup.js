@@ -22,7 +22,7 @@ export default function ResultPopup({
 
   const mascotName = levelConfig[level]?.mascot;
 
-  const correctText = `Số câu trả lời đúng: ${correctCount}/${totalQuestions}`;
+  const correctText = `số câu trả lời đúng: ${correctCount}/${totalQuestions}`;
 
   // 👉 chỉ 1 ảnh tĩnh
   const mascotImg = mascotName
@@ -33,7 +33,8 @@ export default function ResultPopup({
 
   popup.innerHTML = `
   <h2>${title}</h2>
-  <p>${message}</p>  
+
+  <p class="message">${message} với ${correctText}</p>
 
   ${
     mascotImg
@@ -43,7 +44,6 @@ export default function ResultPopup({
       : ""
   }
 
-  <p class="correct-count">✅ ${correctText}</p>
 
   <div class="result-buttons">
     <button class="restart">Chơi lại</button>
