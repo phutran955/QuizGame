@@ -12,7 +12,7 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
 
   overlay.innerHTML = `
     <div class="setting-menu">
-
+    
       <div class="setting-group">
         <label>🎵 Âm lượng nhạc nền</label>
         <input id="music-range" type="range" min="0" max="1" step="0.01">
