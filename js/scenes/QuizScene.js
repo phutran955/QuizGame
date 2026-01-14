@@ -215,7 +215,12 @@ export default function QuizScene() {
     `;
 
     // 🍃 ADD LEAVES AFTER RENDER
-    createFallingLeaves(div);
+    // 🌦 EFFECT BY LEVEL
+    if (currentLevel === 1) {
+      createFallingLeaves(div);
+    } else {
+      createLevelEffect(div, currentLevel);
+    }
 
     // ===== INIT MASCOT =====
     const mascotArea = div.querySelector(".mascot-area");
@@ -231,7 +236,17 @@ export default function QuizScene() {
     // ===== SETTINGS =====
     div.querySelector(".setting-btn").onclick = () => {
       playSound("click");
-      if (settingMenu) return;
+
+      // 🔁 Nếu đang mở → đóng
+      if (settingMenu) {
+        settingMenu.remove();
+        settingMenu = null;
+        isPaused = false;
+        startTimer();
+        return;
+      }
+
+      // ▶ Nếu đang đóng → mở
       isPaused = true;
       clearInterval(timer);
 
@@ -350,6 +365,55 @@ export default function QuizScene() {
 
     parent.appendChild(container);
   }
+
+  function createLevelEffect(parent, level) {
+    parent.querySelector(".effects-layer")?.remove();
+
+    const layer = document.createElement("div");
+    layer.className = "effects-layer";
+
+    let count = 15;
+    if (level === 2) count = 70;
+    if (level === 3) count = 18;
+    if (level === 4) count = 35;
+
+    for (let i = 0; i < count; i++) {
+      const item = document.createElement("div");
+
+      item.style.left = Math.random() * 100 + "%";
+      item.style.animationDuration = 3 + Math.random() * 5 + "s";
+      item.style.animationDelay = Math.random() * 5 + "s";
+
+      if (level === 2) item.className = "rain";
+      if (level === 3) item.className = "leaf-yellow";
+      if (level === 4) {
+        item.className = "ember";
+
+        // 🔥 size to nhỏ ngẫu nhiên
+        const size = 24 + Math.random() * 36;
+        item.style.width = size + "px";
+        item.style.height = size + "px";
+
+        // 🔥 vị trí ngang
+        item.style.left = Math.random() * 100 + "%";
+
+        // 🔥 VỊ TRÍ DỌC – vùng dung nham (65% → 85% màn hình)
+        const lavaStart = window.innerHeight * 0.65;
+        const lavaRange = window.innerHeight * 0.2;
+        item.style.top = lavaStart + Math.random() * lavaRange + "px";
+
+        // ⏱ thời gian bay
+        item.style.animationDuration = 4 + Math.random() * 4 + "s";
+        item.style.animationDelay = Math.random() * 0.1 + "s";
+      }
+
+
+      layer.appendChild(item);
+    }
+
+    parent.appendChild(layer);
+  }
+
 
   loadQuestions();
   return div;

@@ -1,4 +1,3 @@
-// ===== SOUND EFFECTS =====
 const sounds = {
   click: new Audio("/assets/images/sounds/click.mp3"),
   correct: new Audio("/assets/images/sounds/correct.mp3"),
@@ -8,46 +7,48 @@ const sounds = {
 };
 
 // preload
-Object.values(sounds).forEach((s) => {
+Object.values(sounds).forEach(s => {
   s.preload = "auto";
 });
 
-// phát sound effect (clone để bấm nhanh không bị ngắt)
+// ====== SOUND EFFECT ======
 export function playSound(name) {
   if (!sounds[name]) return;
+
   const s = sounds[name].cloneNode();
-  s.volume = 0.7;
+  s.volume = 0.7; // âm hiệu ứng cố định
   s.play().catch(() => {});
 }
 
-// ===== BACKGROUND MUSIC =====
+// ====== BACKGROUND MUSIC ======
 const bgMusic = new Audio("/assets/images/sounds/soundtrack.mp3");
 bgMusic.loop = true;
-bgMusic.volume = 0.15;
 
+let musicVolume = 0.4;
 let bgStarted = false;
 
-// phát nhạc nền (chỉ gọi 1 lần khi vào game)
 export function playBackgroundMusic() {
   if (bgStarted) return;
   bgStarted = true;
+  bgMusic.volume = musicVolume;
   bgMusic.play().catch(() => {});
 }
 
-// dừng nhạc nền (nếu cần reset)
-export function stopBackgroundMusic() {
-  bgMusic.pause();
-  bgMusic.currentTime = 0;
-  bgStarted = false;
-}
-
-// bật / tắt nhạc
 export function toggleBackgroundMusic() {
   if (bgMusic.paused) bgMusic.play();
   else bgMusic.pause();
 }
 
-// kiểm tra trạng thái (dùng cho setting menu)
-export function isBackgroundMusicPlaying() {
+// ====== MUSIC VOLUME ONLY ======
+export function setMusicVolume(v) {
+  musicVolume = v;
+  bgMusic.volume = musicVolume;
+}
+
+export function getMusicVolume() {
+  return musicVolume;
+}
+
+export function isMusicPlaying() {
   return !bgMusic.paused;
 }
