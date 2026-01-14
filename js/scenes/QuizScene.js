@@ -82,9 +82,8 @@ export default function QuizScene() {
     const scaleY = window.innerHeight / DESIGN_HEIGHT;
     const scale = Math.min(scaleX, scaleY);
 
-   div.style.transform =
-  `translateX(-50%) scale(${scale})`;
-
+    div.style.transform =
+      `translate(-50%, -50%) scale(${scale})`;
   }
 
   window.addEventListener("resize", scaleGame);
