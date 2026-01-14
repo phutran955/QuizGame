@@ -4,12 +4,10 @@
   <meta charset="UTF-8" />
   <title>Quiz Game</title>
 
-  <!-- ❗ BẮT BUỘC CHO GAME MOBILE -->
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+ <meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-  <!-- CSS ORDER (RẤT QUAN TRỌNG) -->
   <link rel="stylesheet" href="./css/main.css" />
-
   <link rel="stylesheet" href="./css/mascot.css" />
   <link rel="stylesheet" href="./css/start.css" />
   <link rel="stylesheet" href="./css/level.css" />
@@ -20,13 +18,13 @@
 
 <body>
 
-  <!-- ⚠️ CẢNH BÁO XOAY MÀN HÌNH -->
   <div id="rotate-warning">
     <p>Vui lòng xoay ngang màn hình để chơi game 🎮</p>
   </div>
 
-  <!-- 🎮 ROOT GAME -->
-  <div id="app"></div>
+  <div id="app">
+    <div id="game"></div>
+  </div>
 
   <!-- JS -->
   <script type="module" src="./js/main.js"></script>
