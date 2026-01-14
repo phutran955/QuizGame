@@ -434,15 +434,23 @@
   width: 450px;
 }
 
-.setting-menu button {
-  width: 100%;
-  margin: 6px 0;
-  padding: 10px;
-  border-radius: 10px;
+/* button chung */
+.setting-buttons button {
+  padding: 14px;
+  border-radius: 14px;
   border: none;
   background: #ff9800;
   color: #fff;
+  font-size: 18px;
   cursor: pointer;
+}
+
+/* ⭐ Nút Đóng chiếm 2 cột & căn giữa */
+.setting-buttons .btn-close {
+  grid-column: 1 / -1;   /* chiếm toàn hàng */
+  width: 60%;
+  justify-self: center; /* căn giữa */
+  margin-top: 10px;
 }
 
 .setting-menu button:hover {
@@ -575,8 +583,8 @@
   border-color: #ffffff transparent transparent;
 }
 
+
 /* ===== LÁ RƠI ===== */
-/* ===== LÁ RƠI - NẰM SAU UI ===== */
 .leaves-container {
   position: absolute;
   top: 0;
@@ -645,5 +653,82 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+
+/* =========================
+   LEVEL EFFECTS
+========================= */
+
+.effects-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+  /* dưới UI, trên background */
+}
+
+/* ===== LEVEL 2: MƯA ===== */
+.rain {
+  position: absolute;
+  top: -40px;
+  width: 3px;
+  height: 24px;
+  background: linear-gradient(to bottom, #ffffffaa, #ffffff00);
+  border-radius: 2px;
+  animation: rainFall linear infinite;
+}
+
+@keyframes rainFall {
+  from {
+    transform: translateY(-40px);
+  }
+
+  to {
+    transform: translateY(110vh);
+  }
+}
+
+/* ===== LEVEL 3: LÁ VÀNG ===== */
+.leaf-yellow {
+  position: absolute;
+  top: -60px;
+  width: 34px;
+  height: 34px;
+  background-image: url("/assets/images/decor/autumnleaf.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: leafFall linear infinite, leafSwing ease-in-out infinite;
+}
+
+/* ===== LEVEL 4: TRO LỬA ===== */
+.ember {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-image: url("/assets/images/decor/embers.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: emberFly linear infinite;
+  filter: drop-shadow(0 0 12px orange);
+  pointer-events: none;
+}
+
+
+@keyframes emberFly {
+  0% {
+    transform: translateY(0) scale(0.4) rotate(0deg);
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-500px) scale(1.3) rotate(180deg);
+    opacity: 0;
   }
 }
