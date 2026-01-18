@@ -26,7 +26,7 @@ export default function LevelScene() {
   // chọn level
   div.querySelectorAll("[data-level]").forEach(btn => {
     btn.onclick = () => {
-      playSound("click"); // ✅ âm thanh click
+      playSound("click"); 
       currentLevel = Number(btn.dataset.level);
       router.navigate(QuizScene);
     };
@@ -34,7 +34,7 @@ export default function LevelScene() {
 
   // quay lại start
   div.querySelector(".back-btn").onclick = () => {
-    playSound("click"); // ✅ âm thanh click
+    playSound("click"); 
     import("./StartScene.js").then(m => {
       router.navigate(m.default);
     });

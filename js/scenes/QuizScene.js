@@ -26,6 +26,7 @@ export default function QuizScene() {
   let popup = null;
   let isPaused = false;
   let mascotInstance = null;
+  let enemyMascotInstance = null;
 
   let timer = null;
   const TOTAL_TIME = 10;
@@ -132,6 +133,7 @@ export default function QuizScene() {
       onClose: async () => {
         popup = null;
         await mascotInstance.sad();
+        enemyMascotInstance.happy();
         currentQuestionIndex++;
         render();
       },
@@ -182,23 +184,27 @@ export default function QuizScene() {
         </div>
 
         <div class="quiz-zone">
-          <div class="mascot-area">
+          <div class="mascot-area player">
             <div class="mascot-chat"></div>
           </div>
 
-          <div class="quiz-panel">
-            <div class="quiz-question">
-              <h2>${q.question}</h2>
-            </div>
+        <div class="quiz-panel">
+          <div class="quiz-question">
+            <h2>${q.question}</h2>
+          </div>
 
-            <div class="quiz-answers">
+          <div class="quiz-answers">
               ${q.answers.map((ans, i) =>
       `<button data-index="${i}">${ans}</button>`
     ).join("")}
-            </div>
           </div>
+          </div>
+
+        <div class="mascot-area enemy">
+          <div class="enemy-chat"></div>
         </div>
       </div>
+    </div>
     `;
 
     // 🍃 ADD LEAVES AFTER RENDER
@@ -209,13 +215,35 @@ export default function QuizScene() {
       createLevelEffect(div, currentLevel);
     }
 
-    // ===== INIT MASCOT =====
-    const mascotArea = div.querySelector(".mascot-area");
+    // ===== PLAYER =====
+    const playerArea = div.querySelector(".mascot-area.player");
+
     if (config.mascot && !mascotInstance) {
-      mascotInstance = Mascot({ mascotName: config.mascot });
+      mascotInstance = Mascot({
+        mascotName: config.mascot,
+        role: "player",
+      });
     }
-    if (mascotInstance && !mascotArea.contains(mascotInstance.el)) {
-      mascotArea.appendChild(mascotInstance.el);
+
+    if (mascotInstance && !playerArea.contains(mascotInstance.el)) {
+      playerArea.appendChild(mascotInstance.el);
+    }
+
+    // ===== ENEMY =====
+    const enemyArea = div.querySelector(".mascot-area.enemy");
+
+    if (config.enemyMascot && !enemyMascotInstance) {
+      enemyMascotInstance = Mascot({
+        mascotName: config.enemyMascot,
+        role: "enemy",
+      });
+    }
+
+    if (
+      enemyMascotInstance &&
+      !enemyArea.contains(enemyMascotInstance.el)
+    ) {
+      enemyArea.appendChild(enemyMascotInstance.el);
     }
 
     div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
@@ -268,6 +296,7 @@ export default function QuizScene() {
           btn.classList.add("correct");
           playSound("correct");
           mascotInstance.happy();
+          enemyMascotInstance.sad();
           correctCount++;
 
           popup = Messages({
@@ -286,6 +315,7 @@ export default function QuizScene() {
           btn.classList.add("wrong");
           playSound("wrong");
           mascotInstance.sad();
+          enemyMascotInstance.happy();
 
           buttons.forEach((b) => {
             if (Number(b.dataset.index) === q.correctIndex) {

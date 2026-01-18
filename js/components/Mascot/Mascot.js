@@ -1,11 +1,19 @@
 import { playAnimation } from "./animator.js";
 
-export default function Mascot({ mascotName }) {
+export default function Mascot({
+  mascotName,
+  role = "player",
+}) {
   const div = document.createElement("div");
-  div.className = "mascot";
+  div.className = `mascot mascot-${role}`;
 
   const img = document.createElement("img");
   img.draggable = false;
+
+  if (role === "enemy") {
+    img.style.transform = "scaleX(-1)";
+  }
+
   div.appendChild(img);
 
   let currentAnim = null;
@@ -38,7 +46,7 @@ export default function Mascot({ mascotName }) {
         loop: false,
         onEnd: () => {
           idle();
-          resolve(); // ✅ BÁO ĐÃ XONG ANIM
+          resolve();
         },
       });
     });
@@ -55,17 +63,17 @@ export default function Mascot({ mascotName }) {
         loop: false,
         onEnd: () => {
           idle();
-          resolve(); // ✅ BÁO ĐÃ XONG ANIM
+          resolve();
         },
       });
     });
   }
 
-  // start mặc định
   idle();
 
   return {
     el: div,
+    role,
     idle,
     happy,
     sad,
