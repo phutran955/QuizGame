@@ -2,6 +2,7 @@ export const levelConfig = {
   1: {
     background: "assets/images/levels/level1bg.jpg",
     mascot: "cat",
+    enemyMascot: "dog",
     popupText: {
       correct: "Giỏi lắm 😸",
       wrong: "Chưa tày đâu ",
@@ -11,6 +12,7 @@ export const levelConfig = {
   2: {
     background: "assets/images/levels/level2bg.jpg",
     mascot: "cat",
+    enemyMascot: "dog",
     popupText: {
       correct: "Tuyệt vời 🐻",
       wrong: "Thử lại nhé 🐻‍❄️",
@@ -19,7 +21,8 @@ export const levelConfig = {
 
   3: {
     background: "assets/images/levels/level3bg.jpg",
-     mascot: "dog",
+    mascot: "dog",
+    enemyMascot: "cat",
     popupText: {
       correct: "Tuyệt vời 🐻",
       wrong: "Thử lại nhé 🐻‍❄️",
@@ -29,7 +32,8 @@ export const levelConfig = {
 
   4: {
     background: "assets/images/levels/level4bg.jpg",
-     mascot: "dog",
+    mascot: "dog",
+    enemyMascot: "cat",
     popupText: {
       correct: "Tuyệt vời 🐻",
       wrong: "Thử lại nhé 🐻‍❄️",

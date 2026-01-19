@@ -2,9 +2,6 @@
    QUIZ SCENE
 ========================= */
 .quiz-scene {
-  width: 1720px;
-  height: 720px;
-
   position: absolute;
   left: 50%;
   top: 50%;
@@ -49,9 +46,7 @@
   flex: 1;
   display: flex;
   align-items: flex-end;
-  /* sát mặt đất */
   justify-content: center;
-  /* ⬅ căn giữa toàn bộ */
   padding: 0 40px 50px;
   gap: 40px;
 }
@@ -71,6 +66,19 @@
 .mascot-area img {
   transform: translateY(-40px);
   transform: translateX(-200px);
+}
+
+.mascot-area.player {
+  justify-content: flex-start;
+}
+
+.mascot-area.enemy {
+  justify-content: flex-end;
+}
+
+/* hướng nhìn */
+.mascot-area.enemy img {
+  transform: scaleX(-1) translate(-40px, -40px);
 }
 
 .mascot-chat {
