@@ -10,7 +10,7 @@ export const levelConfig = {
       },
       wrong: {
         mascot: "Huhu sai rồi",
-        enemyMascot: "Chưa tày đâu ",
+        enemyMascot:  "Chưa tày đâu ",
       },
     },
   },
@@ -20,14 +20,8 @@ export const levelConfig = {
     mascot: "cat",
     enemyMascot: "dog",
     popupText: {
-      correct: {
-        mascot: "Giỏi lắm 😸",
-        enemyMascot: "Hên thoyyy",
-      },
-      wrong: {
-        mascot: "Huhu sai rồi",
-        enemyMascot: "Chưa tày đâu ",
-      },
+      correct: "Tuyệt vời 🐻",
+      wrong: "Thử lại nhé 🐻‍❄️",
     },
   },
 
@@ -36,14 +30,9 @@ export const levelConfig = {
     mascot: "dog",
     enemyMascot: "cat",
     popupText: {
-      correct: {
-        mascot: "Giỏi lắm 😸",
-        enemyMascot: "Hên thoyyy",
-      },
-      wrong: {
-        mascot: "Huhu sai rồi",
-        enemyMascot: "Chưa tày đâu ",
-      },
+      correct: "Tuyệt vời 🐻",
+      wrong: "Thử lại nhé 🐻‍❄️",
+
     },
   },
 
@@ -52,14 +41,9 @@ export const levelConfig = {
     mascot: "dog",
     enemyMascot: "cat",
     popupText: {
-      correct: {
-        mascot: "Giỏi lắm 😸",
-        enemyMascot: "Hên thoyyy",
-      },
-      wrong: {
-        mascot: "Huhu sai rồi",
-        enemyMascot: "Chưa tày đâu ",
-      },
+      correct: "Tuyệt vời 🐻",
+      wrong: "Thử lại nhé 🐻‍❄️",
+
     },
   },
 };
