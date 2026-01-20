@@ -374,15 +374,25 @@
 
 .toast-message {
   position: absolute;
-  bottom: 160px;
-  /* trên đầu mascot */
-  left: 430px;
+  bottom: 300px; /* trên đầu mascot */
+  left: 200px;
   transform: none;
+
+    display: flex;
+  align-items: center;
+  justify-content: center;
+
   background: #fff;
   color: #333;
+
   padding: 12px 24px;
   border-radius: 20px;
+
   font-size: 16px;
+  min-width: 170px;      /* rộng hơn */
+  max-width: 600px;      /* giới hạn chiều ngang */
+  height: auto;          /* không cao quá */
+
   opacity: 0;
   pointer-events: none;
   transition: all 0.3s ease;
@@ -407,16 +417,20 @@
   font-weight: bold;
 }
 
+/* mõ */
 .toast-message::after {
   content: "";
   position: absolute;
-  bottom: 15px;
-  left: -10px;
 
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 12px solid #fff;
-  border-left: 0;
+  /* vị trí của mõ */
+  bottom: -10px;
+  left: 55px;
+
+  /* chỉnh hướng mõ của popup chat */
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 12px solid #fff;
+  border-bottom: 0;
 }
 
 
@@ -601,7 +615,7 @@
 .mascot-chat .popup::after {
   content: "";
   position: absolute;
-  top: 20px;
+  bottom: -10px;
   left: -10px;
   border-width: 10px 10px 10px 0;
   border-style: solid;
