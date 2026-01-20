@@ -4,8 +4,14 @@ export const levelConfig = {
     mascot: "cat",
     enemyMascot: "dog",
     popupText: {
-      correct: "Giỏi lắm 😸",
-      wrong: "Chưa tày đâu ",
+      correct: {
+        mascot: "Giỏi lắm 😸",
+        enemyMascot: "Hên thoyyy",
+      },
+      wrong: {
+        mascot: "Huhu sai rồi",
+        enemyMascot:  "Chưa tày đâu ",
+      },
     },
   },
 

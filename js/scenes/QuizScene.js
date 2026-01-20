@@ -299,9 +299,18 @@ export default function QuizScene() {
           enemyMascotInstance.sad();
           correctCount++;
 
+          // Mascot người chơi nói
+          Messages({
+            type: "correct",
+            message: config.popupText?.correct?.mascot || "Đúng rồi! 🎉",
+            target: "player",
+          });
+
+          // Enemy nói (trễ nhẹ cho tự nhiên)
           popup = Messages({
             type: "correct",
-            message: config.popupText?.correct || "Đúng rồi! 🎉",
+            message: config.popupText?.correct?.enemyMascot || "Bạn may thôi",
+            target: "enemy",
             onClose: async () => {
               popup = null;
               await mascotInstance.idle();
@@ -345,9 +354,18 @@ export default function QuizScene() {
             return;
           }
 
+          // Mascot người chơi nói
+          Messages({
+            type: "wrong",
+            message: config.popupText?.wrong?.mascot || "Huhu sai rồi",
+            target: "player",
+          });
+
+          // Enemy nói
           popup = Messages({
             type: "wrong",
-            message: config.popupText?.wrong || "Sai rồi 😢",
+            message: config.popupText?.wrong?.enemyMascot || "Chưa tày đâu",
+            target: "enemy",
             onClose: async () => {
               popup = null;
               await mascotInstance.idle();
@@ -355,6 +373,7 @@ export default function QuizScene() {
               render();
             },
           });
+
 
           showMascotChat(popup);
         }

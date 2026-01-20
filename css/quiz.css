@@ -70,6 +70,8 @@
 
 .mascot-area.player {
   justify-content: flex-start;
+  padding-left: 100px;
+
 }
 
 .mascot-area.enemy {
@@ -344,38 +346,14 @@
   z-index: 2000;
 }
 
-.popup {
-  background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  text-align: center;
-  min-width: 240px;
-  animation: pop 0.2s ease;
-}
 
-.popup.correct {
-  border: 4px solid #4caf50;
-}
 
-.popup.wrong {
-  border: 4px solid #f44336;
-}
 
-.popup button {
-  margin-top: 12px;
-  padding: 10px 24px;
-  font-size: 16px;
-  border-radius: 12px;
-  border: none;
-  background: #4caf50;
-  color: #fff;
-  cursor: pointer;
-}
 
-.toast-message {
-  position: absolute;
-  bottom: 300px; /* trên đầu mascot */
-  left: 200px;
+.toast-message{
+  position: fixed;
+  bottom: 420px; /* trên đầu mascot */
+  left: 300px;
   transform: none;
 
     display: flex;
@@ -384,6 +362,7 @@
 
   background: #fff;
   color: #333;
+  font-weight: bold;
 
   padding: 12px 24px;
   border-radius: 20px;
@@ -399,6 +378,10 @@
   z-index: 3000;
 }
 
+.toast-message.enemy{
+  left: 1450px;
+}
+
 /* hiệu ứng hiện */
 .toast-message.show {
   opacity: 1;
@@ -406,15 +389,21 @@
 }
 
 /* đúng */
-.toast-message.correct {
+.toast-message.correct.player {
   color: #4caf50;
-  font-weight: bold;
+}
+
+.toast-message.correct.enemy {
+  color: #e53935;
 }
 
 /* sai */
-.toast-message.wrong {
+.toast-message.wrong.player {
   color: #f44336;
-  font-weight: bold;
+}
+
+.toast-message.wrong.enemy {
+  color: #9c27b0;
 }
 
 /* mõ */

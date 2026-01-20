@@ -1,13 +1,16 @@
-export default function MessagesPopup({ type, message, onClose, duration = 1500 }) {
+export default function MessagesPopup({ type, message, target = "player", onClose, duration = 1500 }) {
   const toast = document.createElement("div");
-  toast.className = `toast-message ${type}`;
+  toast.className = `toast-message ${type} ${target}`;
 
   toast.innerHTML = `
     <span>${message}</span>
   `;
 
- const mascot = document.querySelector(".mascot-area");
-(mascot || document.body).appendChild(toast);
+  const mascot =
+    target === "enemy" 
+    ? document.querySelector(".mascot-enemy") 
+    : document.querySelector(".mascot-area");
+  (mascot || document.body).appendChild(toast);
 
 
   // animate in
