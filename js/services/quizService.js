@@ -1,13 +1,39 @@
-import { mockFetchQuizByLevel } from "./mockApi.js";
+import { apiGet } from "./api.js";
+
+const LEVEL_QUIZ_MAP = {
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 8,
+};
+
+function mapQuestion(question) {
+  const answers = question.answers.map(a => a.answerName);
+  const correctIndex = question.answers.findIndex(a => a.isAnswer === true);
+
+  return {
+    id: question.id,
+    question: question.questionName,
+    answers,
+    correctIndex,
+  };
+}
 
 export const quizService = {
-  async getQuestions(level) {
-    const res = await mockFetchQuizByLevel(level);
 
-    if (!res.success) {
-      throw new Error("Failed to load quiz data");
+  async getQuestions(level) {
+    const quizId = LEVEL_QUIZ_MAP[level];
+
+    if (!quizId) {
+      throw new Error(`Chưa map quiz cho level ${level}`);
     }
 
-    return res.data;
+    const quiz = await apiGet(`/exercises/${quizId}`);
+
+    if (!quiz.questions || quiz.questions.length === 0) {
+      return [];
+    }
+
+    return quiz.questions.map(mapQuestion);
   },
 };
