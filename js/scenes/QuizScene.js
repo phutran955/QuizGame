@@ -364,7 +364,7 @@ export default function QuizScene() {
           // Enemy nói
           popup = Messages({
             type: "wrong",
-            message: config.popupText?.wrong?.enemyMascot || "Chưa tày đâu",
+            message: q.detailedText || config.popupText?.wrong?.enemyMascot || "Chưa tày đâu",
             target: "enemy",
             onClose: async () => {
               popup = null;
