@@ -1,7 +1,7 @@
 import { apiGet } from "./api.js";
 
 const LEVEL_QUIZ_MAP = {
-  1: 1,
+  1: 19,
   2: 2,
   3: 3,
   4: 8,
