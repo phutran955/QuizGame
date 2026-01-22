@@ -68,17 +68,17 @@
 }
 
 .mascot-area.player {
-  left: 60px;
+  left: 150px;
   bottom: 20px;
 }
 
 .mascot-area.enemy {
-  right: 60px;
+  right: 230px;
   bottom: 20px;
 }
 
 .mascot-area img {
-  height: 260px;
+  height: 340px;
   width: auto;
   object-fit: contain;
   transform: none !important;
@@ -134,8 +134,6 @@
   pointer-events: none;
 }
 
-
-
 @keyframes popIn {
   from {
     opacity: 0;
@@ -145,79 +143,6 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-/* =========================
-   TOAST MESSAGE - HIỆU ỨNG LỚN HƠN (NHƯ "GIỎI LẮM", "HÈN THYYYY")
-========================= */
-.toast-message {
-  position: fixed;
-  bottom: 320px; /* Cao hơn chat bubble */
-  left: 300px;
-  transform: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  color: #333;
-  font-weight: bold;
-  padding: 14px 28px;
-  border-radius: 24px;
-  font-size: 20px; /* Chữ lớn hơn */
-  min-width: 180px;
-  max-width: 400px;
-  height: auto;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  z-index: 3000;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  border: 3px solid;
-}
-
-/* Toast message cho player */
-.toast-message.player {
-  left: 300px;
-  background: #e8f5e9;
-  border-color: #4caf50;
-  color: #2e7d32; /* Màu xanh đậm */
-}
-
-/* Toast message cho enemy */
-.toast-message.enemy {
-  left: 1450px;
-  background: #ffebee;
-  border-color: #f44336;
-  color: #c62828; /* Màu đỏ đậm */
-}
-
-/* Hiệu ứng hiện */
-.toast-message.show {
-  opacity: 1;
-  transform: scale(1.05); /* Phóng to nhẹ */
-}
-
-/* Mũi tên cho toast message - CHỈ XUỐNG DƯỚI */
-.toast-message::after {
-  content: "";
-  position: absolute;
-  top: 100%; /* Mũi tên ở dưới cùng */
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-top: 14px solid;
-  border-bottom: 0;
-}
-
-/* Màu mũi tên cho player */
-.toast-message.player::after {
-  border-top-color: #e8f5e9;
-}
-
-/* Màu mũi tên cho enemy */
-.toast-message.enemy::after {
-  border-top-color: #ffebee;
 }
 
 /* =========================
@@ -291,7 +216,9 @@
   background: linear-gradient(135deg, #4dd0e1, #81c784);
   color: #1f1f1f;
   cursor: pointer;
-  box-shadow: 0 6px 0 #2e7d32, 0 10px 16px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 6px 0 #2e7d32,
+    0 10px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
   animation: floatIdle 2.2s ease-in-out infinite;
 }
@@ -312,13 +239,17 @@
 /* 👉 Rê chuột */
 .quiz-answers button:hover {
   transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 10px 0 #2e7d32, 0 14px 22px rgba(0, 0, 0, 0.25);
+  box-shadow:
+    0 10px 0 #2e7d32,
+    0 14px 22px rgba(0, 0, 0, 0.25);
 }
 
 /* 👉 Khi bấm */
 .quiz-answers button:active {
   transform: translateY(-2px) scale(0.96);
-  box-shadow: 0 4px 0 #2e7d32, 0 6px 10px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 4px 0 #2e7d32,
+    0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* =========================
@@ -439,17 +370,15 @@
   z-index: 2000;
 }
 
+/* TOAST-MESSAGE (CHATBOX CỦA MASCOT) */
 
-
-
-
-.toast-message{
+.toast-message {
   position: fixed;
   bottom: 420px; /* trên đầu mascot */
   left: 300px;
   transform: none;
 
-    display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 
@@ -460,10 +389,13 @@
   padding: 12px 24px;
   border-radius: 20px;
 
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border: 3px solid;
+
   font-size: 16px;
-  min-width: 170px;      /* rộng hơn */
-  max-width: 600px;      /* giới hạn chiều ngang */
-  height: auto;          /* không cao quá */
+  min-width: 170px; /* rộng hơn */
+  max-width: 600px; /* giới hạn chiều ngang */
+  height: auto; /* không cao quá */
 
   opacity: 0;
   pointer-events: none;
@@ -471,7 +403,7 @@
   z-index: 3000;
 }
 
-.toast-message.enemy{
+.toast-message.enemy {
   left: 1450px;
 }
 
@@ -482,22 +414,20 @@
 }
 
 /* đúng */
-.toast-message.correct.player {
+.toast-message.correct.player,
+.toast-message.wrong.enemy {
   color: #4caf50;
+  background-color: #e8f5e9;
 }
 
-.toast-message.correct.enemy {
-  color: #e53935;
-}
 
 /* sai */
-.toast-message.wrong.player {
+.toast-message.wrong.player,
+.toast-message.correct.enemy {
   color: #f44336;
+  background-color: #ffebee;
 }
 
-.toast-message.wrong.enemy {
-  color: #9c27b0;
-}
 
 /* mõ */
 .toast-message::after {
@@ -515,6 +445,15 @@
   border-bottom: 0;
 }
 
+.toast-message.correct.player::after, 
+.toast-message.wrong.enemy::after {
+  border-top: 12px solid #e8f5e9;
+}
+
+.toast-message.correct.enemy::after, 
+.toast-message.wrong.player::after {
+  border-top: 12px solid #ffebee;
+}
 
 /* =========================
    SETTINGS MENU
@@ -640,7 +579,9 @@
   cursor: pointer;
   background: #ff9800;
   color: #fff;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .result-buttons button:hover {
@@ -682,7 +623,9 @@
   background-image: url("/assets/images/decor/leaf.png");
   background-size: contain;
   background-repeat: no-repeat;
-  animation: leafFall linear infinite, leafSwing ease-in-out infinite;
+  animation:
+    leafFall linear infinite,
+    leafSwing ease-in-out infinite;
 }
 
 /* rơi xuống */
@@ -697,7 +640,8 @@
 
 /* lắc lư */
 @keyframes leafSwing {
-  0%, 100% {
+  0%,
+  100% {
     margin-left: 0;
   }
   50% {
@@ -776,7 +720,9 @@
   background-image: url("/assets/images/decor/autumnleaf.png");
   background-size: contain;
   background-repeat: no-repeat;
-  animation: leafFall linear infinite, leafSwing ease-in-out infinite;
+  animation:
+    leafFall linear infinite,
+    leafSwing ease-in-out infinite;
 }
 
 /* ===== LEVEL 4: TRO LỬA ===== */

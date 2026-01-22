@@ -149,6 +149,62 @@ export default function QuizScene() {
 
     const q = questions[currentQuestionIndex];
 
+    // ===== FUNCTION QUESTION TYPE =====
+
+    function renderAnswers(q) {
+      // ==== CASE FILL (PHẢI CHECK TRƯỚC) ====
+      if (Number(q.typeQuestion) === 200) {
+        const a = q.fill || q.answers?.[0]; // hỗ trợ cả DB mới & cũ
+        if (!a) return "<p>❌ Thiếu dữ liệu fill</p>";
+
+        return `
+      <div class="quiz-fill">
+        <span>${a.leftText}</span>
+        <input class="fill-input" />
+        <span>${a.rightText}</span>
+        <button class="fill-submit">Trả lời</button>
+      </div>
+    `;
+      }
+
+      // ==== CASE MULTI (DB MỚI) ====
+      if (Number(q.typeQuestion) === 100) {
+        // legacy: answers là mảng string
+        if (typeof q.answers?.[0] === "string") {
+          return `
+        <div class="quiz-answers">
+          ${q.answers
+              .map(
+                (ans, i) =>
+                  `<button data-index="${i}">${ans}</button>`
+              )
+              .join("")}
+        </div>
+      `;
+        }
+        return `
+      <div class="quiz-answers">
+        ${q.answers
+            .map(
+              (ans, i) => `
+            <button
+              class="answer-btn"
+              data-index="${i}"
+              data-correct="${ans.isAnswer}"
+            >
+              ${ans.answerName}
+            </button>
+          `
+            )
+            .join("")}
+      </div>
+    `;
+      }
+
+      return "<p>❌ Không hỗ trợ dạng câu hỏi</p>";
+    }
+
+
     // ===== WIN =====
     if (!q) {
       playSound("win");
@@ -193,11 +249,7 @@ export default function QuizScene() {
             <h2>${q.question}</h2>
           </div>
 
-          <div class="quiz-answers">
-              ${q.answers.map((ans, i) =>
-      `<button data-index="${i}">${ans}</button>`
-    ).join("")}
-          </div>
+          ${renderAnswers(q)}
           </div>
 
         <div class="mascot-area enemy">
@@ -281,66 +333,162 @@ export default function QuizScene() {
     };
 
     // ===== ANSWERS =====
-    div.querySelectorAll(".quiz-answers button").forEach((btn) => {
-      btn.onclick = () => {
-        if (isPaused) return;
-        clearInterval(timer);
+    // ===== ANSWERS =====
+    if (q.typeQuestion === 100) {
+      div.querySelectorAll(".quiz-answers button").forEach((btn) => {
+        btn.onclick = () => {
+          if (isPaused) return;
+          clearInterval(timer);
 
-        const buttons = div.querySelectorAll(".quiz-answers button");
-        buttons.forEach((b) => (b.disabled = true));
+          const buttons = div.querySelectorAll(".quiz-answers button");
+          buttons.forEach((b) => (b.disabled = true));
 
-        const answerIndex = Number(btn.dataset.index);
-        const isCorrect = answerIndex === q.correctIndex;
+          const answerIndex = Number(btn.dataset.index);
+          const isCorrect = answerIndex === q.correctIndex;
 
-        if (isCorrect) {
-          btn.classList.add("correct");
-          playSound("correct");
-          mascotInstance.happy();
-          enemyMascotInstance.sad();
-          correctCount++;
+          if (isCorrect) {
+            btn.classList.add("correct");
+            playSound("correct");
+            mascotInstance.happy();
+            enemyMascotInstance.sad();
+            correctCount++;
 
-          // Mascot người chơi nói
-          Messages({
-            type: "correct",
-            message: config.popupText?.correct?.mascot || "Đúng rồi! 🎉",
-            target: "player",
-          });
+            Messages({
+              type: "correct",
+              message: config.popupText?.correct?.mascot || "Đúng rồi! 🎉",
+              target: "player",
+            });
 
-          // Enemy nói (trễ nhẹ cho tự nhiên)
-          popup = Messages({
-            type: "correct",
-            message: config.popupText?.correct?.enemyMascot || "Bạn may thôi",
-            target: "enemy",
-            onClose: async () => {
-              popup = null;
-              await mascotInstance.idle();
-              currentQuestionIndex++;
-              render();
-            },
-          });
+            popup = Messages({
+              type: "correct",
+              message: config.popupText?.correct?.enemyMascot || "Bạn may thôi",
+              target: "enemy",
+              onClose: async () => {
+                popup = null;
+                await mascotInstance.idle();
+                currentQuestionIndex++;
+                render();
+              },
+            });
 
-          showMascotChat(popup);
-        } else {
-          btn.classList.add("wrong");
-          playSound("wrong");
-          mascotInstance.sad();
-          enemyMascotInstance.happy();
+            showMascotChat(popup);
+          } else {
+            btn.classList.add("wrong");
+            playSound("wrong");
+            mascotInstance.sad();
+            enemyMascotInstance.happy();
 
-          buttons.forEach((b) => {
-            if (Number(b.dataset.index) === q.correctIndex) {
-              b.classList.add("correct-answer");
+            buttons.forEach((b) => {
+              if (Number(b.dataset.index) === q.correctIndex) {
+                b.classList.add("correct-answer");
+              }
+            });
+
+            hearts--;
+            div.querySelector(".hearts").innerHTML = "";
+            div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+            applyHeartBeat();
+
+            if (hearts <= 0) {
+              playSound("gameover");
+              div.appendChild(
+                ResultPopup({
+                  isWin: false,
+                  level: currentLevel,
+                  correctCount,
+                  totalQuestions,
+                  onRestart: () => router.navigate(() => QuizScene()),
+                  onGoLevel: () => router.navigate(() => LevelScene()),
+                  onGoHome: () => router.navigate(() => StartScene()),
+                })
+              );
+              return;
             }
-          });
 
-          hearts--;
-          div.querySelector(".hearts").innerHTML = "";
-          div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
-          applyHeartBeat();
+            Messages({
+              type: "wrong",
+              message: config.popupText?.wrong?.mascot || "Huhu sai rồi",
+              target: "player",
+            });
 
-          if (hearts <= 0) {
-            playSound("gameover");
+            popup = Messages({
+              type: "wrong",
+              message:
+                q.detailedText ||
+                config.popupText?.wrong?.enemyMascot ||
+                "Chưa tày đâu",
+              target: "enemy",
+              onClose: async () => {
+                popup = null;
+                await mascotInstance.idle();
+                currentQuestionIndex++;
+                render();
+              },
+            });
 
-            popup = ResultPopup({
+            showMascotChat(popup);
+          }
+        };
+      });
+    }
+
+    // ===== FILL ANSWER =====
+if (q.typeQuestion === 200) {
+  const input = div.querySelector(".fill-input");
+  const submitBtn = div.querySelector(".fill-submit");
+
+  if (input && submitBtn) {
+    submitBtn.onclick = async () => {
+      if (isPaused) return;
+      clearInterval(timer);
+
+      const userAnswer = input.value.trim();
+      const correctAnswer = String(q.fill.answerText).trim();
+
+      if (!userAnswer) return;
+
+      const isCorrect = userAnswer === correctAnswer;
+
+      if (isCorrect) {
+        playSound("correct");
+        mascotInstance.happy();
+        enemyMascotInstance.sad();
+        correctCount++;
+
+                    Messages({
+              type: "correct",
+              message: config.popupText?.correct?.mascot || "Đúng rồi! 🎉",
+              target: "player",
+            });
+
+            popup = Messages({
+              type: "correct",
+              message: config.popupText?.correct?.enemyMascot || "Bạn may thôi",
+              target: "enemy",
+              onClose: async () => {
+                popup = null;
+                await mascotInstance.idle();
+                currentQuestionIndex++;
+                render();
+              },
+            });
+
+            showMascotChat(popup);
+      } else {
+        playSound("wrong");
+        mascotInstance.sad();
+        enemyMascotInstance.happy();
+
+        hearts--;
+        div.querySelector(".hearts").innerHTML = "";
+        div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+        applyHeartBeat();
+
+        if (hearts <= 0) {
+          playSound("gameover");
+
+          div.appendChild(
+            ResultPopup({
               isWin: false,
               level: currentLevel,
               correctCount,
@@ -348,37 +496,42 @@ export default function QuizScene() {
               onRestart: () => router.navigate(() => QuizScene()),
               onGoLevel: () => router.navigate(() => LevelScene()),
               onGoHome: () => router.navigate(() => StartScene()),
+            })
+          );
+          return;
+        }
+
+        Messages({
+              type: "wrong",
+              message: config.popupText?.wrong?.mascot || "Huhu sai rồi",
+              target: "player",
             });
 
-            div.appendChild(popup);
-            return;
-          }
+            popup = Messages({
+              type: "wrong",
+              message:
+                q.detailedText ||
+                config.popupText?.wrong?.enemyMascot ||
+                "Chưa tày đâu",
+              target: "enemy",
+              onClose: async () => {
+                popup = null;
+                await mascotInstance.idle();
+                currentQuestionIndex++;
+                render();
+              },
+            });
 
-          // Mascot người chơi nói
-          Messages({
-            type: "wrong",
-            message: config.popupText?.wrong?.mascot || "Huhu sai rồi",
-            target: "player",
-          });
+            showMascotChat(popup);
+      }
+    };
 
-          // Enemy nói
-          popup = Messages({
-            type: "wrong",
-            message: q.detailedText || config.popupText?.wrong?.enemyMascot || "Chưa tày đâu",
-            target: "enemy",
-            onClose: async () => {
-              popup = null;
-              await mascotInstance.idle();
-              currentQuestionIndex++;
-              render();
-            },
-          });
-
-
-          showMascotChat(popup);
-        }
-      };
+    // ⌨ Enter submit
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") submitBtn.click();
     });
+  }
+}
 
     startTimer();
   }
