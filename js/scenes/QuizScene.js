@@ -135,8 +135,8 @@ export default function (questionsData) {
       message: "Hết giờ rồi 😭",
       onClose: async () => {
         popup = null;
-        await mascotInstance.sad();
-        enemyMascotInstance.happy();
+        mascotInstance.sad();
+        await enemyMascotInstance.happy() ;
         currentQuestionIndex++;
         render();
       },
