@@ -121,7 +121,7 @@ export default function (questionsData) {
         level: currentLevel,
         correctCount,
         totalQuestions,
-        onRestart: () => router.navigate(() => QuizScene()),
+        onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
         onGoLevel: () => router.navigate(() => LevelScene()),
         onGoHome: () => router.navigate(() => StartScene()),
       });
@@ -219,7 +219,7 @@ export default function (questionsData) {
         level: currentLevel,
         correctCount,
         totalQuestions,
-        onRestart: () => router.navigate(() => QuizScene()),
+        onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
         onGoLevel: () => router.navigate(() => LevelScene()),
         onGoHome: () => router.navigate(() => StartScene()),
       });
@@ -331,7 +331,7 @@ export default function (questionsData) {
         },
         onGoStart: () => router.navigate(() => StartScene()),
         onGoLevel: () => router.navigate(() => LevelScene()),
-        onReplay: () => router.navigate(() => QuizScene()),
+        onReplay: () => router.navigate(() => LoadingScene(currentLevel)),
       });
 
       div.appendChild(settingMenu);
@@ -401,8 +401,7 @@ export default function (questionsData) {
                   level: currentLevel,
                   correctCount,
                   totalQuestions,
-                  onRestart: () => router.navigate(() => LoadingScene(currentLevel))
-                  ,
+                  onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
                   onGoLevel: () => router.navigate(() => LevelScene()),
                   onGoHome: () => router.navigate(() => StartScene()),
                 })
@@ -512,7 +511,7 @@ export default function (questionsData) {
                   level: currentLevel,
                   correctCount,
                   totalQuestions,
-                  onRestart: () => router.navigate(() => QuizScene()),
+                  onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
                   onGoLevel: () => router.navigate(() => LevelScene()),
                   onGoHome: () => router.navigate(() => StartScene()),
                 })
