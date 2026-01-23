@@ -102,6 +102,32 @@ export default function QuizScene() {
     if (isPaused) return;
 
     clearInterval(timer);
+
+    // ===== HIGHLIGHT ĐÁP ÁN ĐÚNG KHI HẾT GIỜ =====
+    const buttons = div.querySelectorAll(".quiz-answers button");
+    if (buttons.length > 0) {
+      buttons.forEach((b) => (b.disabled = true));
+
+      buttons.forEach((b) => {
+        if (Number(b.dataset.index) === questions[currentQuestionIndex].correctIndex) {
+          b.classList.add("correct-answer"); // 🌟 màu vàng
+        }
+      });
+    }
+
+    // ===== FILL ANSWER =====
+    const input = div.querySelector(".fill-input");
+    const submitBtn = div.querySelector(".fill-submit");
+
+    if (input) {
+      input.classList.add("timeout"); // 🌟 vàng
+      input.value = questions[currentQuestionIndex].fill?.answerText || "";
+      input.disabled = true;
+    }
+
+    if (submitBtn) submitBtn.disabled = true;
+
+
     hearts--;
     mascotInstance?.idle();
     playSound("wrong");
@@ -158,13 +184,15 @@ export default function QuizScene() {
         if (!a) return "<p>❌ Thiếu dữ liệu fill</p>";
 
         return `
-      <div class="quiz-fill">
-        <span>${a.leftText}</span>
-        <input class="fill-input" />
-        <span>${a.rightText}</span>
-        <button class="fill-submit">Trả lời</button>
-      </div>
-    `;
+          <div class="quiz-fill">
+            <div class="fill-row">
+              <span>${a.leftText}</span>
+              <input class="fill-input" />
+              <span>${a.rightText}</span>
+            </div>
+            <button class="fill-submit">Trả lời</button>
+          </div>
+        `;
       }
 
       // ==== CASE MULTI (DB MỚI) ====
@@ -433,29 +461,32 @@ export default function QuizScene() {
     }
 
     // ===== FILL ANSWER =====
-if (q.typeQuestion === 200) {
-  const input = div.querySelector(".fill-input");
-  const submitBtn = div.querySelector(".fill-submit");
+    if (q.typeQuestion === 200) {
+      const input = div.querySelector(".fill-input");
+      const submitBtn = div.querySelector(".fill-submit");
 
-  if (input && submitBtn) {
-    submitBtn.onclick = async () => {
-      if (isPaused) return;
-      clearInterval(timer);
+      if (input && submitBtn) {
+        submitBtn.onclick = async () => {
+          if (isPaused) return;
+          clearInterval(timer);
 
-      const userAnswer = input.value.trim();
-      const correctAnswer = String(q.fill.answerText).trim();
+          const userAnswer = input.value.trim();
+          const correctAnswer = String(q.fill.answerText).trim();
 
-      if (!userAnswer) return;
+          const isEmpty = !userAnswer;
+          const isCorrect = !isEmpty && userAnswer === correctAnswer;
 
-      const isCorrect = userAnswer === correctAnswer;
 
-      if (isCorrect) {
-        playSound("correct");
-        mascotInstance.happy();
-        enemyMascotInstance.sad();
-        correctCount++;
+          if (isCorrect) {
+            playSound("correct");
+            input.classList.add("correct");
+            input.disabled = true;
+            submitBtn.disabled = true;
+            mascotInstance.happy();
+            enemyMascotInstance.sad();
+            correctCount++;
 
-                    Messages({
+            Messages({
               type: "correct",
               message: config.popupText?.correct?.mascot || "Đúng rồi! 🎉",
               target: "player",
@@ -474,34 +505,45 @@ if (q.typeQuestion === 200) {
             });
 
             showMascotChat(popup);
-      } else {
-        playSound("wrong");
-        mascotInstance.sad();
-        enemyMascotInstance.happy();
+          } else {
+            playSound("wrong");
+            input.classList.add("wrong");
 
-        hearts--;
-        div.querySelector(".hearts").innerHTML = "";
-        div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
-        applyHeartBeat();
+            if (isEmpty) {
+              input.classList.add("timeout");   
+            } else {
+              input.classList.add("wrong");     
+            }
 
-        if (hearts <= 0) {
-          playSound("gameover");
+            input.value = correctAnswer;
+            input.disabled = true;
+            submitBtn.disabled = true;
+            mascotInstance.sad();
+            enemyMascotInstance.happy();
 
-          div.appendChild(
-            ResultPopup({
-              isWin: false,
-              level: currentLevel,
-              correctCount,
-              totalQuestions,
-              onRestart: () => router.navigate(() => QuizScene()),
-              onGoLevel: () => router.navigate(() => LevelScene()),
-              onGoHome: () => router.navigate(() => StartScene()),
-            })
-          );
-          return;
-        }
+            hearts--;
+            div.querySelector(".hearts").innerHTML = "";
+            div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+            applyHeartBeat();
 
-        Messages({
+            if (hearts <= 0) {
+              playSound("gameover");
+
+              div.appendChild(
+                ResultPopup({
+                  isWin: false,
+                  level: currentLevel,
+                  correctCount,
+                  totalQuestions,
+                  onRestart: () => router.navigate(() => QuizScene()),
+                  onGoLevel: () => router.navigate(() => LevelScene()),
+                  onGoHome: () => router.navigate(() => StartScene()),
+                })
+              );
+              return;
+            }
+
+            Messages({
               type: "wrong",
               message: config.popupText?.wrong?.mascot || "Huhu sai rồi",
               target: "player",
@@ -523,15 +565,15 @@ if (q.typeQuestion === 200) {
             });
 
             showMascotChat(popup);
-      }
-    };
+          }
+        };
 
-    // ⌨ Enter submit
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") submitBtn.click();
-    });
-  }
-}
+        // ⌨ Enter submit
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") submitBtn.click();
+        });
+      }
+    }
 
     startTimer();
   }
