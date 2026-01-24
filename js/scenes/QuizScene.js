@@ -55,24 +55,34 @@ export default function (questionsData) {
   }
 
   // ====== TIMER ======
+  function updateTimerUI() {
+    const fill = div.querySelector(".timer-fill");
+    const percent = (timeLeft / TOTAL_TIME) * 100;
+    if (fill) fill.style.width = percent + "%";
+  }
+
   function startTimer() {
     clearInterval(timer);
 
+    // ⚡ UPDATE NGAY – KHÔNG CHỜ 1s
+    updateTimerUI();
+
     timer = setInterval(() => {
-      if (isPaused) return;
+      if (isPaused){
+        clearInterval(timer);
+         return;
+      }
 
-      timeLeft--;
-
-      const fill = div.querySelector(".timer-fill");
-      const percent = (timeLeft / TOTAL_TIME) * 100;
-      if (fill) fill.style.width = percent + "%";
+      timeLeft-= 0.01;
+      updateTimerUI();
 
       if (timeLeft <= 0) {
         clearInterval(timer);
         handleTimeOut();
       }
-    }, 1000);
+    }, 10);
   }
+
 
   function handleTimeOut() {
     if (isPaused) return;
@@ -135,7 +145,7 @@ export default function (questionsData) {
       onClose: async () => {
         popup = null;
         mascotInstance.sad();
-        await enemyMascotInstance.happy() ;
+        await enemyMascotInstance.happy();
         currentQuestionIndex++;
         render();
       },
@@ -146,6 +156,12 @@ export default function (questionsData) {
 
   // ====== RENDER ======
   function render() {
+    if (settingMenu) {
+      settingMenu.remove();
+      settingMenu = null;
+    }
+
+    isPaused = false;
     clearInterval(timer);
     timeLeft = TOTAL_TIME;
 
