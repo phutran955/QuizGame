@@ -1,5 +1,4 @@
 import { router } from "../router.js";
-import { quizService } from "../services/quizService.js";
 import { currentLevel } from "./LevelScene.js";
 
 import ResultPopup from "../components/ResultPopup.js";

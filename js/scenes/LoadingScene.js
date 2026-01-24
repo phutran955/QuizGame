@@ -1,13 +1,24 @@
 import { router } from "../router.js";
 import { quizService } from "../services/quizService.js";
+import { levelConfig } from "../configs/levelConfig.js";
 import QuizScene from "./QuizScene.js";
 import LevelScene from "./LevelScene.js";
 
 export default function LoadingScene(level) {
+  const config = levelConfig[level];
+
   const div = document.createElement("div");
   div.className = "loading-scene";
   div.style.width = "1720px";
   div.style.height = "720px";
+
+  div.style.background = `
+    linear-gradient(
+      rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.25)
+    ),
+    url("${config.background}") center / cover no-repeat
+  `;
 
   div.innerHTML = `
     <div class="loading-box">
@@ -19,6 +30,11 @@ export default function LoadingScene(level) {
       </div>
       <p class="loading-percent">0%</p>
     </div>
+  `;
+
+  const sprite = div.querySelector(".loading-sprite");
+  sprite.style.backgroundImage = `
+    url("/assets/mascots/${config.mascot}/happy/3.png")
   `;
 
   const fill = div.querySelector(".loading-fill");

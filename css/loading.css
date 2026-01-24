@@ -4,11 +4,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-    background: linear-gradient(
-      rgba(0, 0, 0, 0.25),
-      rgba(0, 0, 0, 0.25)
-    ),
-    url("../assets/images/GEM_Start.png") center / cover no-repeat;
 }
 
 .loading-box {
@@ -38,25 +33,18 @@
   position: relative;
 }
 
-/* SPRITE */
 .loading-sprite {
   position: absolute;
-  top: -33px; /* nổi lên trên thanh */
-  right: -20px; /* bám vào đầu fill */
-
+  top: -33px; 
+  right: -20px; 
   width: 40px;
   height: 40px;
-
-  background-image: url("../assets/mascots/cat/happy/3.png");
   background-size: contain;
   background-repeat: no-repeat;
-
   animation: bounce 1s infinite;
-
   pointer-events: none;
 }
 
-/* HIỆU ỨNG NHÚN NHẢY */
 @keyframes bounce {
   0%, 100% {
     transform: translateY(0);
@@ -75,11 +63,10 @@
   
   display: flex;
   flex-direction: column;
-  justify-content: center; /* giữa theo chiều dọc */
+  justify-content: center; 
   align-items: center;  
 
 }
-
 
 .error-popup button {
   margin-top: 150px;
