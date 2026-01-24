@@ -34,7 +34,7 @@ export default function LoadingScene(level) {
 
   const sprite = div.querySelector(".loading-sprite");
   sprite.style.backgroundImage = `
-    url("/assets/mascots/${config.mascot}/happy/3.png")
+    url("/assets/mascots/${config.mascot}/win.png")
   `;
 
   const fill = div.querySelector(".loading-fill");
