@@ -56,9 +56,14 @@ export default function (questionsData) {
 
   // ====== TIMER ======
   function updateTimerUI() {
-    const fill = div.querySelector(".timer-fill");
-    const percent = (timeLeft / TOTAL_TIME) * 100;
-    if (fill) fill.style.width = percent + "%";
+    if (isPaused) {
+      return;
+    } else {
+      const fill = div.querySelector(".timer-fill");
+      const percent = (timeLeft / TOTAL_TIME) * 100;
+      if (fill) fill.style.width = percent + "%";
+    }
+
   }
 
   function startTimer() {
@@ -68,18 +73,20 @@ export default function (questionsData) {
     updateTimerUI();
 
     timer = setInterval(() => {
-      if (isPaused){
+      if (isPaused) {
         clearInterval(timer);
-         return;
+        return;
+      } else {
+        timeLeft -= 0.01;
+        updateTimerUI();
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          handleTimeOut();
+        }
       }
 
-      timeLeft-= 0.01;
-      updateTimerUI();
 
-      if (timeLeft <= 0) {
-        clearInterval(timer);
-        handleTimeOut();
-      }
     }, 10);
   }
 
