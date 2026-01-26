@@ -1,5 +1,4 @@
 import { router } from "../router.js";
-import { quizService } from "../services/quizService.js";
 import { currentLevel } from "./LevelScene.js";
 
 import ResultPopup from "../components/ResultPopup.js";
@@ -11,14 +10,15 @@ import Mascot from "../components/Mascot/Mascot.js";
 
 import StartScene from "./StartScene.js";
 import LevelScene from "./LevelScene.js";
+import LoadingScene from "./LoadingScene.js";
 import { levelConfig } from "../configs/levelConfig.js";
 
 import { playSound } from "../components/soundManager.js";
 
-export default function QuizScene() {
+export default function (questionsData) {
   // ====== STATE ======
-  let questions = [];
-  let totalQuestions = 0;
+  let questions = questionsData || [];
+  let totalQuestions = questions.length;
   let currentQuestionIndex = 0;
   let correctCount = 0;
   let hearts = 3;
@@ -53,30 +53,6 @@ export default function QuizScene() {
     chatBox.innerHTML = "";
     chatBox.appendChild(content);
   }
-
-  // ====== LOAD DATA ======
-  async function loadQuestions() {
-
-    try {
-      questions = await quizService.getQuestions(currentLevel);
-
-      if (!questions || questions.length === 0) {
-        div.innerHTML = `<p>⚠️ Không có câu hỏi cho level này</p>`;
-        return;
-      }
-
-      totalQuestions = questions.length;
-      currentQuestionIndex = 0;
-      correctCount = 0;
-      hearts = 3;
-      popup = null;
-      render();
-    } catch (err) {
-      console.error(err);
-      div.innerHTML = `<p>❌ Lỗi tải câu hỏi</p>`;
-    }
-  }
-
 
   // ====== TIMER ======
   function startTimer() {
@@ -144,7 +120,7 @@ export default function QuizScene() {
         level: currentLevel,
         correctCount,
         totalQuestions,
-        onRestart: () => router.navigate(() => QuizScene()),
+        onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
         onGoLevel: () => router.navigate(() => LevelScene()),
         onGoHome: () => router.navigate(() => StartScene()),
       });
@@ -158,8 +134,8 @@ export default function QuizScene() {
       message: "Hết giờ rồi 😭",
       onClose: async () => {
         popup = null;
-        await mascotInstance.sad();
-        enemyMascotInstance.happy();
+        mascotInstance.sad();
+        await enemyMascotInstance.happy() ;
         currentQuestionIndex++;
         render();
       },
@@ -242,7 +218,7 @@ export default function QuizScene() {
         level: currentLevel,
         correctCount,
         totalQuestions,
-        onRestart: () => router.navigate(() => QuizScene()),
+        onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
         onGoLevel: () => router.navigate(() => LevelScene()),
         onGoHome: () => router.navigate(() => StartScene()),
       });
@@ -332,7 +308,7 @@ export default function QuizScene() {
     div.querySelector(".setting-btn").onclick = () => {
       playSound("click");
 
-      // 🔁 Nếu đang mở → đóng
+      // Nếu đang mở → đóng
       if (settingMenu) {
         settingMenu.remove();
         settingMenu = null;
@@ -354,13 +330,12 @@ export default function QuizScene() {
         },
         onGoStart: () => router.navigate(() => StartScene()),
         onGoLevel: () => router.navigate(() => LevelScene()),
-        onReplay: () => router.navigate(() => QuizScene()),
+        onReplay: () => router.navigate(() => LoadingScene(currentLevel)),
       });
 
       div.appendChild(settingMenu);
     };
 
-    // ===== ANSWERS =====
     // ===== ANSWERS =====
     if (q.typeQuestion === 100) {
       div.querySelectorAll(".quiz-answers button").forEach((btn) => {
@@ -425,7 +400,7 @@ export default function QuizScene() {
                   level: currentLevel,
                   correctCount,
                   totalQuestions,
-                  onRestart: () => router.navigate(() => QuizScene()),
+                  onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
                   onGoLevel: () => router.navigate(() => LevelScene()),
                   onGoHome: () => router.navigate(() => StartScene()),
                 })
@@ -510,9 +485,9 @@ export default function QuizScene() {
             input.classList.add("wrong");
 
             if (isEmpty) {
-              input.classList.add("timeout");   
+              input.classList.add("timeout");
             } else {
-              input.classList.add("wrong");     
+              input.classList.add("wrong");
             }
 
             input.value = correctAnswer;
@@ -535,7 +510,7 @@ export default function QuizScene() {
                   level: currentLevel,
                   correctCount,
                   totalQuestions,
-                  onRestart: () => router.navigate(() => QuizScene()),
+                  onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
                   onGoLevel: () => router.navigate(() => LevelScene()),
                   onGoHome: () => router.navigate(() => StartScene()),
                 })
@@ -645,7 +620,12 @@ export default function QuizScene() {
     parent.appendChild(layer);
   }
 
+  if (!questions || questions.length === 0) {
+    router.navigate(() => LoadingScene(currentLevel));
+    return div;
+  }
 
-  loadQuestions();
+  render();
   return div;
+
 }

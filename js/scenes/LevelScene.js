@@ -1,5 +1,5 @@
 import { router } from "../router.js";
-import QuizScene from "./QuizScene.js";
+import LoadingScene from "./LoadingScene.js";
 import { playSound } from "../components/soundManager.js";
 
 export let currentLevel = 1;
@@ -28,7 +28,7 @@ export default function LevelScene() {
     btn.onclick = () => {
       playSound("click"); 
       currentLevel = Number(btn.dataset.level);
-      router.navigate(QuizScene);
+      router.navigate(() => LoadingScene(currentLevel));
     };
   });
 
