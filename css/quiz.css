@@ -196,6 +196,21 @@
 }
 
 /* =========================
+   QUESTION IMAGE
+========================= */
+.question-img {
+  margin: 12px 0;
+  text-align: center;
+} 
+
+.question-img img{
+  max-width: auto;
+  max-height: 220px;
+    object-fit: contain;
+  display: inline-block;
+}
+
+/* =========================
    ANSWERS GRID
 ========================= */
 .quiz-answers {

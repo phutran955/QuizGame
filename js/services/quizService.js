@@ -2,7 +2,7 @@ import { apiGet } from "./api.js";
 
 const LEVEL_QUIZ_MAP = {
   1: 19,
-  2: 2,
+  2: 20,
   3: 3,
   4: 8,
 };
@@ -11,12 +11,27 @@ function mapQuestion(question) {
 
   const type = Number(question.typeQuestion);
 
+  const img = question.imageQuestion;
+
   // MULTI CHOICE
   if (type === 100) {
     const answers = question.answers.map(a => a.answerName);
     const correctIndex = question.answers.findIndex(
       a => a.isAnswer === true
     );
+
+
+    if (img !== null || img !== "") {
+      return {
+        id: question.id,
+        question: question.questionName,
+        typeQuestion: type,
+        img,
+        answers,
+        correctIndex,
+        detailedText: question.detailedAnswer,
+      }
+    }
 
     return {
       id: question.id,
@@ -31,6 +46,21 @@ function mapQuestion(question) {
   // FILL BLANK
   if (type === 200) {
     const a = question.answers[0];
+
+    if (img !== null || img !== "") {
+      return {
+      id: question.id,
+      question: question.questionName,
+      typeQuestion: type,
+      img,
+      fill: {
+        leftText: a.leftText,
+        rightText: a.rightText,
+        answerText: a.answerText,
+      },
+      detailedText: question.detailedAnswer,
+      }
+    }
 
     return {
       id: question.id,
@@ -66,7 +96,7 @@ export const quizService = {
     }
 
     return quiz.questions
-  .map(mapQuestion)
-  .filter(Boolean);
+      .map(mapQuestion)
+      .filter(Boolean);
   },
 };

@@ -85,8 +85,6 @@ export default function (questionsData) {
           handleTimeOut();
         }
       }
-
-
     }, 1000);
   }
 
@@ -231,6 +229,17 @@ export default function (questionsData) {
       return "<p>❌ Không hỗ trợ dạng câu hỏi</p>";
     }
 
+  // ===== FUNCTION QUESTION IMAGE =====
+
+    function renderImg(q) {
+      if (!q.img) return "";
+
+      return `
+    <div class="question-img">
+      <img src="${q.img}" alt="question image">
+    </div>
+  `;
+    }
 
     // ===== WIN =====
     if (!q) {
@@ -275,6 +284,8 @@ export default function (questionsData) {
           <div class="quiz-question">
             <h2>${q.question}</h2>
           </div>
+
+          ${renderImg(q)}
 
           ${renderAnswers(q)}
           </div>
