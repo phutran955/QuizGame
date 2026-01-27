@@ -77,7 +77,7 @@ export default function (questionsData) {
         clearInterval(timer);
         return;
       } else {
-        timeLeft -= 0.01;
+        timeLeft--;
         updateTimerUI();
 
         if (timeLeft <= 0) {
@@ -87,7 +87,7 @@ export default function (questionsData) {
       }
 
 
-    }, 10);
+    }, 1000);
   }
 
 
