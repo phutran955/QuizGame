@@ -1,5 +1,5 @@
 import { router } from "../router.js";
-import LevelScene from "./LevelScene.js";
+import LoadingScene from "./LoadingScene.js";
 import { playSound, playBackgroundMusic } from "../components/soundManager.js";
 
 export default function StartScene() {
@@ -18,7 +18,7 @@ export default function StartScene() {
 
     playBackgroundMusic();
 
-    router.navigate(LevelScene);
+    router.navigate(() => LoadingScene());
   };
 
   return div;
