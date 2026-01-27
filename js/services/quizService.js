@@ -1,11 +1,6 @@
 import { apiGet } from "./api.js";
 
-const LEVEL_QUIZ_MAP = {
-  1: 19,
-  2: 2,
-  3: 3,
-  4: 8,
-};
+const QUIZ_ID = 19; 
 
 function mapQuestion(question) {
 
@@ -52,21 +47,16 @@ function mapQuestion(question) {
 
 export const quizService = {
 
-  async getQuestions(level) {
-    const quizId = LEVEL_QUIZ_MAP[level];
+async getQuestions() {
+  const quiz = await apiGet(`/exercises/${QUIZ_ID}`);
 
-    if (!quizId) {
-      throw new Error(`Chưa map quiz cho level ${level}`);
-    }
+  if (!quiz.questions || quiz.questions.length === 0) {
+    return [];
+  }
 
-    const quiz = await apiGet(`/exercises/${quizId}`);
+  return quiz.questions
+    .map(mapQuestion)
+    .filter(Boolean);
+}
 
-    if (!quiz.questions || quiz.questions.length === 0) {
-      return [];
-    }
-
-    return quiz.questions
-  .map(mapQuestion)
-  .filter(Boolean);
-  },
 };

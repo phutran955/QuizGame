@@ -1,23 +1,21 @@
 import { router } from "../router.js";
-import { currentLevel } from "./LevelScene.js";
-
 import ResultPopup from "../components/ResultPopup.js";
 import SettingMenu from "../components/SettingMenu.js";
-
 import HeartBar from "../components/HeartBar.js";
 import Messages from "../components/MessagesPopup.js";
 import Mascot from "../components/Mascot/Mascot.js";
-
 import StartScene from "./StartScene.js";
-import LevelScene from "./LevelScene.js";
 import LoadingScene from "./LoadingScene.js";
-import { levelConfig } from "../configs/levelConfig.js";
-
 import { playSound } from "../components/soundManager.js";
 
-export default function (questionsData) {
+export default function ({
+  questions,
+  allQuestions,
+  nextIndex,
+  background
+}) {
+
   // ====== STATE ======
-  let questions = questionsData || [];
   let totalQuestions = questions.length;
   let currentQuestionIndex = 0;
   let correctCount = 0;
@@ -32,10 +30,14 @@ export default function (questionsData) {
   const TOTAL_TIME = 10;
   let timeLeft = TOTAL_TIME;
 
+  let correctProgress = 0;
+  const REQUIRED_CORRECT = questions.length;
+
   const div = document.createElement("div");
   div.className = "quiz-scene";
   div.style.width = "1720px";
   div.style.height = "720px";
+
 
   // ===== HEART EFFECT =====
   function applyHeartBeat() {
@@ -52,6 +54,28 @@ export default function (questionsData) {
     if (!chatBox) return;
     chatBox.innerHTML = "";
     chatBox.appendChild(content);
+  }
+
+  // ================= UTIL =================
+  function updateCorrectProgress() {
+    const percent = (correctProgress / REQUIRED_CORRECT) * 100;
+    div.querySelector(".correct-fill").style.width = percent + "%";
+    div.querySelector(".correct-text").innerText =
+      `${correctProgress} / ${REQUIRED_CORRECT}`;
+  }
+
+  function handleCorrectProgress() {
+    correctProgress++;
+    updateCorrectProgress();
+
+    if (correctProgress >= REQUIRED_CORRECT) {
+      router.navigate(() =>
+        LoadingScene(allQuestions, nextIndex)
+      );
+      return true;
+    }
+
+    return false;
   }
 
   // ====== TIMER ======
@@ -117,11 +141,9 @@ export default function (questionsData) {
 
       popup = ResultPopup({
         isWin: false,
-        level: currentLevel,
         correctCount,
         totalQuestions,
-        onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
-        onGoLevel: () => router.navigate(() => LevelScene()),
+        onRestart: () => router.navigate(() => LoadingScene()),
         onGoHome: () => router.navigate(() => StartScene()),
       });
 
@@ -135,7 +157,7 @@ export default function (questionsData) {
       onClose: async () => {
         popup = null;
         mascotInstance.sad();
-        await enemyMascotInstance.happy() ;
+        await enemyMascotInstance.happy();
         currentQuestionIndex++;
         render();
       },
@@ -151,8 +173,7 @@ export default function (questionsData) {
 
     const q = questions[currentQuestionIndex];
 
-    // ===== FUNCTION QUESTION TYPE =====
-
+    // ================= RENDER ANSWERS =================
     function renderAnswers(q) {
       // ==== CASE FILL (PHẢI CHECK TRƯỚC) ====
       if (Number(q.typeQuestion) === 200) {
@@ -208,38 +229,25 @@ export default function (questionsData) {
       return "<p>❌ Không hỗ trợ dạng câu hỏi</p>";
     }
 
-
     // ===== WIN =====
     if (!q) {
-      playSound("win");
-
-      popup = ResultPopup({
-        isWin: true,
-        level: currentLevel,
-        correctCount,
-        totalQuestions,
-        onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
-        onGoLevel: () => router.navigate(() => LevelScene()),
-        onGoHome: () => router.navigate(() => StartScene()),
-      });
-
-      div.innerHTML = "";
-      div.appendChild(popup);
       return;
     }
 
-    const config = levelConfig[currentLevel] || {};
-
-    div.style.backgroundImage = config.background
-      ? `url(${config.background})`
-      : "none";
+    div.style.backgroundImage = `
+  linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+  url("${background.bg}")
+`;
 
     div.innerHTML = `
       <div class="quiz-content">
         <div class="quiz-top">
+        <div class="correct-progress">
+          <div class="correct-fill"></div>
+          <span class="correct-text">0 / 3</span>
+       </div>
           <div class="hearts"></div>
           <div class="timer-bar"><div class="timer-fill"></div></div>
-          <div class="level">Level ${currentLevel}</div>
           <button class="setting-btn"></button>
         </div>
 
@@ -247,7 +255,6 @@ export default function (questionsData) {
           <div class="mascot-area player">
             <div class="mascot-chat"></div>
           </div>
-
         <div class="quiz-panel">
           <div class="quiz-question">
             <h2>${q.question}</h2>
@@ -262,21 +269,14 @@ export default function (questionsData) {
       </div>
     </div>
     `;
-
-    // 🍃 ADD LEAVES AFTER RENDER
-    // 🌦 EFFECT BY LEVEL
-    if (currentLevel === 1) {
-      createFallingLeaves(div);
-    } else {
-      createLevelEffect(div, currentLevel);
-    }
+    createEffect(div, background.effect);
 
     // ===== PLAYER =====
     const playerArea = div.querySelector(".mascot-area.player");
 
-    if (config.mascot && !mascotInstance) {
+    if (!mascotInstance) {
       mascotInstance = Mascot({
-        mascotName: config.mascot,
+        mascotName: "cat",
         role: "player",
       });
     }
@@ -288,9 +288,9 @@ export default function (questionsData) {
     // ===== ENEMY =====
     const enemyArea = div.querySelector(".mascot-area.enemy");
 
-    if (config.enemyMascot && !enemyMascotInstance) {
+    if (!enemyMascotInstance) {
       enemyMascotInstance = Mascot({
-        mascotName: config.enemyMascot,
+        mascotName: "dog",
         role: "enemy",
       });
     }
@@ -329,8 +329,7 @@ export default function (questionsData) {
           startTimer();
         },
         onGoStart: () => router.navigate(() => StartScene()),
-        onGoLevel: () => router.navigate(() => LevelScene()),
-        onReplay: () => router.navigate(() => LoadingScene(currentLevel)),
+        onReplay: () => router.navigate(() => LoadingScene()),
       });
 
       div.appendChild(settingMenu);
@@ -355,16 +354,16 @@ export default function (questionsData) {
             mascotInstance.happy();
             enemyMascotInstance.sad();
             correctCount++;
-
+            if (handleCorrectProgress()) return;
             Messages({
               type: "correct",
-              message: config.popupText?.correct?.mascot || "Đúng rồi! 🎉",
+              message: "Đúng rồi! 🎉",
               target: "player",
             });
 
             popup = Messages({
               type: "correct",
-              message: config.popupText?.correct?.enemyMascot || "Bạn may thôi",
+              message: "Bạn may thôi",
               target: "enemy",
               onClose: async () => {
                 popup = null;
@@ -380,7 +379,6 @@ export default function (questionsData) {
             playSound("wrong");
             mascotInstance.sad();
             enemyMascotInstance.happy();
-
             buttons.forEach((b) => {
               if (Number(b.dataset.index) === q.correctIndex) {
                 b.classList.add("correct-answer");
@@ -397,20 +395,18 @@ export default function (questionsData) {
               div.appendChild(
                 ResultPopup({
                   isWin: false,
-                  level: currentLevel,
                   correctCount,
                   totalQuestions,
-                  onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
-                  onGoLevel: () => router.navigate(() => LevelScene()),
+                  onRestart: () => router.navigate(() => LoadingScene()),
                   onGoHome: () => router.navigate(() => StartScene()),
                 })
               );
               return;
             }
-
+            if (handleCorrectProgress()) return;
             Messages({
               type: "wrong",
-              message: config.popupText?.wrong?.mascot || "Huhu sai rồi",
+              message: "Huhu sai rồi",
               target: "player",
             });
 
@@ -418,7 +414,6 @@ export default function (questionsData) {
               type: "wrong",
               message:
                 q.detailedText ||
-                config.popupText?.wrong?.enemyMascot ||
                 "Chưa tày đâu",
               target: "enemy",
               onClose: async () => {
@@ -460,16 +455,16 @@ export default function (questionsData) {
             mascotInstance.happy();
             enemyMascotInstance.sad();
             correctCount++;
-
+            if (handleCorrectProgress()) return;
             Messages({
               type: "correct",
-              message: config.popupText?.correct?.mascot || "Đúng rồi! 🎉",
+              message: "Đúng rồi! 🎉",
               target: "player",
             });
 
             popup = Messages({
               type: "correct",
-              message: config.popupText?.correct?.enemyMascot || "Bạn may thôi",
+              message: "Bạn may thôi",
               target: "enemy",
               onClose: async () => {
                 popup = null;
@@ -507,20 +502,18 @@ export default function (questionsData) {
               div.appendChild(
                 ResultPopup({
                   isWin: false,
-                  level: currentLevel,
                   correctCount,
                   totalQuestions,
-                  onRestart: () => router.navigate(() => LoadingScene(currentLevel)),
-                  onGoLevel: () => router.navigate(() => LevelScene()),
+                  onRestart: () => router.navigate(() => LoadingScene()),
                   onGoHome: () => router.navigate(() => StartScene()),
                 })
               );
               return;
             }
-
+           if (handleCorrectProgress()) return;
             Messages({
               type: "wrong",
-              message: config.popupText?.wrong?.mascot || "Huhu sai rồi",
+              message: "Huhu sai rồi",
               target: "player",
             });
 
@@ -528,7 +521,6 @@ export default function (questionsData) {
               type: "wrong",
               message:
                 q.detailedText ||
-                config.popupText?.wrong?.enemyMascot ||
                 "Chưa tày đâu",
               target: "enemy",
               onClose: async () => {
@@ -554,65 +546,47 @@ export default function (questionsData) {
   }
 
   // ===== FALLING LEAVES =====
-  function createFallingLeaves(parent) {
-    parent.querySelector(".leaves-container")?.remove();
-
-    const container = document.createElement("div");
-    container.className = "leaves-container";
-
-    for (let i = 0; i < 12; i++) {
-      const leaf = document.createElement("div");
-      leaf.className = "leaf";
-      leaf.style.left = Math.random() * 100 + "%";
-      leaf.style.animationDuration = 6 + Math.random() * 6 + "s";
-      leaf.style.animationDelay = Math.random() * 5 + "s";
-      container.appendChild(leaf);
-    }
-
-    parent.appendChild(container);
-  }
-
-  function createLevelEffect(parent, level) {
+  function createEffect(parent, effectType) {
     parent.querySelector(".effects-layer")?.remove();
+
+    if (!effectType || effectType === "none") return;
 
     const layer = document.createElement("div");
     layer.className = "effects-layer";
 
-    let count = 15;
-    if (level === 2) count = 70;
-    if (level === 3) count = 18;
-    if (level === 4) count = 35;
+    const config = {
+      leaf: { count: 18, className: "leaf" },
+      rain: { count: 70, className: "rain" },
+      leafyellow: { count: 18, className: "leaf-yellow" },
+      ember: { count: 35, className: "ember" },
+    };
+
+    const { count, className } = config[effectType] || {};
 
     for (let i = 0; i < count; i++) {
       const item = document.createElement("div");
+      item.className = className;
 
+      // vị trí ngang
       item.style.left = Math.random() * 100 + "%";
+
+      // thời gian
       item.style.animationDuration = 3 + Math.random() * 5 + "s";
-      item.style.animationDelay = Math.random() * 5 + "s";
+      item.style.animationDelay = Math.random() * 2 + "s";
 
-      if (level === 2) item.className = "rain";
-      if (level === 3) item.className = "leaf-yellow";
-      if (level === 4) {
-        item.className = "ember";
-
-        // 🔥 size to nhỏ ngẫu nhiên
+      // 🔥 hiệu ứng riêng cho ember
+      if (effectType === "ember") {
         const size = 24 + Math.random() * 36;
         item.style.width = size + "px";
         item.style.height = size + "px";
 
-        // 🔥 vị trí ngang
-        item.style.left = Math.random() * 100 + "%";
-
-        // 🔥 VỊ TRÍ DỌC – vùng dung nham (65% → 85% màn hình)
         const lavaStart = window.innerHeight * 0.65;
         const lavaRange = window.innerHeight * 0.2;
         item.style.top = lavaStart + Math.random() * lavaRange + "px";
 
-        // ⏱ thời gian bay
         item.style.animationDuration = 4 + Math.random() * 4 + "s";
         item.style.animationDelay = Math.random() * 0.1 + "s";
       }
-
 
       layer.appendChild(item);
     }
@@ -621,7 +595,7 @@ export default function (questionsData) {
   }
 
   if (!questions || questions.length === 0) {
-    router.navigate(() => LoadingScene(currentLevel));
+    router.navigate(() => LoadingScene());
     return div;
   }
 
