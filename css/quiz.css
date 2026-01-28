@@ -32,13 +32,6 @@
   z-index: 20;
 }
 
-.level {
-  font-weight: bold;
-  font-size: 40px;
-  color: #fff;
-  text-shadow: 1px 1px 3px #000;
-}
-
 /* =========================
    QUIZ ZONE LAYOUT
 ========================= */
@@ -193,6 +186,21 @@
   color: #fff;
   text-shadow: 2px 2px 4px #000;
   line-height: 1.4;
+}
+
+/* =========================
+   QUESTION IMAGE
+========================= */
+.question-img {
+  margin: 12px 0;
+  text-align: center;
+} 
+
+.question-img img{
+  max-width: auto;
+  max-height: 220px;
+    object-fit: contain;
+  display: inline-block;
 }
 
 /* =========================

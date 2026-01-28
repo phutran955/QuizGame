@@ -9,12 +9,10 @@
 .level-title {
   font-size: 42px;
   color: #fff;
-  margin-bottom: 30px;
 }
 
 .level-list {
-  display: grid;
-  grid-template-columns: repeat(2, 180px);
+  display: table-column;
   gap: 32px;
   justify-content: center;
 }
@@ -23,20 +21,24 @@
   all: unset;
   font-size: 36px;
   font-weight: 800;
+  color: #4caf50;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   height: 110px;
+  width: 285px;
   border-radius: 38px;
-  color: #4caf50;
+  margin-top: 30px;
 
-    text-shadow:
+  background-color: rgba(166, 226, 245, 0.634);
+
+  text-shadow:
     -2px -2px 0 #ffffff,
-     2px -2px 0 #ffffff,
-    -2px  2px 0 #ffffff,
-     2px  2px 0 #ffffff;
+    2px -2px 0 #ffffff,
+    -2px 2px 0 #ffffff,
+    2px 2px 0 #ffffff;
 
   cursor: pointer;
 }
@@ -50,7 +52,7 @@
   box-shadow: 0 2px 0 #388e3c;
 }
 
-.level-1 {
+/* .level-1 {
   background: url("../assets/images/levels/level1bg.jpg") center / contain no-repeat;
 }
 
@@ -64,11 +66,11 @@
 
 .level-4 {
   background: url("../assets/images/levels/level4bg.jpg") center / contain no-repeat;
-}
+} */
 
 .back-btn {
   margin-top: 40px;
-  padding: 25px 150px;
+  padding: 25px 120px;
   font-family: "Comic Sans MS", "Arial Rounded MT Bold", Arial, sans-serif;
   font-weight: bold;
   font-size: 40px;
@@ -78,7 +80,9 @@
 
   background: #763c21;
   color: #b0b0b0;
-  text-shadow: 1px 1px 0 #5e5e5e, -1px -1px 0 #d6d6d6;
+  text-shadow:
+    1px 1px 0 #5e5e5e,
+    -1px -1px 0 #d6d6d6;
 }
 
 .back-btn:hover {
