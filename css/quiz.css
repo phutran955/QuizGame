@@ -18,21 +18,6 @@
 }
 
 /* =========================
-   TOP BAR
-========================= */
-.quiz-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  flex: 0 0 auto;
-  padding: 10px 20px;
-  height: 80px;
-  z-index: 20;
-}
-
-/* =========================
    QUIZ ZONE LAYOUT
 ========================= */
 .quiz-zone {
@@ -432,74 +417,6 @@
   color: #5d4500;
   box-shadow: 0 0 18px #ffeb3b;
 }
-
-/* =========================
-   SETTINGS BUTTON
-========================= */
-.setting-btn {
-  background-image: url("../assets/images/menu.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: transparent;
-  border: none;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  cursor: pointer;
-}
-
-.setting-btn:hover {
-  transform: scale(1.1) rotate(10deg);
-}
-
-/* =========================
-   HEART BAR
-========================= */
-.hearts {
-  display: flex;
-  gap: 6px;
-}
-
-/* =========================
-  Progress
-========================= */
-.correct-progress {
-  position: relative;
-  width: 220px;
-  height: 18px;
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
-}
-
-/* Thanh fill */
-.correct-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(
-    90deg,
-    #4ade80,
-    #22c55e
-  );
-  border-radius: 999px;
-  transition: width 0.4s ease;
-}
-
-/* Text */
-.correct-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 12px;
-  font-weight: 700;
-  color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-  pointer-events: none;
-}
-
 
 /* =========================
    POPUP OVERLAY

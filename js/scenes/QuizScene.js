@@ -2,6 +2,7 @@ import { router } from "../router.js";
 import ResultPopup from "../components/ResultPopup.js";
 import SettingMenu from "../components/SettingMenu.js";
 import HeartBar from "../components/HeartBar.js";
+import StarBar from "../components/StarBar.js";
 import Messages from "../components/MessagesPopup.js";
 import Mascot from "../components/Mascot/Mascot.js";
 import StartScene from "./StartScene.js";
@@ -27,6 +28,7 @@ export default function ({
 
   let correctProgress = 0;
   const REQUIRED_CORRECT = questions.length;
+  const MAX_STARS = REQUIRED_CORRECT;
 
   const div = document.createElement("div");
   div.className = "quiz-scene";
@@ -34,7 +36,7 @@ export default function ({
   div.style.height = "720px";
 
 
-  // ===== HEART EFFECT =====
+  // ===== HEART & STAR EFFECT =====
   function applyHeartBeat() {
     div.querySelectorAll(".hearts img, .hearts .heart").forEach(h => {
       h.classList.remove("heart-beat");
@@ -42,6 +44,16 @@ export default function ({
       h.classList.add("heart-beat");
     });
   }
+
+function applyStarEffect() {
+  const star = div.querySelector(".star-progress img.star-new");
+  if (!star) return;
+
+  star.classList.remove("star-beat");
+  void star.offsetWidth;
+  star.classList.add("star-beat");
+}
+
 
   // ===== MASCOT CHAT =====
   function showMascotChat(content) {
@@ -52,16 +64,20 @@ export default function ({
   }
 
   // ================= UTIL =================
-  function updateCorrectProgress() {
-    const percent = (correctProgress / REQUIRED_CORRECT) * 100;
-    div.querySelector(".correct-fill").style.width = percent + "%";
-    div.querySelector(".correct-text").innerText =
-      `${correctProgress} / ${REQUIRED_CORRECT}`;
+  function updateStarProgress() {
+    const starWrap = div.querySelector(".star-progress");
+    if (!starWrap) return;
+
+    starWrap.innerHTML = "";
+    starWrap.appendChild(
+      StarBar(MAX_STARS, correctProgress)
+    );
   }
 
   function handleCorrectProgress() {
     correctProgress++;
-    updateCorrectProgress();
+    updateStarProgress();
+    applyStarEffect();
 
     if (correctProgress >= REQUIRED_CORRECT) {
       router.navigate(() =>
@@ -135,7 +151,7 @@ export default function ({
       return "<p>❌ Không hỗ trợ dạng câu hỏi</p>";
     }
 
-  // ===== FUNCTION QUESTION IMAGE =====
+    // ===== FUNCTION QUESTION IMAGE =====
 
     function renderImg(q) {
       if (!q.img) return "";
@@ -162,10 +178,7 @@ export default function ({
         <div class="quiz-top">   
           <div class="hearts"></div>
 
-          <div class="correct-progress">
-           <div class="correct-fill"></div>
-           <span class="correct-text"></span>
-          </div>
+          <div class="star-progress"></div>
 
           <button class="setting-btn"></button>
         </div>
@@ -191,7 +204,7 @@ export default function ({
     </div>
     `;
     createEffect(div, background.effect);
-    updateCorrectProgress();
+    updateStarProgress();
 
     // ===== PLAYER =====
     const playerArea = div.querySelector(".mascot-area.player");
@@ -421,7 +434,7 @@ export default function ({
               );
               return;
             }
-           if (handleCorrectProgress()) return;
+            if (handleCorrectProgress()) return;
             Messages({
               type: "wrong",
               message: "Huhu sai rồi",

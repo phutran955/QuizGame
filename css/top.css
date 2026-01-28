@@ -1,0 +1,85 @@
+/* =========================
+   TOP BAR
+========================= */
+.quiz-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+  padding: 10px 20px;
+  height: 80px;
+  z-index: 0;
+}
+
+/* =========================
+   HEART BAR
+========================= */
+.heart-bar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-left: 38px;
+}
+
+.heart {
+  width: 100px;
+  height: auto;
+}
+
+/* =========================
+   STAR BAR
+========================= */
+.star-progress {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 60px;
+}
+
+.star-progress img {
+  width: 100px;
+  height: auto;
+}
+
+.star-beat {
+  animation: starBeat 0.6s ease-out;
+}
+
+@keyframes starBeat {
+  0% {
+    transform: scale(0.6) rotate(0deg);
+    filter: brightness(0.8);
+  }
+  50% {
+    transform: scale(1.4) rotate(12deg);
+    filter: brightness(1.4);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1);
+  }
+}
+
+
+
+/* =========================
+   SETTINGS BUTTON
+========================= */
+.setting-btn {
+  background-image: url("../assets/images/tops/menu.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  cursor: pointer;
+}
+
+.setting-btn:hover {
+  transform: scale(1.1) rotate(10deg);
+}
