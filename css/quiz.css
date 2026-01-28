@@ -179,12 +179,12 @@
 .question-img {
   margin: 12px 0;
   text-align: center;
-} 
+}
 
-.question-img img{
+.question-img img {
   max-width: auto;
   max-height: 220px;
-    object-fit: contain;
+  object-fit: contain;
   display: inline-block;
 }
 
@@ -264,7 +264,7 @@
 }
 
 .quiz-fill span {
-  font-size: 26px;       
+  font-size: 26px;
   color: #fff;
   font-weight: bold;
   text-shadow: 2px 2px 4px #000;
@@ -330,7 +330,6 @@
   box-shadow: 0 2px 0 #3fa66b;
 }
 
-
 /* =========================
    FILL ANSWER STATES
 ========================= */
@@ -358,7 +357,6 @@
   color: #5d4500;
   box-shadow: 0 0 18px #ffeb3b;
 }
-
 
 /* =========================
    ANSWER STATES
@@ -481,14 +479,12 @@
   background-color: #e8f5e9;
 }
 
-
 /* sai */
 .toast-message.wrong.player,
 .toast-message.correct.enemy {
   color: #f44336;
   background-color: #ffebee;
 }
-
 
 /* mõ */
 .toast-message::after {
@@ -506,12 +502,12 @@
   border-bottom: 0;
 }
 
-.toast-message.correct.player::after, 
+.toast-message.correct.player::after,
 .toast-message.wrong.enemy::after {
   border-top: 12px solid #e8f5e9;
 }
 
-.toast-message.correct.enemy::after, 
+.toast-message.correct.enemy::after,
 .toast-message.wrong.player::after {
   border-top: 12px solid #ffebee;
 }
