@@ -70,58 +70,58 @@ export default function Mascot({
   }
 
   function run({ from = -200, to = 1400, duration = 800 } = {}) {
-  return new Promise(resolve => {
-    stopCurrent();
-    currentState = "run";
-
-    // reset vị trí ban đầu
-    div.style.position = "absolute";
-    div.style.left = from + "px";
-
-    currentAnim = playAnimation({
-      img,
-      path: `/assets/mascots/${mascotName}/run`,
-      loop: true,
-      totalFrames: 8,
-    });
-
-    // chạy ngang
-    div.animate(
-      [
-        { transform: `translateX(0)` },
-        { transform: `translateX(${to - from}px)` },
-      ],
-      {
-        duration,
-        easing: "ease-in-out",
-        fill: "forwards",
-      }
-    );
-
-    setTimeout(() => {
+    return new Promise(resolve => {
       stopCurrent();
-      idle();
-      resolve();
-    }, duration);
-  });
-}
+      currentState = "run";
 
-function attack() {
-  return new Promise(resolve => {
-    stopCurrent();
-    currentState = "attack";
+      // reset vị trí ban đầu
+      div.style.position = "absolute";
+      div.style.left = from + "px";
 
-    currentAnim = playAnimation({
-      img,
-      path: `/assets/mascots/${mascotName}/attack`,
-      loop: false,
-      onEnd: () => {
+      currentAnim = playAnimation({
+        img,
+        path: `/assets/mascots/${mascotName}/run`,
+        loop: true,
+        totalFrames: 8,
+      });
+
+      // chạy ngang
+      div.animate(
+        [
+          { transform: `translateX(0)` },
+          { transform: `translateX(${to - from}px)` },
+        ],
+        {
+          duration,
+          easing: "ease-in-out",
+          fill: "forwards",
+        }
+      );
+
+      setTimeout(() => {
+        stopCurrent();
         idle();
         resolve();
-      },
+      }, duration);
     });
-  });
-}
+  }
+
+  function attack() {
+    return new Promise(resolve => {
+      stopCurrent();
+      currentState = "attack";
+
+      currentAnim = playAnimation({
+        img,
+        path: `/assets/mascots/${mascotName}/attack`,
+        loop: false,
+        onEnd: () => {
+          idle();
+          resolve();
+        },
+      });
+    });
+  }
 
 
 
