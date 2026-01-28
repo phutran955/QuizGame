@@ -22,13 +22,8 @@ export default function ({
   let hearts = 3;
   let settingMenu = null;
   let popup = null;
-  let isPaused = false;
   let mascotInstance = null;
   let enemyMascotInstance = null;
-
-  let timer = null;
-  const TOTAL_TIME = 10;
-  let timeLeft = TOTAL_TIME;
 
   let correctProgress = 0;
   const REQUIRED_CORRECT = questions.length;
@@ -78,119 +73,9 @@ export default function ({
     return false;
   }
 
-  // ====== TIMER ======
-  function updateTimerUI() {
-    if (isPaused) {
-      return;
-    } else {
-      const fill = div.querySelector(".timer-fill");
-      const percent = (timeLeft / TOTAL_TIME) * 100;
-      if (fill) fill.style.width = percent + "%";
-    }
-
-  }
-
-  function startTimer() {
-    clearInterval(timer);
-
-    // ⚡ UPDATE NGAY – KHÔNG CHỜ 1s
-    updateTimerUI();
-
-    timer = setInterval(() => {
-      if (isPaused) {
-        clearInterval(timer);
-        return;
-      } else {
-        timeLeft--;
-        updateTimerUI();
-
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          handleTimeOut();
-        }
-      }
-    }, 1000);
-  }
-
-
-  function handleTimeOut() {
-    if (isPaused) return;
-
-    clearInterval(timer);
-
-    // ===== HIGHLIGHT ĐÁP ÁN ĐÚNG KHI HẾT GIỜ =====
-    const buttons = div.querySelectorAll(".quiz-answers button");
-    if (buttons.length > 0) {
-      buttons.forEach((b) => (b.disabled = true));
-
-      buttons.forEach((b) => {
-        if (Number(b.dataset.index) === questions[currentQuestionIndex].correctIndex) {
-          b.classList.add("correct-answer"); // 🌟 màu vàng
-        }
-      });
-    }
-
-    // ===== FILL ANSWER =====
-    const input = div.querySelector(".fill-input");
-    const submitBtn = div.querySelector(".fill-submit");
-
-    if (input) {
-      input.classList.add("timeout"); // 🌟 vàng
-      input.value = questions[currentQuestionIndex].fill?.answerText || "";
-      input.disabled = true;
-    }
-
-    if (submitBtn) submitBtn.disabled = true;
-
-
-    hearts--;
-    mascotInstance?.idle();
-    playSound("wrong");
-
-    div.querySelector(".hearts").innerHTML = "";
-    div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
-    applyHeartBeat();
-
-    if (hearts <= 0) {
-      playSound("gameover");
-
-      popup = ResultPopup({
-        isWin: false,
-        correctCount,
-        totalQuestions,
-        onRestart: () => router.navigate(() => LoadingScene()),
-        onGoHome: () => router.navigate(() => StartScene()),
-      });
-
-      div.appendChild(popup);
-      return;
-    }
-
-    popup = Messages({
-      type: "wrong",
-      message: "Hết giờ rồi 😭",
-      onClose: async () => {
-        popup = null;
-        mascotInstance.sad();
-        await enemyMascotInstance.happy();
-        currentQuestionIndex++;
-        render();
-      },
-    });
-
-    showMascotChat(popup);
-  }
 
   // ====== RENDER ======
   function render() {
-    if (settingMenu) {
-      settingMenu.remove();
-      settingMenu = null;
-    }
-
-    isPaused = false;
-    clearInterval(timer);
-    timeLeft = TOTAL_TIME;
 
     const q = questions[currentQuestionIndex];
 
@@ -274,13 +159,14 @@ export default function ({
 
     div.innerHTML = `
       <div class="quiz-content">
-        <div class="quiz-top">
-        <div class="correct-progress">
-          <div class="correct-fill"></div>
-          <span class="correct-text">0 / 3</span>
-       </div>
+        <div class="quiz-top">   
           <div class="hearts"></div>
-          <div class="timer-bar"><div class="timer-fill"></div></div>
+
+          <div class="correct-progress">
+           <div class="correct-fill"></div>
+           <span class="correct-text"></span>
+          </div>
+
           <button class="setting-btn"></button>
         </div>
 
@@ -305,6 +191,7 @@ export default function ({
     </div>
     `;
     createEffect(div, background.effect);
+    updateCorrectProgress();
 
     // ===== PLAYER =====
     const playerArea = div.querySelector(".mascot-area.player");
@@ -347,21 +234,14 @@ export default function ({
       if (settingMenu) {
         settingMenu.remove();
         settingMenu = null;
-        isPaused = false;
-        startTimer();
         return;
       }
 
       // ▶ Nếu đang đóng → mở
-      isPaused = true;
-      clearInterval(timer);
-
       settingMenu = SettingMenu({
         onClose: () => {
           settingMenu.remove();
           settingMenu = null;
-          isPaused = false;
-          startTimer();
         },
         onGoStart: () => router.navigate(() => StartScene()),
         onReplay: () => router.navigate(() => LoadingScene()),
@@ -374,8 +254,6 @@ export default function ({
     if (q.typeQuestion === 100) {
       div.querySelectorAll(".quiz-answers button").forEach((btn) => {
         btn.onclick = () => {
-          if (isPaused) return;
-          clearInterval(timer);
 
           const buttons = div.querySelectorAll(".quiz-answers button");
           buttons.forEach((b) => (b.disabled = true));
@@ -472,8 +350,6 @@ export default function ({
 
       if (input && submitBtn) {
         submitBtn.onclick = async () => {
-          if (isPaused) return;
-          clearInterval(timer);
 
           const userAnswer = input.value.trim();
           const correctAnswer = String(q.fill.answerText).trim();
@@ -576,8 +452,6 @@ export default function ({
         });
       }
     }
-
-    startTimer();
   }
 
   // ===== FALLING LEAVES =====
@@ -592,7 +466,7 @@ export default function ({
     const config = {
       leaf: { count: 18, className: "leaf" },
       rain: { count: 70, className: "rain" },
-      leafyellow: { count: 18, className: "leaf-yellow" },
+      yellow: { count: 18, className: "yellow" },
       ember: { count: 35, className: "ember" },
     };
 
