@@ -6,6 +6,7 @@
   align-items: flex-end;
   flex: 0 0 auto;
   align-self: flex-end;   
+  position: absolute;
 }
 
 .mascot img {

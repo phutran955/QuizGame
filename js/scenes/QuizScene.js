@@ -45,14 +45,14 @@ export default function ({
     });
   }
 
-function applyStarEffect() {
-  const star = div.querySelector(".star-progress img.star-new");
-  if (!star) return;
+  function applyStarEffect() {
+    const star = div.querySelector(".star-progress img.star-new");
+    if (!star) return;
 
-  star.classList.remove("star-beat");
-  void star.offsetWidth;
-  star.classList.add("star-beat");
-}
+    star.classList.remove("star-beat");
+    void star.offsetWidth;
+    star.classList.add("star-beat");
+  }
 
 
   // ===== MASCOT CHAT =====
@@ -62,6 +62,32 @@ function applyStarEffect() {
     chatBox.innerHTML = "";
     chatBox.appendChild(content);
   }
+
+  async function attackAnimation(onDone) {
+
+
+    // đảm bảo mèo nằm trên cùng
+    mascotInstance.el.style.zIndex = 5000;
+
+    // 1️⃣ mèo chạy tới chó
+    await mascotInstance.run({
+      from: -50,
+      to: 900,   // chỉnh tới gần chó
+      duration: 5000,
+    });
+
+    // 2️⃣ đánh
+    mascotInstance.attack();
+
+    // 3️⃣ chó phản ứng
+    await enemyMascotInstance.sad();
+
+    // reset z-index
+    mascotInstance.el.style.zIndex = "";
+
+    onDone && onDone();
+  }
+
 
   // ================= UTIL =================
   function updateStarProgress() {
@@ -80,9 +106,10 @@ function applyStarEffect() {
     applyStarEffect();
 
     if (correctProgress >= REQUIRED_CORRECT) {
-      router.navigate(() =>
+
+      attackAnimation(() => router.navigate(() =>
         LoadingScene(allQuestions, nextIndex)
-      );
+      ));
       return true;
     }
 
