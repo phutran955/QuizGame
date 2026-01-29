@@ -8,6 +8,7 @@ import Mascot from "../components/Mascot/Mascot.js";
 import StartScene from "./StartScene.js";
 import LoadingScene from "./LoadingScene.js";
 import { playSound } from "../components/soundManager.js";
+import { gameState } from "../state/gameState.js";
 
 export default function ({
   questions,
@@ -19,8 +20,6 @@ export default function ({
   // ====== STATE ======
   let totalQuestions = questions.length;
   let currentQuestionIndex = 0;
-  let correctCount = 0;
-  let hearts = 3;
   let settingMenu = null;
   let popup = null;
   let mascotInstance = null;
@@ -266,7 +265,9 @@ export default function ({
       enemyArea.appendChild(enemyMascotInstance.el);
     }
 
-    div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+    div.querySelector(".hearts").appendChild(
+      HeartBar(3, gameState.hearts)
+    );
 
     // ===== SETTINGS =====
     div.querySelector(".setting-btn").onclick = () => {
@@ -285,8 +286,14 @@ export default function ({
           settingMenu.remove();
           settingMenu = null;
         },
-        onGoStart: () => router.navigate(() => StartScene()),
-        onReplay: () => router.navigate(() => LoadingScene()),
+        onGoStart: () => {
+          gameState.reset();
+          router.navigate(() => StartScene());
+        },
+        onReplay: () => {
+          gameState.reset();
+          router.navigate(() => LoadingScene());
+        },
       });
 
       div.appendChild(settingMenu);
@@ -308,7 +315,7 @@ export default function ({
             playSound("correct");
             mascotInstance.happy();
             enemyMascotInstance.sad();
-            correctCount++;
+            gameState.correctCount++;
             if (handleCorrectProgress()) return;
             Messages({
               type: "correct",
@@ -340,25 +347,33 @@ export default function ({
               }
             });
 
-            hearts--;
+            gameState.hearts--;
             div.querySelector(".hearts").innerHTML = "";
-            div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+            div.querySelector(".hearts").appendChild(HeartBar(3, gameState.hearts));
             applyHeartBeat();
 
-            if (hearts <= 0) {
+            if (gameState.hearts <= 0) {
               playSound("gameover");
+
               div.appendChild(
                 ResultPopup({
                   isWin: false,
-                  correctCount,
+                  correctCount: gameState.correctCount,
                   totalQuestions,
                   bg: currentBackground,
-                  onRestart: () => router.navigate(() => LoadingScene()),
-                  onGoHome: () => router.navigate(() => StartScene()),
+                  onRestart: () => {
+                    gameState.reset();
+                    router.navigate(() => LoadingScene());
+                  },
+                  onGoHome: () => {
+                    gameState.reset();
+                    router.navigate(() => StartScene());
+                  },
                 })
               );
               return;
             }
+
             if (handleCorrectProgress()) return;
             Messages({
               type: "wrong",
@@ -408,7 +423,7 @@ export default function ({
             submitBtn.disabled = true;
             mascotInstance.happy();
             enemyMascotInstance.sad();
-            correctCount++;
+            gameState.correctCount++;
             if (handleCorrectProgress()) return;
             Messages({
               type: "correct",
@@ -445,26 +460,33 @@ export default function ({
             mascotInstance.sad();
             enemyMascotInstance.happy();
 
-            hearts--;
+            gameState.hearts--;
             div.querySelector(".hearts").innerHTML = "";
-            div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+            div.querySelector(".hearts").appendChild(HeartBar((3, gameState.hearts)));
             applyHeartBeat();
 
-            if (hearts <= 0) {
+            if (gameState.hearts <= 0) {
               playSound("gameover");
 
               div.appendChild(
                 ResultPopup({
                   isWin: false,
-                  correctCount,
+                  correctCount: gameState.correctCount,
                   totalQuestions,
                   bg: currentBackground,
-                  onRestart: () => router.navigate(() => LoadingScene()),
-                  onGoHome: () => router.navigate(() => StartScene()),
+                  onRestart: () => {
+                    gameState.reset();
+                    router.navigate(() => LoadingScene());
+                  },
+                  onGoHome: () => {
+                    gameState.reset();
+                    router.navigate(() => StartScene());
+                  },
                 })
               );
               return;
             }
+
             if (handleCorrectProgress()) return;
             Messages({
               type: "wrong",
