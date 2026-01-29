@@ -78,6 +78,7 @@ export default function ({
     return false;
   }
 
+ 
   // ====== TIMER ======
   function updateTimerUI() {
     if (isPaused) {
@@ -115,7 +116,6 @@ export default function ({
 
   function handleTimeOut() {
     if (isPaused) return;
-
     clearInterval(timer);
 
     // ===== HIGHLIGHT ĐÁP ÁN ĐÚNG KHI HẾT GIỜ =====
@@ -250,8 +250,7 @@ export default function ({
       return "<p>❌ Không hỗ trợ dạng câu hỏi</p>";
     }
 
-  // ===== FUNCTION QUESTION IMAGE =====
-
+ // ===== FUNCTION QUESTION IMAGE =====
     function renderImg(q) {
       if (!q.img) return "";
 
@@ -545,7 +544,7 @@ export default function ({
               );
               return;
             }
-           if (handleCorrectProgress()) return;
+            if (handleCorrectProgress()) return;
             Messages({
               type: "wrong",
               message: "Huhu sai rồi",
