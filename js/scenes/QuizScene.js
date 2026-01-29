@@ -67,24 +67,43 @@ export default function ({
 
     mascotInstance.el.style.zIndex = 5000;
 
-    // 1️⃣ mèo chạy tới chó
+    // 1️⃣ player chạy tới enemy
     await mascotInstance.run({
       from: -50,
-      to: 900,   // chỉnh tới gần chó
+      to: 900,       // gần enemy
       duration: 5000,
     });
 
-    // 2️⃣ đánh
+    // 2️⃣ tấn công
     mascotInstance.attack();
 
-    // 3️⃣ chó phản ứng
+    // 3️⃣ enemy trúng đòn
     await enemyMascotInstance.sad();
 
-    // reset z-index
+    // 4️⃣ enemy biến mất
+    if (enemyMascotInstance?.el) {
+      enemyMascotInstance.el.style.transition =
+        "opacity 0.8s ease, transform 0.8s ease";
+      enemyMascotInstance.el.style.opacity = "0";
+      enemyMascotInstance.el.style.transform = "scale(0.5)";
+    }
+
+    // đợi enemy fade xong
+    await new Promise(r => setTimeout(r, 800));
+
+    // 5️⃣ player chạy tiếp ra khỏi màn hình
+    await mascotInstance.run({
+      from: 900,
+      to: window.innerWidth + 200,  // chạy ra ngoài màn hình
+      duration: 2500,
+    });
+
     mascotInstance.el.style.zIndex = "";
 
+    // 6️⃣ qua màn
     onDone && onDone();
   }
+
 
 
   // ================= UTIL =================
@@ -105,16 +124,36 @@ export default function ({
 
     if (correctProgress >= REQUIRED_CORRECT) {
 
-      attackAnimation(() => router.navigate(() =>
-        LoadingScene(allQuestions, nextIndex)
-      ));
+      // 👉 ẨN KHUNG CÂU HỎI
+      setTimeout(() => {
+        hideQuizPanel();
+
+        attackAnimation(() =>
+          router.navigate(() =>
+            LoadingScene(allQuestions, nextIndex)
+          )
+        );
+
+      }, 3000);
       return true;
     }
 
     return false;
   }
 
+  function hideQuizPanel() {
+    const panel = div.querySelector(".quiz-panel");
+    if (panel) {
+      panel.classList.add("quiz-hide");
+    }
+  }
 
+  function showQuizPanel() {
+    const panel = div.querySelector(".quiz-panel");
+    if (panel) {
+      panel.classList.remove("quiz-hide");
+    }
+  }
   // ====== RENDER ======
   function render() {
 
@@ -231,6 +270,7 @@ export default function ({
       </div>
     </div>
     `;
+    showQuizPanel();
     createEffect(div, background.effect);
     updateStarProgress();
 
@@ -242,10 +282,23 @@ export default function ({
         mascotName: "cat",
         role: "player",
       });
+
+      // 👇 đặt vị trí ban đầu ngoài mép trái
+      mascotInstance.el.style.transform = "translateX(-200px)";
     }
 
     if (mascotInstance && !playerArea.contains(mascotInstance.el)) {
       playerArea.appendChild(mascotInstance.el);
+    }
+
+    if (currentQuestionIndex === 0 && correctProgress === 0) {
+      requestAnimationFrame(() => {
+        mascotInstance.run({
+          from: -200,
+          to: 0,
+          duration: 1200,
+        });
+      });
     }
 
     // ===== ENEMY =====
