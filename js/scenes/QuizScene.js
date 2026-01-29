@@ -18,7 +18,7 @@ export default function ({
 }) {
 
   // ====== STATE ======
-  let totalQuestions = questions.length;
+  let totalQuestions = allQuestions.length;
   let currentQuestionIndex = 0;
   let settingMenu = null;
   let popup = null;
@@ -130,11 +130,11 @@ export default function ({
 
         attackAnimation(() =>
           router.navigate(() =>
-            LoadingScene(allQuestions, nextIndex)
+            LoadingScene(allQuestions, nextIndex, questions[currentQuestionIndex].status)
           )
         );
 
-      }, 3000);
+      }, 1000);
       return true;
     }
 
@@ -238,7 +238,6 @@ export default function ({
 `;
 
     currentBackground = background.bg;
-    console.log("RESULT BG:", currentBackground);
 
     div.innerHTML = `
       <div class="quiz-content">
@@ -411,6 +410,7 @@ export default function ({
               div.appendChild(
                 ResultPopup({
                   isWin: false,
+                  level: q.status,
                   correctCount: gameState.correctCount,
                   totalQuestions,
                   bg: currentBackground,
@@ -515,7 +515,7 @@ export default function ({
 
             gameState.hearts--;
             div.querySelector(".hearts").innerHTML = "";
-            div.querySelector(".hearts").appendChild(HeartBar((3, gameState.hearts)));
+            div.querySelector(".hearts").appendChild(HeartBar(3, gameState.hearts));
             applyHeartBeat();
 
             if (gameState.hearts <= 0) {
@@ -524,6 +524,7 @@ export default function ({
               div.appendChild(
                 ResultPopup({
                   isWin: false,
+                  level: q.status,
                   correctCount: gameState.correctCount,
                   totalQuestions,
                   bg: currentBackground,

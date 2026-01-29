@@ -25,8 +25,8 @@ export default function ResultPopup({
 
   const title = isWin ? "🎉 Chúc mừng bạn!" : "💀 Bạn đã thua!";
   const message = isWin
-    ? `Bạn đã hoàn thành Level ${level}`
-    : `Bạn đã hết tim ở Level ${level}`;
+    ? `Bạn đã hoàn thành cấp độ ${level}`
+    : `Bạn đã hết tim ở cấp độ ${level}`;
 
   const mascotName = "cat";
 
