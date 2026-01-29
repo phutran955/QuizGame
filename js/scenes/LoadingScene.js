@@ -63,8 +63,8 @@ export default function LoadingScene(allQuestions = null, startIndex = 0) {
         return;
       }
 
-      // 🔹 CẮT 3 CÂU CHO MÀN HIỆN TẠI
-      const batch = allQuestions.slice(startIndex, startIndex + 3);
+      // 🔹 CẮT CÂU CHO 3 MÀN
+      const batch = allQuestions.slice(startIndex, startIndex + allQuestions.length / 3);
 
       // 🔹 ĐÃ HẾT TOÀN BỘ GAME → WIN
       if (startIndex >= allQuestions.length) {
@@ -73,6 +73,7 @@ export default function LoadingScene(allQuestions = null, startIndex = 0) {
             isWin: true,
             correctCount: allQuestions.length, // hoặc lưu state tổng
             totalQuestions: allQuestions.length,
+            bg: background.bg,
             onRestart: () => router.navigate(() => LoadingScene()),
             onGoHome: () => router.navigate(() => StartScene()),
           })
@@ -85,7 +86,7 @@ export default function LoadingScene(allQuestions = null, startIndex = 0) {
         QuizScene({
           questions: batch,
           allQuestions,
-          nextIndex: startIndex + 3,
+          nextIndex: startIndex + allQuestions.length / 3,
           background,
         })
       );

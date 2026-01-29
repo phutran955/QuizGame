@@ -25,6 +25,7 @@ export default function ({
   let popup = null;
   let mascotInstance = null;
   let enemyMascotInstance = null;
+  let currentBackground = null;
 
   let correctProgress = 0;
   const REQUIRED_CORRECT = questions.length;
@@ -65,8 +66,6 @@ export default function ({
 
   async function attackAnimation(onDone) {
 
-
-    // đảm bảo mèo nằm trên cùng
     mascotInstance.el.style.zIndex = 5000;
 
     // 1️⃣ mèo chạy tới chó
@@ -199,6 +198,9 @@ export default function ({
   linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
   url("${background.bg}")
 `;
+
+    currentBackground = background.bg;
+    console.log("RESULT BG:", currentBackground);
 
     div.innerHTML = `
       <div class="quiz-content">
@@ -350,6 +352,7 @@ export default function ({
                   isWin: false,
                   correctCount,
                   totalQuestions,
+                  bg: currentBackground,
                   onRestart: () => router.navigate(() => LoadingScene()),
                   onGoHome: () => router.navigate(() => StartScene()),
                 })
@@ -455,6 +458,7 @@ export default function ({
                   isWin: false,
                   correctCount,
                   totalQuestions,
+                  bg: currentBackground,
                   onRestart: () => router.navigate(() => LoadingScene()),
                   onGoHome: () => router.navigate(() => StartScene()),
                 })
