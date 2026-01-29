@@ -2,11 +2,13 @@ import { router } from "../router.js";
 import ResultPopup from "../components/ResultPopup.js";
 import SettingMenu from "../components/SettingMenu.js";
 import HeartBar from "../components/HeartBar.js";
+import StarBar from "../components/StarBar.js";
 import Messages from "../components/MessagesPopup.js";
 import Mascot from "../components/Mascot/Mascot.js";
 import StartScene from "./StartScene.js";
 import LoadingScene from "./LoadingScene.js";
 import { playSound } from "../components/soundManager.js";
+import { gameState } from "../state/gameState.js";
 
 export default function ({
   questions,
@@ -18,20 +20,15 @@ export default function ({
   // ====== STATE ======
   let totalQuestions = questions.length;
   let currentQuestionIndex = 0;
-  let correctCount = 0;
-  let hearts = 3;
   let settingMenu = null;
   let popup = null;
-  let isPaused = false;
   let mascotInstance = null;
   let enemyMascotInstance = null;
-
-  let timer = null;
-  const TOTAL_TIME = 10;
-  let timeLeft = TOTAL_TIME;
+  let currentBackground = null;
 
   let correctProgress = 0;
   const REQUIRED_CORRECT = questions.length;
+  const MAX_STARS = REQUIRED_CORRECT;
 
   const div = document.createElement("div");
   div.className = "quiz-scene";
@@ -39,7 +36,7 @@ export default function ({
   div.style.height = "720px";
 
 
-  // ===== HEART EFFECT =====
+  // ===== HEART & STAR EFFECT =====
   function applyHeartBeat() {
     div.querySelectorAll(".hearts img, .hearts .heart").forEach(h => {
       h.classList.remove("heart-beat");
@@ -47,6 +44,16 @@ export default function ({
       h.classList.add("heart-beat");
     });
   }
+
+  function applyStarEffect() {
+    const star = div.querySelector(".star-progress img.star-new");
+    if (!star) return;
+
+    star.classList.remove("star-beat");
+    void star.offsetWidth;
+    star.classList.add("star-beat");
+  }
+
 
   // ===== MASCOT CHAT =====
   function showMascotChat(content) {
@@ -56,141 +63,60 @@ export default function ({
     chatBox.appendChild(content);
   }
 
+  async function attackAnimation(onDone) {
+
+    mascotInstance.el.style.zIndex = 5000;
+
+    // 1️⃣ mèo chạy tới chó
+    await mascotInstance.run({
+      from: -50,
+      to: 900,   // chỉnh tới gần chó
+      duration: 5000,
+    });
+
+    // 2️⃣ đánh
+    mascotInstance.attack();
+
+    // 3️⃣ chó phản ứng
+    await enemyMascotInstance.sad();
+
+    // reset z-index
+    mascotInstance.el.style.zIndex = "";
+
+    onDone && onDone();
+  }
+
+
   // ================= UTIL =================
-  function updateCorrectProgress() {
-    const percent = (correctProgress / REQUIRED_CORRECT) * 100;
-    div.querySelector(".correct-fill").style.width = percent + "%";
-    div.querySelector(".correct-text").innerText =
-      `${correctProgress} / ${REQUIRED_CORRECT}`;
+  function updateStarProgress() {
+    const starWrap = div.querySelector(".star-progress");
+    if (!starWrap) return;
+
+    starWrap.innerHTML = "";
+    starWrap.appendChild(
+      StarBar(MAX_STARS, correctProgress)
+    );
   }
 
   function handleCorrectProgress() {
     correctProgress++;
-    updateCorrectProgress();
+    updateStarProgress();
+    applyStarEffect();
 
     if (correctProgress >= REQUIRED_CORRECT) {
-      router.navigate(() =>
+
+      attackAnimation(() => router.navigate(() =>
         LoadingScene(allQuestions, nextIndex)
-      );
+      ));
       return true;
     }
 
     return false;
   }
 
- 
-  // ====== TIMER ======
-  function updateTimerUI() {
-    if (isPaused) {
-      return;
-    } else {
-      const fill = div.querySelector(".timer-fill");
-      const percent = (timeLeft / TOTAL_TIME) * 100;
-      if (fill) fill.style.width = percent + "%";
-    }
-
-  }
-
-  function startTimer() {
-    clearInterval(timer);
-
-    // ⚡ UPDATE NGAY – KHÔNG CHỜ 1s
-    updateTimerUI();
-
-    timer = setInterval(() => {
-      if (isPaused) {
-        clearInterval(timer);
-        return;
-      } else {
-        timeLeft--;
-        updateTimerUI();
-
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          handleTimeOut();
-        }
-      }
-    }, 1000);
-  }
-
-
-  function handleTimeOut() {
-    if (isPaused) return;
-    clearInterval(timer);
-
-    // ===== HIGHLIGHT ĐÁP ÁN ĐÚNG KHI HẾT GIỜ =====
-    const buttons = div.querySelectorAll(".quiz-answers button");
-    if (buttons.length > 0) {
-      buttons.forEach((b) => (b.disabled = true));
-
-      buttons.forEach((b) => {
-        if (Number(b.dataset.index) === questions[currentQuestionIndex].correctIndex) {
-          b.classList.add("correct-answer"); // 🌟 màu vàng
-        }
-      });
-    }
-
-    // ===== FILL ANSWER =====
-    const input = div.querySelector(".fill-input");
-    const submitBtn = div.querySelector(".fill-submit");
-
-    if (input) {
-      input.classList.add("timeout"); // 🌟 vàng
-      input.value = questions[currentQuestionIndex].fill?.answerText || "";
-      input.disabled = true;
-    }
-
-    if (submitBtn) submitBtn.disabled = true;
-
-
-    hearts--;
-    mascotInstance?.idle();
-    playSound("wrong");
-
-    div.querySelector(".hearts").innerHTML = "";
-    div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
-    applyHeartBeat();
-
-    if (hearts <= 0) {
-      playSound("gameover");
-
-      popup = ResultPopup({
-        isWin: false,
-        correctCount,
-        totalQuestions,
-        onRestart: () => router.navigate(() => LoadingScene()),
-        onGoHome: () => router.navigate(() => StartScene()),
-      });
-
-      div.appendChild(popup);
-      return;
-    }
-
-    popup = Messages({
-      type: "wrong",
-      message: "Hết giờ rồi 😭",
-      onClose: async () => {
-        popup = null;
-        mascotInstance.sad();
-        await enemyMascotInstance.happy();
-        currentQuestionIndex++;
-        render();
-      },
-    });
-
-    showMascotChat(popup);
-  }
 
   // ====== RENDER ======
   function render() {
-    if (settingMenu) {
-      settingMenu.remove();
-      settingMenu = null;
-    }
-
-    isPaused = false;
-    clearInterval(timer);
-    timeLeft = TOTAL_TIME;
 
     const q = questions[currentQuestionIndex];
 
@@ -250,7 +176,8 @@ export default function ({
       return "<p>❌ Không hỗ trợ dạng câu hỏi</p>";
     }
 
- // ===== FUNCTION QUESTION IMAGE =====
+    // ===== FUNCTION QUESTION IMAGE =====
+
     function renderImg(q) {
       if (!q.img) return "";
 
@@ -271,15 +198,16 @@ export default function ({
   url("${background.bg}")
 `;
 
+    currentBackground = background.bg;
+    console.log("RESULT BG:", currentBackground);
+
     div.innerHTML = `
       <div class="quiz-content">
-        <div class="quiz-top">
-        <div class="correct-progress">
-          <div class="correct-fill"></div>
-          <span class="correct-text">0 / 3</span>
-       </div>
+        <div class="quiz-top">   
           <div class="hearts"></div>
-          <div class="timer-bar"><div class="timer-fill"></div></div>
+
+          <div class="star-progress"></div>
+
           <button class="setting-btn"></button>
         </div>
 
@@ -304,6 +232,7 @@ export default function ({
     </div>
     `;
     createEffect(div, background.effect);
+    updateStarProgress();
 
     // ===== PLAYER =====
     const playerArea = div.querySelector(".mascot-area.player");
@@ -336,7 +265,9 @@ export default function ({
       enemyArea.appendChild(enemyMascotInstance.el);
     }
 
-    div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+    div.querySelector(".hearts").appendChild(
+      HeartBar(3, gameState.hearts)
+    );
 
     // ===== SETTINGS =====
     div.querySelector(".setting-btn").onclick = () => {
@@ -346,24 +277,23 @@ export default function ({
       if (settingMenu) {
         settingMenu.remove();
         settingMenu = null;
-        isPaused = false;
-        startTimer();
         return;
       }
 
       // ▶ Nếu đang đóng → mở
-      isPaused = true;
-      clearInterval(timer);
-
       settingMenu = SettingMenu({
         onClose: () => {
           settingMenu.remove();
           settingMenu = null;
-          isPaused = false;
-          startTimer();
         },
-        onGoStart: () => router.navigate(() => StartScene()),
-        onReplay: () => router.navigate(() => LoadingScene()),
+        onGoStart: () => {
+          gameState.reset();
+          router.navigate(() => StartScene());
+        },
+        onReplay: () => {
+          gameState.reset();
+          router.navigate(() => LoadingScene());
+        },
       });
 
       div.appendChild(settingMenu);
@@ -373,8 +303,6 @@ export default function ({
     if (q.typeQuestion === 100) {
       div.querySelectorAll(".quiz-answers button").forEach((btn) => {
         btn.onclick = () => {
-          if (isPaused) return;
-          clearInterval(timer);
 
           const buttons = div.querySelectorAll(".quiz-answers button");
           buttons.forEach((b) => (b.disabled = true));
@@ -387,7 +315,7 @@ export default function ({
             playSound("correct");
             mascotInstance.happy();
             enemyMascotInstance.sad();
-            correctCount++;
+            gameState.correctCount++;
             if (handleCorrectProgress()) return;
             Messages({
               type: "correct",
@@ -419,24 +347,33 @@ export default function ({
               }
             });
 
-            hearts--;
+            gameState.hearts--;
             div.querySelector(".hearts").innerHTML = "";
-            div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+            div.querySelector(".hearts").appendChild(HeartBar(3, gameState.hearts));
             applyHeartBeat();
 
-            if (hearts <= 0) {
+            if (gameState.hearts <= 0) {
               playSound("gameover");
+
               div.appendChild(
                 ResultPopup({
                   isWin: false,
-                  correctCount,
+                  correctCount: gameState.correctCount,
                   totalQuestions,
-                  onRestart: () => router.navigate(() => LoadingScene()),
-                  onGoHome: () => router.navigate(() => StartScene()),
+                  bg: currentBackground,
+                  onRestart: () => {
+                    gameState.reset();
+                    router.navigate(() => LoadingScene());
+                  },
+                  onGoHome: () => {
+                    gameState.reset();
+                    router.navigate(() => StartScene());
+                  },
                 })
               );
               return;
             }
+
             if (handleCorrectProgress()) return;
             Messages({
               type: "wrong",
@@ -471,8 +408,6 @@ export default function ({
 
       if (input && submitBtn) {
         submitBtn.onclick = async () => {
-          if (isPaused) return;
-          clearInterval(timer);
 
           const userAnswer = input.value.trim();
           const correctAnswer = String(q.fill.answerText).trim();
@@ -488,7 +423,7 @@ export default function ({
             submitBtn.disabled = true;
             mascotInstance.happy();
             enemyMascotInstance.sad();
-            correctCount++;
+            gameState.correctCount++;
             if (handleCorrectProgress()) return;
             Messages({
               type: "correct",
@@ -525,21 +460,28 @@ export default function ({
             mascotInstance.sad();
             enemyMascotInstance.happy();
 
-            hearts--;
+            gameState.hearts--;
             div.querySelector(".hearts").innerHTML = "";
-            div.querySelector(".hearts").appendChild(HeartBar(3, hearts));
+            div.querySelector(".hearts").appendChild(HeartBar((3, gameState.hearts)));
             applyHeartBeat();
 
-            if (hearts <= 0) {
+            if (gameState.hearts <= 0) {
               playSound("gameover");
 
               div.appendChild(
                 ResultPopup({
                   isWin: false,
-                  correctCount,
+                  correctCount: gameState.correctCount,
                   totalQuestions,
-                  onRestart: () => router.navigate(() => LoadingScene()),
-                  onGoHome: () => router.navigate(() => StartScene()),
+                  bg: currentBackground,
+                  onRestart: () => {
+                    gameState.reset();
+                    router.navigate(() => LoadingScene());
+                  },
+                  onGoHome: () => {
+                    gameState.reset();
+                    router.navigate(() => StartScene());
+                  },
                 })
               );
               return;
@@ -575,8 +517,6 @@ export default function ({
         });
       }
     }
-
-    startTimer();
   }
 
   // ===== FALLING LEAVES =====
@@ -591,7 +531,7 @@ export default function ({
     const config = {
       leaf: { count: 18, className: "leaf" },
       rain: { count: 70, className: "rain" },
-      leafyellow: { count: 18, className: "leaf-yellow" },
+      yellow: { count: 18, className: "yellow" },
       ember: { count: 35, className: "ember" },
     };
 

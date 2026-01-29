@@ -10,7 +10,7 @@ export const bgConfig = {
   },
   autum: {
     bg: "assets/images/levels/level3bg.jpg",
-    effect: "leaf",
+    effect: "yellow",
   },
   lava: {
     bg: "assets/images/levels/level4bg.jpg",

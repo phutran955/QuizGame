@@ -2,6 +2,7 @@ import { apiGet } from "./api.js";
 
 
 const QUIZ_ID = 19;
+const QUIZ_MODE = "basic";
 
 function mapQuestion(question) {
 
@@ -86,6 +87,7 @@ export const quizService = {
     }
 
     return quiz.questions
+      .filter(q => q.status === QUIZ_MODE)
       .map(mapQuestion)
       .filter(Boolean);
   }
