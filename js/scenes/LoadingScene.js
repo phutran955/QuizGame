@@ -76,8 +76,14 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
             correctCount: gameState.correctCount, // hoặc lưu state tổng
             totalQuestions: allQuestions.length,
             bg: background.bg,
-            onRestart: () => router.navigate(() => LoadingScene()),
-            onGoHome: () => router.navigate(() => StartScene()),
+            onRestart: () => {
+              gameState.reset();
+              router.navigate(() => LoadingScene());
+            },
+            onGoHome: () => {
+              gameState.reset();
+              router.navigate(() => StartScene());
+            }
           })
         );
         return;

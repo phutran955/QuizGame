@@ -65,20 +65,29 @@ export default function ({
 
   async function attackAnimation(onDone) {
 
-    mascotInstance.el.style.zIndex = 5000;
+    mascotInstance.el.style.zIndex = 9000;
+    enemyMascotInstance.el.style.zIndex = 8000;
 
     // 1️⃣ player chạy tới enemy
     await mascotInstance.run({
       from: -50,
       to: 900,       // gần enemy
-      duration: 5000,
+      duration: 3500,
     });
 
     // 2️⃣ tấn công
     mascotInstance.attack();
 
-    // 3️⃣ enemy trúng đòn
-    await enemyMascotInstance.sad();
+    // ⏳ đợi 1.2s sau khi bắt đầu attack
+    await wait(1200);
+
+    if (gameState.attackState >= 2) {
+      // enemy chết
+      await enemyMascotInstance.dead();
+    } else {
+      // 3️⃣ enemy trúng đòn
+      await enemyMascotInstance.sad();
+    }
 
     // 4️⃣ enemy biến mất
     if (enemyMascotInstance?.el) {
@@ -99,13 +108,12 @@ export default function ({
     });
 
     mascotInstance.el.style.zIndex = "";
+    gameState.attackState++;
 
     // 6️⃣ qua màn
     onDone && onDone();
   }
-
-
-
+  
   // ================= UTIL =================
   function updateStarProgress() {
     const starWrap = div.querySelector(".star-progress");
@@ -154,6 +162,11 @@ export default function ({
       panel.classList.remove("quiz-hide");
     }
   }
+
+  function wait(ms) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+
   // ====== RENDER ======
   function render() {
 
