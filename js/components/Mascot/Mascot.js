@@ -69,6 +69,23 @@ export default function Mascot({
     });
   }
 
+  function dead() {
+    return new Promise(resolve => {
+      stopCurrent();
+      currentState = "dead";
+
+      currentAnim = playAnimation({
+        img,
+        path: `/assets/mascots/${mascotName}/dead`,
+        loop: false,
+        onEnd: () => {
+          idle();
+          resolve();
+        },
+      });
+    });
+  }
+
   function run({ from = -200, to = 1400, duration = 800 } = {}) {
     return new Promise(resolve => {
       stopCurrent();
@@ -115,6 +132,7 @@ export default function Mascot({
         img,
         path: `/assets/mascots/${mascotName}/attack`,
         loop: false,
+        totalFrames: 13,
         onEnd: () => {
           idle();
           resolve();
@@ -133,6 +151,7 @@ export default function Mascot({
     idle,
     happy,
     sad,
+    dead,
     run,
     attack,
     getState: () => currentState,

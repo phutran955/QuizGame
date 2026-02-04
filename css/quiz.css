@@ -41,23 +41,22 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  pointer-events: none;
   z-index: 25;
 }
 
 .mascot-area.player {
-  left: 150px;
+  left: 120px;
   bottom: 20px;
 }
 
 .mascot-area.enemy {
-  right: 230px;
+  right: 250px;
   bottom: 20px;
 }
 
 .mascot-area img {
-  height: 340px;
-  width: auto;
+  height: auto;
+  width: 500px;
   object-fit: contain;
   transform: none !important;
 }
@@ -743,8 +742,6 @@
   transform: scale(0.9);
   transition: 0.4s ease;
 }
-
-
 
 /* =========================
    LEVEL EFFECTS

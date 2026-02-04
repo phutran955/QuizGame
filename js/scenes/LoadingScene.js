@@ -4,8 +4,9 @@ import { randomBackground } from "../configs/backgrounds.js";
 import ResultPopup from "../components/ResultPopup.js";
 import QuizScene from "./QuizScene.js";
 import StartScene from "./StartScene.js";
+import { gameState } from "../state/gameState.js";
 
-export default function LoadingScene(allQuestions = null, startIndex = 0) {
+export default function LoadingScene(allQuestions = null, startIndex = 0, level = null) {
   const div = document.createElement("div");
   div.className = "loading-scene";
   div.style.width = "1720px";
@@ -71,11 +72,18 @@ export default function LoadingScene(allQuestions = null, startIndex = 0) {
         router.navigate(() =>
           ResultPopup({
             isWin: true,
-            correctCount: allQuestions.length, // hoặc lưu state tổng
+            level: level,
+            correctCount: gameState.correctCount, // hoặc lưu state tổng
             totalQuestions: allQuestions.length,
             bg: background.bg,
-            onRestart: () => router.navigate(() => LoadingScene()),
-            onGoHome: () => router.navigate(() => StartScene()),
+            onRestart: () => {
+              gameState.reset();
+              router.navigate(() => LoadingScene());
+            },
+            onGoHome: () => {
+              gameState.reset();
+              router.navigate(() => StartScene());
+            }
           })
         );
         return;

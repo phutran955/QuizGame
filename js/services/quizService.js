@@ -21,6 +21,7 @@ function mapQuestion(question) {
     if (img !== null || img !== "") {
       return {
         id: question.id,
+        status: QUIZ_MODE,
         question: question.questionName,
         typeQuestion: type,
         img,
@@ -32,6 +33,7 @@ function mapQuestion(question) {
 
     return {
       id: question.id,
+      status: QUIZ_MODE,
       question: question.questionName,
       typeQuestion: type,
       answers,
@@ -47,6 +49,7 @@ function mapQuestion(question) {
     if (img !== null || img !== "") {
       return {
         id: question.id,
+        status: QUIZ_MODE,
         question: question.questionName,
         typeQuestion: type,
         img,
@@ -61,6 +64,7 @@ function mapQuestion(question) {
 
     return {
       id: question.id,
+      status: QUIZ_MODE,
       question: question.questionName,
       typeQuestion: type,
       fill: {
