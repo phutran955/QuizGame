@@ -66,6 +66,10 @@
   transform: scaleX(-1) !important;
 }
 
+.mascot-area.enemy img.no-flip {
+  transform: scaleX(1) !important;
+}
+
 /* =========================
    MASCOT CHAT - 2 BUBBLE RIÊNG BIỆT NHƯ TRONG HÌNH
 ========================= */
