@@ -50,7 +50,7 @@
 }
 
 .mascot-area.enemy {
-  right: 250px;
+  right: 245px;
   bottom: 20px;
 }
 
@@ -91,6 +91,7 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.3s ease;
+  
 }
 
 /* mỏ chat */
@@ -114,6 +115,8 @@
   z-index: 30;
   pointer-events: none;
 }
+
+
 
 @keyframes popIn {
   from {

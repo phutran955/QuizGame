@@ -63,6 +63,23 @@ export default function ({
     chatBox.appendChild(content);
   }
 
+  function showEnemyPopupAuto(message, duration = 3000) {
+    return new Promise((resolve) => {
+      const popup = Messages({
+        type: "enemy",
+        message,
+        target: "enemy",
+      });
+
+      showMascotChat(popup);
+
+      setTimeout(() => {
+        popup.remove?.();
+        resolve();
+      }, duration);
+    });
+  }
+
   async function attackAnimation(onDone) {
 
     mascotInstance.el.style.zIndex = 9000;
@@ -118,10 +135,14 @@ export default function ({
       return;
 
     } else {
-      // 3️⃣ enemy trúng đòn
+      // 3️⃣ enemy buồn
       await enemyMascotInstance.sad();
 
-      await wait(500);
+      // 4️⃣ hiện chatbox enemy 
+      await showEnemyPopupAuto(
+        "Hãy đợi đấy,<br>Nupakachi !!!",
+        3000
+      );
 
       enemyMascotInstance.el.querySelector("img").classList.add("no-flip");
 
@@ -129,19 +150,19 @@ export default function ({
         enemyMascotInstance.el.querySelector("img").classList.remove("no-flip");
       }, 3000);
 
-      // 4️⃣ enemy chạy ra khỏi màn hình
+      // 5️⃣ enemy chạy khỏi màn hình
       enemyMascotInstance.run({
         from: 0,
-        to: window.innerWidth + 100,  // chạy ra ngoài màn hình
+        to: window.innerWidth + 100,
         duration: 3000,
       });
 
-      await wait(1000);
+      await wait(600);
 
-      // 5️⃣ player đuổi theo
+      // 6️⃣ player chạy theo
       await mascotInstance.run({
         from: 900,
-        to: window.innerWidth + 600,  // chạy ra ngoài màn hình
+        to: window.innerWidth + 600,
         duration: 2000,
       });
     }
