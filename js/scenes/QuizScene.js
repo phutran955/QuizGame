@@ -137,13 +137,21 @@ export default function ({
     } else {
       // 3️⃣ enemy buồn
       await enemyMascotInstance.sad();
+      await wait(500);
 
       // 4️⃣ hiện chatbox enemy 
-      await showEnemyPopupAuto(
-        "Hãy đợi đấy,<br>Nupakachi !!!",
-        3000
-      );
-
+      if (gameState.attackState < 1) {
+        await showEnemyPopupAuto(
+          "Hãy đợi đấy,<br>Nupakachi !!!",
+          2000
+        )
+      } else {
+        await showEnemyPopupAuto(
+          "Bản gâu sẽ còn<br>quay lại!!!",
+          2000
+        )
+      };
+      
       enemyMascotInstance.el.querySelector("img").classList.add("no-flip");
 
       setTimeout(() => {
@@ -185,7 +193,7 @@ export default function ({
     );
   }
 
-  function handelLostHeart() {
+  function handleLostHeart() {
     gameState.hearts--;
     div.querySelector(".hearts").innerHTML = "";
     div.querySelector(".hearts").appendChild(HeartBar(3, gameState.hearts));
@@ -197,7 +205,7 @@ export default function ({
       div.appendChild(
         ResultPopup({
           isWin: false,
-          level: q.status,
+          level: questions[currentQuestionIndex].status,
           correctCount: gameState.correctCount,
           totalQuestions,
           bg: currentBackground,
@@ -211,8 +219,9 @@ export default function ({
           },
         })
       );
-      return;
+      return true;
     }
+    return false;
   }
 
   function handleCorrectProgress() {
@@ -501,7 +510,7 @@ export default function ({
               }
             });
 
-            handelLostHeart();
+            if (handleLostHeart()) return;
 
             if (handleCorrectProgress()) return;
             Messages({
@@ -543,7 +552,6 @@ export default function ({
 
           const isEmpty = !userAnswer;
           const isCorrect = !isEmpty && userAnswer === correctAnswer;
-
 
           if (isCorrect) {
             playSound("correct");
@@ -589,7 +597,7 @@ export default function ({
             mascotInstance.sad();
             enemyMascotInstance.happy();
 
-            handelLostHeart();
+            if (handleLostHeart()) return;
 
             if (handleCorrectProgress()) return;
             Messages({

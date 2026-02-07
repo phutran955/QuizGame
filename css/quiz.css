@@ -459,11 +459,10 @@
 
   font-size: 16px;
   min-width: 170px; /* rộng hơn */
-  max-width: 600px; /* giới hạn chiều ngang */
+  max-width: 400px; /* giới hạn chiều ngang */
   height: auto; /* không cao quá */
 
   opacity: 0;
-  pointer-events: none;
   transition: all 0.3s ease;
   z-index: 3000;
 }
