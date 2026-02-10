@@ -4,6 +4,9 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  flex: 0 0 auto;
+  align-self: flex-end;
+  position: absolute;
 }
 
 .mascot img {
@@ -11,4 +14,3 @@
   max-height: 125%;
   image-rendering: pixelated;
 }
-

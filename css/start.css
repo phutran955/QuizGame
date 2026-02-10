@@ -1,12 +1,10 @@
 /* css/start.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap");
 
 .start-scene {
-  background: linear-gradient(
-      rgba(0, 0, 0, 0.25),
-      rgba(0, 0, 0, 0.25)
-    ),
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
     url("../assets/images/GEM_Start.png") center / cover no-repeat;
 
   display: flex;
@@ -25,7 +23,7 @@
 
   margin-bottom: 50px;
 
-  text-shadow: 
+  text-shadow:
     3px 3px 0 #ff9800,
     6px 6px 0 #ff5722;
 
@@ -63,13 +61,13 @@
 /* CLICK */
 .start-btn:active {
   transform: translateY(5px);
-  box-shadow:
-    0 3px 0 #f57c00;
+  box-shadow: 0 3px 0 #f57c00;
 }
 
 /* HIỆU ỨNG NHÚN NHẢY */
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {

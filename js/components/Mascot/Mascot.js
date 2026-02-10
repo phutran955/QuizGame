@@ -69,6 +69,79 @@ export default function Mascot({
     });
   }
 
+  function dead() {
+    return new Promise(resolve => {
+      stopCurrent();
+      currentState = "dead";
+
+      currentAnim = playAnimation({
+        img,
+        path: `/assets/mascots/${mascotName}/dead`,
+        loop: false,
+        onEnd: () => {
+          resolve();
+        },
+      });
+    });
+  }
+
+  function run({ from = -200, to = 1400, duration = 800 } = {}) {
+    return new Promise(resolve => {
+      stopCurrent();
+      currentState = "run";
+
+      // reset vị trí ban đầu
+      div.style.position = "absolute";
+      div.style.left = from + "px";
+
+      currentAnim = playAnimation({
+        img,
+        path: `/assets/mascots/${mascotName}/run`,
+        loop: true,
+        totalFrames: 8,
+      });
+
+      // chạy ngang
+      div.animate(
+        [
+          { transform: `translateX(0)` },
+          { transform: `translateX(${to - from}px)` },
+        ],
+        {
+          duration,
+          easing: "ease-in-out",
+          fill: "forwards",
+        }
+      );
+
+      setTimeout(() => {
+        stopCurrent();
+        idle();
+        resolve();
+      }, duration);
+    });
+  }
+
+  function attack() {
+    return new Promise(resolve => {
+      stopCurrent();
+      currentState = "attack";
+
+      currentAnim = playAnimation({
+        img,
+        path: `/assets/mascots/${mascotName}/attack`,
+        loop: false,
+        totalFrames: 13,
+        onEnd: () => {
+          idle();
+          resolve();
+        },
+      });
+    });
+  }
+
+
+
   idle();
 
   return {
@@ -77,6 +150,9 @@ export default function Mascot({
     idle,
     happy,
     sad,
+    dead,
+    run,
+    attack,
     getState: () => currentState,
   };
 }

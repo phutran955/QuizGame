@@ -5,84 +5,76 @@
   position: absolute;
   left: 50%;
   top: 50%;
-
   transform-origin: center;
   transform: translate(-50%, -50%);
-
   overflow: hidden;
-
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-
   display: flex;
   flex-direction: column;
-}
-
-/* =========================
-   TOP BAR
-========================= */
-.quiz-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  flex: 0 0 auto;
-}
-
-.level {
-  font-weight: bold;
-  font-size: 40px;
-  color: #fff;
-  text-shadow: 1px 1px 3px #000;
+  height: 720px;
+  width: 1720px;
 }
 
 /* =========================
    QUIZ ZONE LAYOUT
 ========================= */
 .quiz-zone {
-  margin-top: 80px;
+  position: relative;
   flex: 1;
   display: flex;
-  align-items: flex-end;
   justify-content: center;
-  padding: 0 40px 50px;
-  gap: 40px;
+  align-items: center;
+  padding: 0 40px 120px;
+  min-height: 0;
 }
 
 /* =========================
-   MASCOT
+   MASCOT - CỐ ĐỊNH Ở ĐÁY
 ========================= */
 .mascot-area {
-  flex: 0 0 180px;
-  /* ⬅ thu nhỏ vùng mascot */
-  margin-left: 20px;
-  /* ⬅ đẩy sát mép trái */
+  position: absolute;
+  bottom: 20px;
+  width: 220px;
+  height: 280px;
   display: flex;
+  justify-content: center;
   align-items: flex-end;
-}
-
-.mascot-area img {
-  transform: translateY(-40px);
-  transform: translateX(-200px);
+  z-index: 25;
 }
 
 .mascot-area.player {
-  justify-content: flex-start;
-  padding-left: 100px;
-
+  left: 120px;
+  bottom: 20px;
 }
 
 .mascot-area.enemy {
-  justify-content: flex-end;
+  right: 245px;
+  bottom: 20px;
+}
+
+.mascot-area img {
+  height: auto;
+  width: 500px;
+  object-fit: contain;
+  transform: none !important;
 }
 
 /* hướng nhìn */
 .mascot-area.enemy img {
-  transform: scaleX(-1) translate(-40px, -40px);
+  transform: scaleX(-1) !important;
 }
 
+.mascot-area.enemy img.no-flip {
+  transform: scaleX(1) !important;
+}
+
+/* =========================
+   MASCOT CHAT - 2 BUBBLE RIÊNG BIỆT NHƯ TRONG HÌNH
+========================= */
+
+/* Container cho chat bubble */
 .mascot-chat {
   position: absolute;
   bottom: 160px;
@@ -99,6 +91,7 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.3s ease;
+  
 }
 
 /* mỏ chat */
@@ -112,12 +105,24 @@
   border-color: #fff transparent transparent;
 }
 
+/* Enemy chat container */
+.enemy-chat {
+  position: absolute;
+  bottom: 280px;
+  right: 80px;
+  left: auto;
+  max-width: 260px;
+  z-index: 30;
+  pointer-events: none;
+}
+
+
+
 @keyframes popIn {
   from {
     opacity: 0;
     transform: translateY(10px) scale(0.95);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -128,16 +133,17 @@
    QUIZ PANEL (QUESTION + ANSWERS)
 ========================= */
 .quiz-panel {
-  margin-bottom: 200px;
-  /* ⬅ hạ panel xuống */
+  position: relative;
+  z-index: 20;
   flex: 1;
-  transform: translateY(20px);
   max-width: 520px;
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(6px);
   padding: 24px;
   border-radius: 24px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;
+  transform: none !important;
 }
 
 /* question */
@@ -158,11 +164,34 @@
 /* =========================
    QUESTION
 ========================= */
+.quiz-question {
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-bottom: 20px;
+}
+
 .quiz-question h2 {
-  margin: 20px 0;
-  font-size: 28px;
+  margin: 0 0 15px 0;
+  font-size: 24px;
   color: #fff;
   text-shadow: 2px 2px 4px #000;
+  line-height: 1.4;
+}
+
+/* =========================
+   QUESTION IMAGE
+========================= */
+.question-img {
+  margin: 12px 0;
+  text-align: center;
+}
+
+.question-img img {
+  max-width: auto;
+  max-height: 220px;
+  object-fit: contain;
+  display: inline-block;
 }
 
 /* =========================
@@ -172,7 +201,8 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  margin-bottom: 20px;
+  margin-top: 28px;
+  margin-bottom: 10px;
 }
 
 /* 🌈 Nút trả lời mặc định */
@@ -185,10 +215,10 @@
   background: linear-gradient(135deg, #4dd0e1, #81c784);
   color: #1f1f1f;
   cursor: pointer;
-
-  box-shadow: 0 6px 0 #2e7d32, 0 10px 16px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 6px 0 #2e7d32,
+    0 10px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
-
   animation: floatIdle 2.2s ease-in-out infinite;
 }
 
@@ -197,11 +227,9 @@
   0% {
     transform: translateY(0);
   }
-
   50% {
     transform: translateY(-4px);
   }
-
   100% {
     transform: translateY(0);
   }
@@ -210,20 +238,137 @@
 /* 👉 Rê chuột */
 .quiz-answers button:hover {
   transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 10px 0 #2e7d32, 0 14px 22px rgba(0, 0, 0, 0.25);
+  box-shadow:
+    0 10px 0 #2e7d32,
+    0 14px 22px rgba(0, 0, 0, 0.25);
 }
 
 /* 👉 Khi bấm */
 .quiz-answers button:active {
   transform: translateY(-2px) scale(0.96);
-  box-shadow: 0 4px 0 #2e7d32, 0 6px 10px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 4px 0 #2e7d32,
+    0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* =========================
+   FILL ANSWER
+========================= */
+
+.quiz-fill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.quiz-fill .fill-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-fill span {
+  font-size: 26px;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px #000;
+}
+
+.fill-input {
+  min-width: 100px;
+  max-width: 140px;
+  height: 38px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: 4px solid #ffffff;
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  outline: none;
+
+  background: linear-gradient(135deg, #e3f2fd, #ffffff);
+  color: #1f1f1f;
+
+  box-shadow:
+    0 5px 0 #90caf9,
+    0 10px 16px rgba(0, 0, 0, 0.25);
+
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+}
+
+.fill-input:focus {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 9px 0 #64b5f6,
+    0 14px 22px rgba(0, 0, 0, 0.3);
+}
+
+/* Fill answer button */
+.fill-submit {
+  width: 100%;
+  max-width: 640px;
+  padding: 12px 0;
+
+  border-radius: 12px;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+
+  background: #6fcf97;
+  color: #0b3d1c;
+
+  box-shadow: 0 4px 0 #3fa66b;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.fill-submit:hover {
+  background: #57b87f;
+  transform: translateY(-1px);
+}
+
+.fill-submit:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 0 #3fa66b;
+}
+
+/* =========================
+   FILL ANSWER STATES
+========================= */
+
+/*  đúng */
+.fill-input.correct {
+  background: linear-gradient(135deg, #66ff99, #00c853);
+  border-color: #00c853;
+  color: #0b3d1c;
+  box-shadow: 0 0 18px #00e676;
+}
+
+/*  sai */
+.fill-input.wrong {
+  background: linear-gradient(135deg, #ff8a80, #ff5252);
+  border-color: #d50000;
+  color: #5a0000;
+  animation: wrongShake 0.4s;
+}
+
+/* hết giờ / show đáp án */
+.fill-input.timeout {
+  background: linear-gradient(135deg, #fff176, #ffd600);
+  border-color: #ffab00;
+  color: #5d4500;
+  box-shadow: 0 0 18px #ffeb3b;
 }
 
 /* =========================
    ANSWER STATES
 ========================= */
 
-/* ✅ ĐÚNG */
+/* ĐÚNG */
 .quiz-answers button.correct {
   background: linear-gradient(135deg, #66ff99, #00c853);
   border-color: #00c853;
@@ -235,11 +380,9 @@
   0% {
     transform: scale(1);
   }
-
   50% {
     transform: scale(1.2) rotate(3deg);
   }
-
   100% {
     transform: scale(1);
   }
@@ -257,19 +400,15 @@
   0% {
     transform: translateX(0);
   }
-
   25% {
     transform: translateX(-6px);
   }
-
   50% {
     transform: translateX(6px);
   }
-
   75% {
     transform: translateX(-6px);
   }
-
   100% {
     transform: translateX(0);
   }
@@ -283,58 +422,8 @@
   box-shadow: 0 0 18px #ffeb3b;
 }
 
-
 /* =========================
-   SETTINGS BUTTON
-========================= */
-.setting-btn {
-  background-image: url("../assets/images/menu.png");
-  /* ảnh bánh răng */
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: transparent;
-  border: none;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  cursor: pointer;
-
-}
-
-.setting-btn:hover {
-  transform: scale(1.1) rotate(10deg);
-}
-
-/* =========================
-   HEART BAR
-========================= */
-.hearts {
-  display: flex;
-  gap: 6px;
-}
-
-/* =========================
-   TIMER
-========================= */
-.timer-bar {
-  width: 400px;
-  height: 20px;
-  background: #ddd;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 2px solid #333;
-}
-
-.timer-fill {
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(90deg, #4caf50, #ffeb3b, #f44336);
-  transition: width 1s linear;
-}
-
-/* =========================
-   POPUP
+   POPUP OVERLAY
 ========================= */
 .popup-overlay {
   position: fixed;
@@ -346,17 +435,15 @@
   z-index: 2000;
 }
 
+/* TOAST-MESSAGE (CHATBOX CỦA MASCOT) */
 
-
-
-
-.toast-message{
+.toast-message {
   position: fixed;
   bottom: 420px; /* trên đầu mascot */
   left: 300px;
   transform: none;
 
-    display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 
@@ -367,18 +454,20 @@
   padding: 12px 24px;
   border-radius: 20px;
 
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border: 3px solid;
+
   font-size: 16px;
-  min-width: 170px;      /* rộng hơn */
-  max-width: 600px;      /* giới hạn chiều ngang */
-  height: auto;          /* không cao quá */
+  min-width: 170px; /* rộng hơn */
+  max-width: 400px; /* giới hạn chiều ngang */
+  height: auto; /* không cao quá */
 
   opacity: 0;
-  pointer-events: none;
   transition: all 0.3s ease;
   z-index: 3000;
 }
 
-.toast-message.enemy{
+.toast-message.enemy {
   left: 1450px;
 }
 
@@ -389,21 +478,17 @@
 }
 
 /* đúng */
-.toast-message.correct.player {
+.toast-message.correct.player,
+.toast-message.wrong.enemy {
   color: #4caf50;
-}
-
-.toast-message.correct.enemy {
-  color: #e53935;
+  background-color: #e8f5e9;
 }
 
 /* sai */
-.toast-message.wrong.player {
+.toast-message.wrong.player,
+.toast-message.correct.enemy {
   color: #f44336;
-}
-
-.toast-message.wrong.enemy {
-  color: #9c27b0;
+  background-color: #ffebee;
 }
 
 /* mõ */
@@ -422,7 +507,15 @@
   border-bottom: 0;
 }
 
+.toast-message.correct.player::after,
+.toast-message.wrong.enemy::after {
+  border-top: 12px solid #e8f5e9;
+}
 
+.toast-message.correct.enemy::after,
+.toast-message.wrong.player::after {
+  border-top: 12px solid #ffebee;
+}
 
 /* =========================
    SETTINGS MENU
@@ -449,11 +542,9 @@
   height: 500px;
 }
 
-
 .setting-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* 2 cột */
   gap: 14px 16px;
   margin: 10px 105px 0px;
   width: 450px;
@@ -473,10 +564,8 @@
 /* ⭐ Nút Đóng chiếm 2 cột & căn giữa */
 .setting-buttons .btn-close {
   grid-column: 1 / -1;
-  /* chiếm toàn hàng */
   width: 60%;
   justify-self: center;
-  /* căn giữa */
   margin-top: 10px;
 }
 
@@ -506,7 +595,6 @@
 /* =========================
    RESULT POPUP
 ========================= */
-
 .result-popup {
   text-align: center;
   padding: 24px;
@@ -535,7 +623,6 @@
   width: 160px;
   max-width: 70%;
   image-rendering: pixelated;
-  /* nếu là pixel art */
   user-select: none;
 }
 
@@ -554,7 +641,9 @@
   cursor: pointer;
   background: #ff9800;
   color: #fff;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .result-buttons button:hover {
@@ -570,47 +659,11 @@
     transform: scale(0.8);
     opacity: 0;
   }
-
   to {
     transform: scale(1);
     opacity: 1;
   }
 }
-
-/* =========================
-   MASCOT CHAT OVERRIDE
-========================= */
-
-/* tắt overlay khi popup nằm trong mascot */
-.mascot-chat .popup-overlay {
-  display: none !important;
-}
-
-/* ép popup về layout bình thường */
-.mascot-chat .popup {
-  position: relative !important;
-  inset: auto !important;
-  transform: none !important;
-
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 12px 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-  font-size: 14px;
-  animation: popIn 0.25s ease;
-}
-
-/* mỏ chat */
-.mascot-chat .popup::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: -10px;
-  border-width: 10px 10px 10px 0;
-  border-style: solid;
-  border-color: #ffffff transparent transparent;
-}
-
 
 /* ===== LÁ RƠI ===== */
 .leaves-container {
@@ -620,10 +673,8 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  /* không chặn click */
   overflow: hidden;
   z-index: 2;
-  /* nền động */
 }
 
 .leaf {
@@ -631,13 +682,12 @@
   top: -60px;
   width: 30px;
   height: 30px;
-
   background-image: url("/assets/images/decor/leaf.png");
-  /* đổi đúng đường dẫn */
   background-size: contain;
   background-repeat: no-repeat;
-
-  animation: leafFall linear infinite, leafSwing ease-in-out infinite;
+  animation:
+    leafFall linear infinite,
+    leafSwing ease-in-out infinite;
 }
 
 /* rơi xuống */
@@ -645,7 +695,6 @@
   from {
     transform: translateY(-80px);
   }
-
   to {
     transform: translateY(110vh);
   }
@@ -653,12 +702,10 @@
 
 /* lắc lư */
 @keyframes leafSwing {
-
   0%,
   100% {
     margin-left: 0;
   }
-
   50% {
     margin-left: 40px;
   }
@@ -667,13 +714,9 @@
 .quiz-content {
   position: relative;
   z-index: 10;
-}
-
-.quiz-top,
-.quiz-zone,
-.quiz-panel {
-  position: relative;
-  z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ===== TIM ĐẬP ===== */
@@ -685,36 +728,36 @@
   0% {
     transform: scale(1);
   }
-
   25% {
     transform: scale(1.2);
   }
-
   50% {
     transform: scale(1);
   }
-
   75% {
     transform: scale(1.15);
   }
-
   100% {
     transform: scale(1);
   }
 }
 
+.quiz-panel.quiz-hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9);
+  transition: 0.4s ease;
+}
 
 /* =========================
    LEVEL EFFECTS
 ========================= */
-
 .effects-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
   z-index: 2;
-  /* dưới UI, trên background */
 }
 
 /* ===== LEVEL 2: MƯA ===== */
@@ -732,14 +775,13 @@
   from {
     transform: translateY(-40px);
   }
-
   to {
     transform: translateY(110vh);
   }
 }
 
 /* ===== LEVEL 3: LÁ VÀNG ===== */
-.leaf-yellow {
+.yellow {
   position: absolute;
   top: -60px;
   width: 34px;
@@ -747,7 +789,9 @@
   background-image: url("/assets/images/decor/autumnleaf.png");
   background-size: contain;
   background-repeat: no-repeat;
-  animation: leafFall linear infinite, leafSwing ease-in-out infinite;
+  animation:
+    leafFall linear infinite,
+    leafSwing ease-in-out infinite;
 }
 
 /* ===== LEVEL 4: TRO LỬA ===== */
@@ -763,17 +807,14 @@
   pointer-events: none;
 }
 
-
 @keyframes emberFly {
   0% {
     transform: translateY(0) scale(0.4) rotate(0deg);
     opacity: 0;
   }
-
   5% {
     opacity: 1;
   }
-
   100% {
     transform: translateY(-500px) scale(1.3) rotate(180deg);
     opacity: 0;

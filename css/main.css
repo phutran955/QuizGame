@@ -16,8 +16,8 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;         
-  touch-action: none;        
+  overflow: hidden;
+  touch-action: none;
 }
 
 body {
@@ -39,7 +39,6 @@ body {
   transform: translate(-50%, -50%);
   transform-origin: center center;
 }
-
 
 /* =========================
    ROTATE WARNING (PORTRAIT)
@@ -70,6 +69,3 @@ body {
     display: flex;
   }
 }
-
-
-

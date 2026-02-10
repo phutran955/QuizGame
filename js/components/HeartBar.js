@@ -8,8 +8,8 @@
 
     img.src =
       i < currentHearts
-        ? "assets/images/heart.png"
-        : "assets/images/heartblank.png";
+        ? "assets/images/tops/heart.png"
+        : "assets/images/tops/heartblank.png";
 
     div.appendChild(img);
   }
