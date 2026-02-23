@@ -63,6 +63,23 @@ export default function ({
     chatBox.appendChild(content);
   }
 
+  function showEnemyPopupAuto(message, duration = 3000) {
+    return new Promise((resolve) => {
+      const popup = Messages({
+        type: "enemy",
+        message,
+        target: "enemy",
+      });
+
+      showMascotChat(popup);
+
+      setTimeout(() => {
+        popup.remove?.();
+        resolve();
+      }, duration);
+    });
+  }
+
   async function attackAnimation(onDone) {
 
     mascotInstance.el.style.zIndex = 9000;
@@ -82,30 +99,81 @@ export default function ({
     await wait(1200);
 
     if (gameState.attackState >= 2) {
-      // enemy chết
+      // 3️⃣ enemy chết
       await enemyMascotInstance.dead();
+
+      // 4️⃣ enemy biến mất
+      if (enemyMascotInstance?.el) {
+        enemyMascotInstance.el.style.transition =
+          "opacity 0.8s ease, transform 0.8s ease";
+        enemyMascotInstance.el.style.opacity = "0";
+        enemyMascotInstance.el.style.transform = "scale(0.5)";
+      }
+
+      // đợi enemy fade xong
+      await new Promise(r => setTimeout(r, 800));
+
+      // 5️⃣ hiện popup win game
+      div.appendChild(
+        ResultPopup({
+          isWin: true,
+          level: questions[currentQuestionIndex].status,
+          correctCount: gameState.correctCount,
+          totalQuestions,
+          bg: currentBackground,
+          onRestart: () => {
+            gameState.reset();
+            router.navigate(() => LoadingScene());
+          },
+          onGoHome: () => {
+            gameState.reset();
+            router.navigate(() => StartScene());
+          },
+        })
+      );
+
+      return;
+
     } else {
-      // 3️⃣ enemy trúng đòn
+      // 3️⃣ enemy buồn
       await enemyMascotInstance.sad();
+      await wait(500);
+
+      // 4️⃣ hiện chatbox enemy 
+      if (gameState.attackState < 1) {
+        await showEnemyPopupAuto(
+          "Hãy đợi đấy,<br>Nupakachi !!!",
+          2000
+        )
+      } else {
+        await showEnemyPopupAuto(
+          "Bản gâu sẽ còn<br>quay lại!!!",
+          2000
+        )
+      };
+      
+      enemyMascotInstance.el.querySelector("img").classList.add("no-flip");
+
+      setTimeout(() => {
+        enemyMascotInstance.el.querySelector("img").classList.remove("no-flip");
+      }, 3000);
+
+      // 5️⃣ enemy chạy khỏi màn hình
+      enemyMascotInstance.run({
+        from: 0,
+        to: window.innerWidth + 100,
+        duration: 3000,
+      });
+
+      await wait(600);
+
+      // 6️⃣ player chạy theo
+      await mascotInstance.run({
+        from: 900,
+        to: window.innerWidth + 600,
+        duration: 2000,
+      });
     }
-
-    // 4️⃣ enemy biến mất
-    if (enemyMascotInstance?.el) {
-      enemyMascotInstance.el.style.transition =
-        "opacity 0.8s ease, transform 0.8s ease";
-      enemyMascotInstance.el.style.opacity = "0";
-      enemyMascotInstance.el.style.transform = "scale(0.5)";
-    }
-
-    // đợi enemy fade xong
-    await new Promise(r => setTimeout(r, 800));
-
-    // 5️⃣ player chạy tiếp ra khỏi màn hình
-    await mascotInstance.run({
-      from: 900,
-      to: window.innerWidth + 200,  // chạy ra ngoài màn hình
-      duration: 2500,
-    });
 
     mascotInstance.el.style.zIndex = "";
     gameState.attackState++;
@@ -113,7 +181,7 @@ export default function ({
     // 6️⃣ qua màn
     onDone && onDone();
   }
-  
+
   // ================= UTIL =================
   function updateStarProgress() {
     const starWrap = div.querySelector(".star-progress");
@@ -123,6 +191,37 @@ export default function ({
     starWrap.appendChild(
       StarBar(MAX_STARS, correctProgress)
     );
+  }
+
+  function handleLostHeart() {
+    gameState.hearts--;
+    div.querySelector(".hearts").innerHTML = "";
+    div.querySelector(".hearts").appendChild(HeartBar(3, gameState.hearts));
+    applyHeartBeat();
+
+    if (gameState.hearts <= 0) {
+      playSound("gameover");
+
+      div.appendChild(
+        ResultPopup({
+          isWin: false,
+          level: questions[currentQuestionIndex].status,
+          correctCount: gameState.correctCount,
+          totalQuestions,
+          bg: currentBackground,
+          onRestart: () => {
+            gameState.reset();
+            router.navigate(() => LoadingScene());
+          },
+          onGoHome: () => {
+            gameState.reset();
+            router.navigate(() => StartScene());
+          },
+        })
+      );
+      return true;
+    }
+    return false;
   }
 
   function handleCorrectProgress() {
@@ -145,7 +244,6 @@ export default function ({
       }, 1000);
       return true;
     }
-
     return false;
   }
 
@@ -412,33 +510,7 @@ export default function ({
               }
             });
 
-            gameState.hearts--;
-            div.querySelector(".hearts").innerHTML = "";
-            div.querySelector(".hearts").appendChild(HeartBar(3, gameState.hearts));
-            applyHeartBeat();
-
-            if (gameState.hearts <= 0) {
-              playSound("gameover");
-
-              div.appendChild(
-                ResultPopup({
-                  isWin: false,
-                  level: q.status,
-                  correctCount: gameState.correctCount,
-                  totalQuestions,
-                  bg: currentBackground,
-                  onRestart: () => {
-                    gameState.reset();
-                    router.navigate(() => LoadingScene());
-                  },
-                  onGoHome: () => {
-                    gameState.reset();
-                    router.navigate(() => StartScene());
-                  },
-                })
-              );
-              return;
-            }
+            if (handleLostHeart()) return;
 
             if (handleCorrectProgress()) return;
             Messages({
@@ -480,7 +552,6 @@ export default function ({
 
           const isEmpty = !userAnswer;
           const isCorrect = !isEmpty && userAnswer === correctAnswer;
-
 
           if (isCorrect) {
             playSound("correct");
@@ -526,33 +597,8 @@ export default function ({
             mascotInstance.sad();
             enemyMascotInstance.happy();
 
-            gameState.hearts--;
-            div.querySelector(".hearts").innerHTML = "";
-            div.querySelector(".hearts").appendChild(HeartBar(3, gameState.hearts));
-            applyHeartBeat();
+            if (handleLostHeart()) return;
 
-            if (gameState.hearts <= 0) {
-              playSound("gameover");
-
-              div.appendChild(
-                ResultPopup({
-                  isWin: false,
-                  level: q.status,
-                  correctCount: gameState.correctCount,
-                  totalQuestions,
-                  bg: currentBackground,
-                  onRestart: () => {
-                    gameState.reset();
-                    router.navigate(() => LoadingScene());
-                  },
-                  onGoHome: () => {
-                    gameState.reset();
-                    router.navigate(() => StartScene());
-                  },
-                })
-              );
-              return;
-            }
             if (handleCorrectProgress()) return;
             Messages({
               type: "wrong",
@@ -642,5 +688,4 @@ export default function ({
 
   render();
   return div;
-
 }

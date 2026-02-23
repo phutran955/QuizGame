@@ -79,7 +79,6 @@ export default function Mascot({
         path: `/assets/mascots/${mascotName}/dead`,
         loop: false,
         onEnd: () => {
-          idle();
           resolve();
         },
       });

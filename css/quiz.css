@@ -50,7 +50,7 @@
 }
 
 .mascot-area.enemy {
-  right: 250px;
+  right: 245px;
   bottom: 20px;
 }
 
@@ -64,6 +64,10 @@
 /* hướng nhìn */
 .mascot-area.enemy img {
   transform: scaleX(-1) !important;
+}
+
+.mascot-area.enemy img.no-flip {
+  transform: scaleX(1) !important;
 }
 
 /* =========================
@@ -87,6 +91,7 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.3s ease;
+  
 }
 
 /* mỏ chat */
@@ -110,6 +115,8 @@
   z-index: 30;
   pointer-events: none;
 }
+
+
 
 @keyframes popIn {
   from {
@@ -452,11 +459,10 @@
 
   font-size: 16px;
   min-width: 170px; /* rộng hơn */
-  max-width: 600px; /* giới hạn chiều ngang */
+  max-width: 400px; /* giới hạn chiều ngang */
   height: auto; /* không cao quá */
 
   opacity: 0;
-  pointer-events: none;
   transition: all 0.3s ease;
   z-index: 3000;
 }
