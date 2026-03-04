@@ -39,7 +39,7 @@ export default function ({
   const ENEMY_BY_LEVEL = {
     basic: "dog",
     level: "bear",
-    advance: "tiger",
+    advanced: "tiger",
   };
 
   // ===== HEART & STAR EFFECT =====
