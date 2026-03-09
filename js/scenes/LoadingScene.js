@@ -1,10 +1,8 @@
 import { router } from "../router.js";
 import { quizService } from "../services/quizService.js";
 import { randomBackground } from "../configs/backgrounds.js";
-import ResultPopup from "../components/ResultPopup.js";
 import QuizScene from "./QuizScene.js";
 import StartScene from "./StartScene.js";
-import { gameState } from "../state/gameState.js";
 
 export default function LoadingScene(allQuestions = null, startIndex = 0, level = null) {
   const div = document.createElement("div");

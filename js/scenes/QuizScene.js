@@ -35,6 +35,12 @@ export default function ({
   div.style.width = "1720px";
   div.style.height = "720px";
 
+  // ===== ENEMY BY LEVEL =====
+  const ENEMY_BY_LEVEL = {
+    basic: "dog",
+    level: "bear",
+    advance: "tiger",
+  };
 
   // ===== HEART & STAR EFFECT =====
   function applyHeartBeat() {
@@ -151,7 +157,7 @@ export default function ({
           2000
         )
       };
-      
+
       enemyMascotInstance.el.querySelector("img").classList.add("no-flip");
 
       setTimeout(() => {
@@ -269,6 +275,9 @@ export default function ({
   function render() {
 
     const q = questions[currentQuestionIndex];
+
+    const enemyName =
+      ENEMY_BY_LEVEL[q.status] || "dog"; // fallback nếu thiếu
 
     // ================= RENDER ANSWERS =================
     function renderAnswers(q) {
@@ -414,11 +423,20 @@ export default function ({
     // ===== ENEMY =====
     const enemyArea = div.querySelector(".mascot-area.enemy");
 
-    if (!enemyMascotInstance) {
+    if (!enemyMascotInstance || enemyMascotInstance.name !== enemyName) {
+
+      // Xóa enemy cũ nếu có
+      if (enemyMascotInstance?.el) {
+        enemyMascotInstance.el.remove();
+      }
+
       enemyMascotInstance = Mascot({
-        mascotName: "dog",
+        mascotName: enemyName,
         role: "enemy",
       });
+
+      // Lưu tên để so sánh lần sau
+      enemyMascotInstance.name = enemyName;
     }
 
     if (
