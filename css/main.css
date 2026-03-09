@@ -61,9 +61,7 @@ body {
    BLOCK MOBILE PORTRAIT
 ========================= */
 @media screen and (orientation: portrait) and (max-width: 1024px) {
-  #game {
-    display: none;
-  }
+
 
   #rotate-warning {
     display: flex;
