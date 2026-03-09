@@ -2,7 +2,7 @@ import { apiGet } from "./api.js";
 
 
 const QUIZ_ID = 19;
-const QUIZ_MODE = "basic";
+const QUIZ_MODE = "advanced";
 
 function mapQuestion(question) {
 
