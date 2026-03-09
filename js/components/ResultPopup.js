@@ -1,6 +1,3 @@
-import { levelConfig } from "../configs/levelConfig.js";
-
-
 export default function ResultPopup({
   isWin,
   level,
