@@ -39,7 +39,7 @@ export default function ({
   const ENEMY_BY_LEVEL = {
     basic: "dog",
     level: "bear",
-    advanced: "tiger",
+    advance: "tiger",
   };
 
   // ===== HEART & STAR EFFECT =====
@@ -131,9 +131,6 @@ export default function ({
             gameState.reset();
             router.navigate(() => LoadingScene());
           },
-          onGoLevel: () => {
-            window.location.href = "https://lmo.edu.vn";
-          },
           onGoHome: () => {
             gameState.reset();
             router.navigate(() => StartScene());
@@ -156,7 +153,7 @@ export default function ({
         )
       } else {
         await showEnemyPopupAuto(
-          "Ngộ sẽ còn<br>quay lại!!!",
+          "Bản gâu sẽ còn<br>quay lại!!!",
           2000
         )
       };
@@ -221,8 +218,6 @@ export default function ({
           onRestart: () => {
             gameState.reset();
             router.navigate(() => LoadingScene());
-          }, onGoLevel: () => {
-            window.location.href = "https://lmo.edu.vn";
           },
           onGoHome: () => {
             gameState.reset();
@@ -475,9 +470,6 @@ export default function ({
         onGoStart: () => {
           gameState.reset();
           router.navigate(() => StartScene());
-        },
-        onGoLevel: () => {
-          window.open("https://lmo.edu.vn", "_blank", "noopener,noreferrer");
         },
         onReplay: () => {
           gameState.reset();
