@@ -132,7 +132,7 @@ export default function ({
             router.navigate(() => LoadingScene());
           },
           onGoLevel: () => {
-            window.location.href = "https://lmo.edu.vn";
+            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
           },
           onGoHome: () => {
             gameState.reset();
@@ -222,7 +222,7 @@ export default function ({
             gameState.reset();
             router.navigate(() => LoadingScene());
           }, onGoLevel: () => {
-            window.location.href = "https://lmo.edu.vn";
+            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
           },
           onGoHome: () => {
             gameState.reset();
@@ -477,7 +477,7 @@ export default function ({
           router.navigate(() => StartScene());
         },
         onGoLevel: () => {
-          window.open("https://lmo.edu.vn", "_blank", "noopener,noreferrer");
+          window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
         },
         onReplay: () => {
           gameState.reset();

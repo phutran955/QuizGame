@@ -1,8 +1,10 @@
 import { apiGet } from "./api.js";
 
 
-const QUIZ_ID = 19;
-const QUIZ_MODE = "advanced";
+const params = new URLSearchParams(window.location.search);
+
+const QUIZ_ID = params.get("lessonId") || 19;
+const QUIZ_MODE = params.get("status") || "advanced";
 
 function mapQuestion(question) {
 
