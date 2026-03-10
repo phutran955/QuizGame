@@ -1,7 +1,20 @@
 import { router } from "./router.js";
-import StartScene from "./scenes/StartScene.js";
+import LoadingScene from "./scenes/LoadingScene.js";
+import { playBackgroundMusic } from "./components/soundManager.js";
 
-router.navigate(StartScene);
+function startMusic() {
+  playBackgroundMusic();
+
+  window.removeEventListener("pointerdown", startMusic);
+  window.removeEventListener("keydown", startMusic);
+  window.removeEventListener("touchstart", startMusic);
+}
+
+window.addEventListener("pointerdown", startMusic);
+window.addEventListener("keydown", startMusic);
+window.addEventListener("touchstart", startMusic);
+
+router.navigate(LoadingScene);
 
 function scaleApp() {
   const DESIGN_WIDTH = 1720;

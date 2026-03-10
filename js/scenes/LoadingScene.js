@@ -2,9 +2,9 @@ import { router } from "../router.js";
 import { quizService } from "../services/quizService.js";
 import { randomBackground } from "../configs/backgrounds.js";
 import QuizScene from "./QuizScene.js";
-import StartScene from "./StartScene.js";
 
 export default function LoadingScene(allQuestions = null, startIndex = 0, level = null) {
+
   const div = document.createElement("div");
   div.className = "loading-scene";
   div.style.width = "1720px";
@@ -89,7 +89,7 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
     `;
 
     div.querySelector("#back").onclick = () =>
-      router.navigate(() => StartScene());
+      router.navigate(() => window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72");
   }
 
   load();

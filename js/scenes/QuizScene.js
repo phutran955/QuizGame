@@ -5,9 +5,8 @@ import HeartBar from "../components/HeartBar.js";
 import StarBar from "../components/StarBar.js";
 import Messages from "../components/MessagesPopup.js";
 import Mascot from "../components/Mascot/Mascot.js";
-import StartScene from "./StartScene.js";
 import LoadingScene from "./LoadingScene.js";
-import { playSound } from "../components/soundManager.js";
+import { playSound, toggleBackgroundMusic, isMusicPlaying } from "../components/soundManager.js";
 import { gameState } from "../state/gameState.js";
 
 export default function ({
@@ -134,10 +133,6 @@ export default function ({
           onGoLevel: () => {
             window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
           },
-          onGoHome: () => {
-            gameState.reset();
-            router.navigate(() => StartScene());
-          },
         })
       );
 
@@ -223,10 +218,6 @@ export default function ({
             router.navigate(() => LoadingScene());
           }, onGoLevel: () => {
             window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
-          },
-          onGoHome: () => {
-            gameState.reset();
-            router.navigate(() => StartScene());
           },
         })
       );
@@ -398,6 +389,27 @@ export default function ({
     createEffect(div, background.effect);
     updateStarProgress();
 
+    // 👉 ADD MUSIC BUTTON HERE
+const musicBtn = document.createElement("button");
+musicBtn.className = "music-toggle";
+
+function updateMusicIcon() {
+  if (isMusicPlaying()) {
+    musicBtn.textContent = "🔊";
+  } else {
+    musicBtn.textContent = "🔇";
+  }
+}
+
+updateMusicIcon();
+
+musicBtn.onclick = () => {
+  toggleBackgroundMusic();
+  updateMusicIcon();
+};
+
+div.appendChild(musicBtn);
+
     // ===== PLAYER =====
     const playerArea = div.querySelector(".mascot-area.player");
 
@@ -471,10 +483,6 @@ export default function ({
         onClose: () => {
           settingMenu.remove();
           settingMenu = null;
-        },
-        onGoStart: () => {
-          gameState.reset();
-          router.navigate(() => StartScene());
         },
         onGoLevel: () => {
           window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";

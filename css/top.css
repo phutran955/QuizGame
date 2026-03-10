@@ -81,3 +81,22 @@
 .setting-btn:hover {
   transform: scale(1.1) rotate(10deg);
 }
+
+/* =========================
+   MUSIC TOGGLE
+========================= */
+
+.music-toggle{
+  position:absolute;
+  top:40px;
+  right:140px;
+
+  width:60px;
+  height:60px;
+
+  border:none;
+  border-radius:50%;
+  font-size:28px;
+  cursor:pointer;
+  z-index: 9999; /* thêm dòng này */
+}
