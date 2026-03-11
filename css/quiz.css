@@ -91,7 +91,6 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-size: 14px;
   animation: popIn 0.3s ease;
-  
 }
 
 /* mỏ chat */
@@ -115,8 +114,6 @@
   z-index: 30;
   pointer-events: none;
 }
-
-
 
 @keyframes popIn {
   from {
@@ -549,14 +546,12 @@
   gap: 14px 16px;
   margin: 10px 105px 0px;
   width: 450px;
-  padding-top: 20px;
-  padding-left: 20px;
 }
 
 /* button chung */
 .setting-buttons button {
-  width: 120px;   /* kích thước cố định */
-  height: 120px;
+  width: 140px; /* kích thước cố định */
+  height: 140px;
   padding: 0;
   border: none;
   background: none;
@@ -565,17 +560,17 @@
 }
 
 .setting-buttons .btn-level {
-  background: url("../assets/images/home-button.jpg") center / cover
+  background: url("../assets/images/decor/home-button.png") center / cover
     no-repeat;
 }
 
 .setting-buttons .btn-replay {
-  background: url("../assets/images/restart-button.png") center / cover
+  background: url("../assets/images/decor/restart-button.png") center / cover
     no-repeat;
 }
 
-.setting-buttons .btn-close{
-  background: url("../assets/images/continue-button.png") center / cover
+.setting-buttons .btn-close {
+  background: url("../assets/images/decor/continue-button.png") center / cover
     no-repeat;
 }
 

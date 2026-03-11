@@ -3,8 +3,8 @@ import { apiGet } from "./api.js";
 
 const params = new URLSearchParams(window.location.search);
 
-const QUIZ_ID = params.get("lessonId") || 19;
-const QUIZ_MODE = params.get("status") || "advanced";
+const LESSON_ID = params.get("lessonId") || 72;
+const QUIZ_MODE = params.get("status") || "basic";
 
 function mapQuestion(question) {
 
@@ -83,18 +83,33 @@ function mapQuestion(question) {
   return null;
 }
 
+async function getFullQuestion(question) {
+  const detail = await apiGet(`/questions/${question.id}`);
+
+  return mapQuestion(detail);
+}
+
 export const quizService = {
 
   async getQuestions() {
-    const quiz = await apiGet(`/exercises/${QUIZ_ID}`);
 
-    if (!quiz.questions || quiz.questions.length === 0) {
+    const lesson = await apiGet(`/lessons/${LESSON_ID}`);
+
+    if (!lesson.questions || lesson.questions.length === 0) {
       return [];
     }
 
-    return quiz.questions
-      .filter(q => q.status === QUIZ_MODE)
-      .map(mapQuestion)
-      .filter(Boolean);
+    // 👉 lọc status từ lesson trước
+    const filteredQuestions = lesson.questions.filter(
+      q => q.status === QUIZ_MODE
+    );
+
+    // 👉 lấy chi tiết question + answers
+    const fullQuestions = await Promise.all(
+      filteredQuestions.map(q => getFullQuestion(q))
+    );
+
+    return fullQuestions.filter(Boolean);
   }
+
 };

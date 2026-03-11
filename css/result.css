@@ -37,10 +37,10 @@
 }
 
 .result-buttons button {
-  width: 120px;   /* kích thước cố định */
-  height: 120px;
+  width: 150px;   /* kích thước cố định */
+  height: 150px;
   padding: 0;
-  margin-top: -120px;
+  margin-top: -150px;
   border: none;
   background: none;
   cursor: pointer;
@@ -48,12 +48,12 @@
 }
 
 .result-buttons .restart {
-  background: url("../assets/images/restart-button.png") center / cover
+  background: url("../assets/images/decor/restart-button.png") center / cover
     no-repeat;
 }
 
 .result-buttons .levels {
-  background: url("../assets/images/home-button.jpg") center / cover
+  background: url("../assets/images/decor/home-button.png") center / cover
     no-repeat;
 }
 

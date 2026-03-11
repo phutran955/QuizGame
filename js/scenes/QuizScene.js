@@ -390,25 +390,28 @@ export default function ({
     updateStarProgress();
 
     // 👉 ADD MUSIC BUTTON HERE
-const musicBtn = document.createElement("button");
-musicBtn.className = "music-toggle";
+    const musicBtn = document.createElement("button");
+    musicBtn.className = "music-toggle";
+    const musicIcon = document.createElement("img");
+    musicIcon.src = "../assets/images/decor/unmute-button.png"; // mặc định
+    musicIcon.alt = "music icon";
 
-function updateMusicIcon() {
-  if (isMusicPlaying()) {
-    musicBtn.textContent = "🔊";
-  } else {
-    musicBtn.textContent = "🔇";
-  }
-}
+    musicBtn.appendChild(musicIcon);
 
-updateMusicIcon();
+    function updateMusicIcon() {
+      if (isMusicPlaying()) {
+        musicIcon.src = "../assets/images/decor/unmute-button.png";
+      } else {
+        musicIcon.src = "../assets/images/decor/mute-button.png";
+      }
+    }
 
-musicBtn.onclick = () => {
-  toggleBackgroundMusic();
-  updateMusicIcon();
-};
+    musicBtn.onclick = () => {
+      toggleBackgroundMusic();
+      updateMusicIcon();
+    };
 
-div.appendChild(musicBtn);
+    div.appendChild(musicBtn);
 
     // ===== PLAYER =====
     const playerArea = div.querySelector(".mascot-area.player");
