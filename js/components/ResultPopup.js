@@ -1,12 +1,10 @@
 export default function ResultPopup({
   isWin,
-  level,
   correctCount,
   totalQuestions,
   bg,
   onRestart,
   onGoLevel,
-  onGoHome,
 }) {
   const overlay = document.createElement("div");
   overlay.className = "popup-overlay";
