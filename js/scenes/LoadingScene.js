@@ -53,7 +53,11 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
       }
 
       // 🔹 2. gom tất cả ảnh cần preload
-      const UI_IMAGES = [
+      const UI_IMAGES = [        
+        "/assets/images/levels/level1bg.jpg",
+        "/assets/images/levels/level2bg.jpg",
+        "/assets/images/levels/level3bg.jpg",
+        "/assets/images/levels/level4bg.jpg",
         "/assets/images/decor/autumnleaf.png",
         "/assets/images/decor/unmute-button.png",
         "/assets/images/decor/mute-button.png",
@@ -65,10 +69,6 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
         "/assets/images/decor/rain.png",
         "/assets/images/decor/restart-button.png",
         "/assets/images/decor/Result_BG_2.png",
-        "/assets/images/levels/level1bg.jpg",
-        "/assets/images/levels/level2bg.jpg",
-        "/assets/images/levels/level3bg.jpg",
-        "/assets/images/levels/level4bg.jpg",
         "/assets/images/tops/heart.png",
         "/assets/images/tops/heartblank.png",
         "/assets/images/tops/menu.png",
@@ -156,6 +156,7 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
 
     return urls;
   }
+
   function preloadImages(urls, onProgress) {
     let loaded = 0;
     const total = urls.length;
