@@ -3,13 +3,11 @@ import { levelConfig } from "../configs/levelConfig.js";
 
 export default function ResultPopup({
   isWin,
-  level,
   correctCount,
   totalQuestions,
   bg,
   onRestart,
   onGoLevel,
-  onGoHome,
 }) {
   const overlay = document.createElement("div");
   overlay.className = "popup-overlay";
@@ -25,12 +23,12 @@ export default function ResultPopup({
 
   const title = isWin ? "🎉 Chúc mừng bạn!" : "💀 Bạn đã thua!";
   const message = isWin
-    ? `Bạn đã hoàn thành cấp độ ${level}`
-    : `Bạn đã hết tim ở cấp độ ${level}`;
+    ? `Chúc mừng bạn đã hoàn thành trò chơi`
+    : `Huhu bạn thua rồi`;
 
   const mascotName = "cat";
 
-  const correctText = `số câu trả lời đúng: ${correctCount}/${totalQuestions}`;
+  const correctText = `Bạn đã trả lời được: ${correctCount}/${totalQuestions}`;
 
   // 👉 chỉ 1 ảnh tĩnh
   const mascotImg = mascotName
@@ -43,7 +41,7 @@ export default function ResultPopup({
   popup.innerHTML = `
   <h2>${title}</h2>
 
-  <p class="message">${message} với ${correctText}</p>
+  <p class="message">${message}<br>${correctText}</p>
 
   ${mascotImg
       ? `<div class="result-mascot">
@@ -54,9 +52,8 @@ export default function ResultPopup({
 
 
   <div class="result-buttons">
-    <button class="restart">Chơi lại</button>
-    <button class="levels">Chọn level</button>
-    <button class="home">Về Start</button>
+    <button class="restart"></button>
+    <button class="levels"></button>
   </div>
 `;
 
@@ -67,11 +64,6 @@ export default function ResultPopup({
 
   popup.querySelector(".levels").onclick = () => {
     onGoLevel && onGoLevel();
-    overlay.remove();
-  };
-
-  popup.querySelector(".home").onclick = () => {
-    onGoHome && onGoHome();
     overlay.remove();
   };
 

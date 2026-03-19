@@ -5,9 +5,8 @@ import HeartBar from "../components/HeartBar.js";
 import StarBar from "../components/StarBar.js";
 import Messages from "../components/MessagesPopup.js";
 import Mascot from "../components/Mascot/Mascot.js";
-import StartScene from "./StartScene.js";
 import LoadingScene from "./LoadingScene.js";
-import { playSound } from "../components/soundManager.js";
+import { playSound, toggleBackgroundMusic, isMusicPlaying } from "../components/soundManager.js";
 import { gameState } from "../state/gameState.js";
 
 export default function ({
@@ -131,9 +130,8 @@ export default function ({
             gameState.reset();
             router.navigate(() => LoadingScene());
           },
-          onGoHome: () => {
-            gameState.reset();
-            router.navigate(() => StartScene());
+          onGoLevel: () => {
+            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
           },
         })
       );
@@ -218,10 +216,8 @@ export default function ({
           onRestart: () => {
             gameState.reset();
             router.navigate(() => LoadingScene());
-          },
-          onGoHome: () => {
-            gameState.reset();
-            router.navigate(() => StartScene());
+          }, onGoLevel: () => {
+            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
           },
         })
       );
@@ -393,6 +389,30 @@ export default function ({
     createEffect(div, background.effect);
     updateStarProgress();
 
+    // 👉 ADD MUSIC BUTTON HERE
+    const musicBtn = document.createElement("button");
+    musicBtn.className = "music-toggle";
+    const musicIcon = document.createElement("img");
+    musicIcon.src = "../assets/images/decor/unmute-button.png"; // mặc định
+    musicIcon.alt = "music icon";
+
+    musicBtn.appendChild(musicIcon);
+
+    function updateMusicIcon() {
+      if (isMusicPlaying()) {
+        musicIcon.src = "../assets/images/decor/unmute-button.png";
+      } else {
+        musicIcon.src = "../assets/images/decor/mute-button.png";
+      }
+    }
+
+    musicBtn.onclick = () => {
+      toggleBackgroundMusic();
+      updateMusicIcon();
+    };
+
+    div.appendChild(musicBtn);
+
     // ===== PLAYER =====
     const playerArea = div.querySelector(".mascot-area.player");
 
@@ -467,9 +487,8 @@ export default function ({
           settingMenu.remove();
           settingMenu = null;
         },
-        onGoStart: () => {
-          gameState.reset();
-          router.navigate(() => StartScene());
+        onGoLevel: () => {
+          window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
         },
         onReplay: () => {
           gameState.reset();

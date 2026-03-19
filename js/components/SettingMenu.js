@@ -1,9 +1,7 @@
-import { 
-  playSound, 
-  toggleBackgroundMusic, 
-  setMusicVolume, 
-  getMusicVolume,
-  isMusicPlaying
+import {
+  playSound,
+  setMusicVolume,
+  getMusicVolume
 } from "./soundManager.js";
 
 export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay }) {
@@ -20,11 +18,9 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
 
       <div class="setting-buttons">
 
-      <button id="btn-start">Về màn hình Start</button>
-      <button id="btn-level">Chọn Level</button>
-      <button id="btn-replay">Chơi lại Level</button>
-      <button id="btn-music"></button>
-      <button class="btn-close" id="btn-close">Tiếp tục game</button>
+      <button id="btn-replay" class="btn-replay"></button>
+      <button id="btn-level" class="btn-level"></button>
+      <button class="btn-close" id="btn-close"></button>
       </div>
     </div>
   `;
@@ -36,11 +32,6 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
     setMusicVolume(Number(e.target.value));
   };
 
-  overlay.querySelector("#btn-start").onclick = () => {
-    playSound("click");
-    onGoStart();
-  };
-
   overlay.querySelector("#btn-level").onclick = () => {
     playSound("click");
     onGoLevel();
@@ -50,24 +41,6 @@ export default function SettingMenu({ onClose, onGoStart, onGoLevel, onReplay })
     playSound("click");
     onReplay();
   };
-
-  const btnMusic = overlay.querySelector("#btn-music");
-
-function updateMusicButton() {
-  if (isMusicPlaying()) {
-    btnMusic.textContent = "🔇 Tắt nhạc";
-  } else {
-    btnMusic.textContent = "🎵 Bật nhạc";
-  }
-}
-
-updateMusicButton();
-
-btnMusic.onclick = () => {
-  toggleBackgroundMusic();
-  updateMusicButton();
-};
-
 
   overlay.querySelector("#btn-close").onclick = () => {
     playSound("click");
