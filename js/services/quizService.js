@@ -3,8 +3,8 @@ import { apiGet } from "./api.js";
 
 const params = new URLSearchParams(window.location.search);
 
-const LESSON_ID = params.get("lessonId") || 72;
-const QUIZ_MODE = params.get("status") || "basic";
+const LESSON_ID = params.get("lessonId");
+const QUIZ_MODE = params.get("status");
 
 function mapQuestion(question) {
 

@@ -34,6 +34,8 @@ export default function ({
   div.style.width = "1720px";
   div.style.height = "720px";
 
+  const params = new URLSearchParams(window.location.search);
+
   // ===== ENEMY BY LEVEL =====
   const ENEMY_BY_LEVEL = {
     basic: "dog",
@@ -131,7 +133,7 @@ export default function ({
             router.navigate(() => LoadingScene());
           },
           onGoLevel: () => {
-            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/74";
+            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/" + LESSON_ID;
           },
         })
       );
@@ -187,6 +189,8 @@ export default function ({
   }
 
   // ================= UTIL =================
+  const LESSON_ID = params.get("lessonId");
+
   function updateStarProgress() {
     const starWrap = div.querySelector(".star-progress");
     if (!starWrap) return;
@@ -216,8 +220,9 @@ export default function ({
           onRestart: () => {
             gameState.reset();
             router.navigate(() => LoadingScene());
-          }, onGoLevel: () => {
-            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/74";
+          },
+          onGoLevel: () => {
+            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/" + LESSON_ID;
           },
         })
       );
@@ -488,7 +493,7 @@ export default function ({
           settingMenu = null;
         },
         onGoLevel: () => {
-          window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/74";
+          window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/" + LESSON_ID;
         },
         onReplay: () => {
           gameState.reset();
