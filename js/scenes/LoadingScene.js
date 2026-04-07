@@ -11,6 +11,7 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
   div.style.height = "720px";
 
   const background = randomBackground();
+  const params = new URLSearchParams(window.location.search);
   const LESSON_ID = params.get("lessonId");
 
   div.style.background = `
