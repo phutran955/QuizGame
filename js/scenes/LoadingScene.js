@@ -11,6 +11,8 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
   div.style.height = "720px";
 
   const background = randomBackground();
+  const params = new URLSearchParams(window.location.search);
+  const LESSON_ID = params.get("lessonId");
 
   div.style.background = `
     linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
@@ -53,7 +55,7 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
       }
 
       // 🔹 2. gom tất cả ảnh cần preload
-      const UI_IMAGES = [        
+      const UI_IMAGES = [
         "/assets/images/levels/level1bg.jpg",
         "/assets/images/levels/level2bg.jpg",
         "/assets/images/levels/level3bg.jpg",
@@ -189,7 +191,7 @@ export default function LoadingScene(allQuestions = null, startIndex = 0, level 
     `;
 
     div.querySelector("#back").onclick = () =>
-      router.navigate(() => window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72");
+      window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/" + LESSON_ID;
   }
 
   load();

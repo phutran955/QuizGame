@@ -34,6 +34,8 @@ export default function ({
   div.style.width = "1720px";
   div.style.height = "720px";
 
+  const params = new URLSearchParams(window.location.search);
+
   // ===== ENEMY BY LEVEL =====
   const ENEMY_BY_LEVEL = {
     basic: "dog",
@@ -131,7 +133,7 @@ export default function ({
             router.navigate(() => LoadingScene());
           },
           onGoLevel: () => {
-            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
+            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/" + LESSON_ID;
           },
         })
       );
@@ -187,6 +189,52 @@ export default function ({
   }
 
   // ================= UTIL =================
+  function getTauntText() {
+    const taunts = [
+      "Sai rồi 😏 thử lại đi!",
+      "Ủa gì vậy trời 🤨",
+      "Não đang lag hả 😭",
+      "Tự tin vậy mà sai à 😆",
+      "Hơi căng nha 🤯",
+      "Câu này dễ mà cũng sai 🤭",
+      "Chắc bấm nhầm đúng không 😌",
+      "Tập trung lại nào 👀",
+      "Thêm lần nữa đi 💪",
+      "Sai nhẹ thôi 😗",
+      "Ôi không 😱",
+      "Chưa đúng rồi 😬",
+      "Còn cơ hội đó 😏",
+      "Đừng bỏ cuộc nha 😤",
+      "Sắp đúng rồi đó (chắc vậy) 😆"
+    ];
+
+    return taunts[Math.floor(Math.random() * taunts.length)];
+  }
+
+  function getPraiseTaunt() {
+    const praises = [
+      "Ơ kìa… đúng thật à 😳",
+      "Hên thôi đúng không 😏",
+      "Tạm chấp nhận 😌",
+      "Cũng không tệ 👀",
+      "Được đấy, làm lại xem 😆",
+      "May mắn ghé thăm rồi 🍀",
+      "Ủa nay thông minh đột xuất à 🤯",
+      "Đúng rồi đó… chắc vậy 😏",
+      "Ghê nha, ai dạy vậy 😳",
+      "Ok, lần này cho qua 😌",
+      "Có tiến bộ nha 😏",
+      "Trúng tủ à 😆",
+      "Đúng mà vẫn thấy sai sai 🤨",
+      "Cũng gọi là ổn 😗",
+      "Tạm ổn, đừng tự tin quá 😎"
+    ];
+
+    return praises[Math.floor(Math.random() * praises.length)];
+  }
+
+  const LESSON_ID = params.get("lessonId");
+
   function updateStarProgress() {
     const starWrap = div.querySelector(".star-progress");
     if (!starWrap) return;
@@ -216,8 +264,9 @@ export default function ({
           onRestart: () => {
             gameState.reset();
             router.navigate(() => LoadingScene());
-          }, onGoLevel: () => {
-            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
+          },
+          onGoLevel: () => {
+            window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/" + LESSON_ID;
           },
         })
       );
@@ -488,7 +537,7 @@ export default function ({
           settingMenu = null;
         },
         onGoLevel: () => {
-          window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/72";
+          window.location.href = "https://www.lmo.edu.vn/student/lesson-detail/" + LESSON_ID;
         },
         onReplay: () => {
           gameState.reset();
@@ -525,7 +574,7 @@ export default function ({
 
             popup = Messages({
               type: "correct",
-              message: "Bạn may thôi",
+              message: getPraiseTaunt(),
               target: "enemy",
               onClose: async () => {
                 popup = null;
@@ -560,7 +609,7 @@ export default function ({
               type: "wrong",
               message:
                 q.detailedText ||
-                "Chưa tày đâu",
+                getTauntText(),
               target: "enemy",
               onClose: async () => {
                 popup = null;
@@ -607,7 +656,7 @@ export default function ({
 
             popup = Messages({
               type: "correct",
-              message: "Bạn may thôi",
+              message: getPraiseTaunt(),
               target: "enemy",
               onClose: async () => {
                 popup = null;
@@ -647,7 +696,7 @@ export default function ({
               type: "wrong",
               message:
                 q.detailedText ||
-                "Chưa tày đâu",
+                getTauntText(),
               target: "enemy",
               onClose: async () => {
                 popup = null;
