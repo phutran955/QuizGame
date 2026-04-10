@@ -456,7 +456,7 @@
 
   font-size: 16px;
   min-width: 170px; /* rộng hơn */
-  max-width: 400px; /* giới hạn chiều ngang */
+  max-width: 150px; /* giới hạn chiều ngang */
   height: auto; /* không cao quá */
 
   opacity: 0;
